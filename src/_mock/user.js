@@ -45,7 +45,7 @@ const Names = [
 ]
 const users = Names.map((WorkerName, index) => ({
   id: faker.datatype.uuid(),
-  avatarUrl: `/assets/images/avatars/avatar_${index % Names.length}.jpg`,
+  avatarUrl: `/assets/images/avatars/avatar_${Names.length%index}.jpg`,
   name: WorkerName,
   department: sample(['Women', 'Men', 'Kids']),
   status: sample(['filled', 'not yet']),

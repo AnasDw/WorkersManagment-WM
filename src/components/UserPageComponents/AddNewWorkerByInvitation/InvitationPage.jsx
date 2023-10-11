@@ -6,20 +6,44 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Checkout from '../AddNewWorker/Checkout';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
+import {
+  getCurrentDate,
+  getCurrentTime,
+  getTimeDifferenceInHours,
+  getTimeDifferenceInMinutes,
+} from 'src/constants/functions';
 
 const defaultTheme = createTheme();
 
 const InvitationPage = () => {
   const param = useParams();
-  const ValidateType = param.param1.charAt(0);
-  const ValidateValue = param.param1.slice(1);
+  const navigate = useNavigate();
 
   useEffect(
     (e) => {
       const ValidateType = param.param1.charAt(0);
-      const ValidateValue = param.param1.slice(1);
+      const ValidateValue = param.param1.charAt(1);
+      const Date = param.param1.slice(2, 10);
+      const Time = param.param1.slice(10);
+
+      const currentDate = getCurrentDate();
+      const currentTime = getCurrentTime();
+
+      switch (ValidateType) {
+        case 'M':
+          if (getTimeDifferenceInMinutes(currentTime, Time) > ValidateValue || currentDate > Date)
+            navigate('/404', { replace: true });
+          break;
+        case 'H':
+          if (getTimeDifferenceInHours(currentTime, Time) > ValidateValue || currentDate > Date)
+            navigate('/404', { replace: true });
+          break;
+        case 'D':
+          if (currentDate - Date > ValidateValue) navigate('/404', { replace: true });
+          break;
+      }
     },
     [param]
   );

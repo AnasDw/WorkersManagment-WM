@@ -17,6 +17,7 @@ import Select from '@mui/material/Select';
 
 import Iconify from 'src/components/iconify/Iconify';
 import { Button } from '@mui/material';
+import { getCurrentDate, getCurrentTime } from 'src/constants/functions';
 
 const SelectList = [{ id: 'Minutes' }, { id: 'Hours' }, { id: 'Days' }];
 
@@ -29,7 +30,9 @@ const GenerateInvitation = () => {
 
   const CopyLink = async () => {
     try {
-      const URL = `http://localhost:3000/InvitationPage/${ValidateType.charAt(0)}${ValidateValue}`;
+      const date = getCurrentDate();
+      const showTime = getCurrentTime();
+      const URL = `http://localhost:3000/InvitationPage/${ValidateType.charAt(0)}${ValidateValue}${date}${showTime}`;
 
       await copy(URL).then(() => {
         setCopied(true);
