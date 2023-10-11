@@ -1,0 +1,23 @@
+[debug] [2023-10-10T10:44:25.730Z] ----------------------------------------------------------------------
+[debug] [2023-10-10T10:44:25.733Z] Command:       /usr/local/bin/node /Users/anasdweik/.npm-global/bin/firebase init
+[debug] [2023-10-10T10:44:25.733Z] CLI Version:   12.6.2
+[debug] [2023-10-10T10:44:25.733Z] Platform:      darwin
+[debug] [2023-10-10T10:44:25.734Z] Node Version:  v20.6.1
+[debug] [2023-10-10T10:44:25.734Z] Time:          Tue Oct 10 2023 13:44:25 GMT+0300 (Eastern European Summer Time)
+[debug] [2023-10-10T10:44:25.734Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-10-10T10:44:25.738Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-10-10T10:44:25.738Z] > authorizing via signed-in user (anas.e.dweik@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/anasdweik/Desktop/material-kit-react
+
+[debug] [2023-10-10T10:47:20.207Z] Error: read EIO
+    at TTY.onStreamRead (node:internal/stream_base_commons:217:20)

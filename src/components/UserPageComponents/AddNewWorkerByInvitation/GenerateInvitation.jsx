@@ -1,0 +1,145 @@
+import * as React from 'react';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import copy from 'clipboard-copy';
+import Stack from '@mui/material/Stack';
+import Container from '@mui/material/Container';
+import Paper from '@mui/material/Paper';
+import CloseIcon from '@mui/icons-material/Close';
+import IconButton from '@mui/material/IconButton';
+
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
+import Iconify from 'src/components/iconify/Iconify';
+import { Button } from '@mui/material';
+
+const SelectList = [{ id: 'Minutes' }, { id: 'Hours' }, { id: 'Days' }];
+
+const GenerateInvitation = () => {
+  const [Copied, setCopied] = React.useState(false);
+  const [ValidateType, setValidateType] = React.useState('None');
+  const [ValidateValue, setValidateValue] = React.useState(0);
+  const [ShortMsg, setShortMsg] = React.useState();
+  const [temp, setTemp] = React.useState({});
+
+  const CopyLink = async () => {
+    try {
+      const URL = `http://localhost:3000/InvitationPage/${ValidateType.charAt(0)}${ValidateValue}`;
+
+      await copy(URL).then(() => {
+        setCopied(true);
+        setTimeout(() => {
+          setCopied(false);
+          window.location.reload();
+        }, 1000);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleChange = (event) => {
+    setValidateType(event.target.value);
+    const a = SelectList.find((obj) => obj.id === ValidateType);
+    setTemp(a);
+    console.log(temp);
+  };
+  return (
+    <>
+      <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
+        <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+          <Stack direction={'row'} sx={{ gap: 1 }} alignItems="center" justifyContent="space-between">
+            <Typography variant="h6" gutterBottom>
+              Invitation Details
+            </Typography>
+            <IconButton>
+              <CloseIcon
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.reload(true);
+                }}
+              />
+            </IconButton>
+          </Stack>
+          <Stack sx={{ gap: 1, marginTop: 2 }} alignItems="center" justifyContent="space-between">
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={12}>
+                <>
+                  <FormControl sx={{ m: 1, minWidth: 120 }}>
+                    <InputLabel id="demo-simple-select-helper-label">Valid For</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-helper-label"
+                      id="demo-simple-select-helper"
+                      value={ValidateType}
+                      label="Valid For"
+                      onChange={handleChange}
+                    >
+                      {SelectList.map((item, i) => (
+                        <MenuItem key={i} value={item.id}>
+                          {item.id}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText>Invitation Valid For</FormHelperText>
+                  </FormControl>
+
+                  <FormControl sx={{ m: 1, minWidth: 120 }}>
+                    <Select
+                      onChange={(e) => {
+                        setValidateValue(e.target.value);
+                      }}
+                      value={ValidateValue}
+                      displayEmpty
+                      inputProps={{ 'aria-label': 'Without label' }}
+                    >
+                      {Array.from({ length: 20 }, (_, index) => index + 1).map((value, index) => (
+                        <MenuItem key={index} value={value}>
+                          {value}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText>Value</FormHelperText>
+                  </FormControl>
+                </>
+              </Grid>
+              <Grid item xs={12} sm={12}>
+                <TextField
+                  value={ShortMsg}
+                  id="ShortMsg"
+                  name="ShortMsg"
+                  label="Add Short Msg"
+                  fullWidth
+                  variant="standard"
+                  onChange={(e) => {
+                    setShortMsg(e.target.value);
+                  }}
+                />
+              </Grid>
+            </Grid>
+            <Grid my={2} item xs={12} md={12}>
+              <Button
+                onClick={(e) => {
+                  e.preventDefault();
+                  CopyLink();
+                }}
+                variant="outlined"
+                startIcon={
+                  <Iconify icon={Copied ? 'solar:copy-outline' : 'vscode-icons:file-type-dartlang-generated'} />
+                }
+              >
+                {Copied ? 'Copied' : 'Generate Invitation Link'}
+              </Button>
+            </Grid>
+          </Stack>
+        </Paper>
+      </Container>
+    </>
+  );
+};
+
+export default GenerateInvitation;
