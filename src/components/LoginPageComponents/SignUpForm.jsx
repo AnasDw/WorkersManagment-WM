@@ -10,22 +10,37 @@ import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-// import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Copyright, FormList } from './Styles/SignUpStyles';
 import IconsForm from './IconsForm';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from 'src/config/FireBase';
+import { useNavigate } from 'react-router-dom';
+import { pushNewUser } from 'src/config/FireBase/CRUD';
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+  const navigate = useNavigate();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+
+    createUserWithEmailAndPassword(auth, data.get('email'), data.get('password'))
+      .then((res) => {
+        res.user.displayName = `${data.get('firstName')} ${data.get('lastName')}`;
+        pushNewUser({
+          email: data.get('email'),
+          password: data.get('password'),
+          name: `${data.get('firstName')} ${data.get('lastName')}`,
+        });
+        navigate('/', { replace: true });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   return (
@@ -47,7 +62,7 @@ export default function SignUp() {
             Sign up
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
+            <Grid container key={0} spacing={2}>
               {FormList.map((item, i) => (
                 <>
                   <Grid key={i} item xs={item.xs} sm={item.sm}>
@@ -65,9 +80,9 @@ export default function SignUp() {
                 </>
               ))}
 
-              <Grid item xs={12}>
+              <Grid key={1} item xs={12}>
                 <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
+                  control={<Checkbox id="allowExtraEmails" value="allowExtraEmails" color="primary" />}
                   label="I want to receive inspiration, marketing promotions and updates via email."
                 />
               </Grid>

@@ -25,7 +25,7 @@ export default function LoginForm() {
     try {
       await signInWithEmailAndPassword(auth, Email, Password)
         .then(() => {
-          navigate('/dashboard', { replace: true });
+          navigate('/', { replace: true });
         })
         .catch((e) => {
           console.log(e);

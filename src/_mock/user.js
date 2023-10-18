@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { sample } from 'lodash';
+import { auth } from 'src/config/FireBase';
 
 // ----------------------------------------------------------------------
 const Names = [
@@ -42,10 +43,11 @@ const Names = [
   'Noa',
   'Abraham',
   'Mohammad Razem',
-]
+];
+
 const users = Names.map((WorkerName, index) => ({
   id: faker.datatype.uuid(),
-  avatarUrl: `/assets/images/avatars/avatar_${Names.length%index}.jpg`,
+  avatarUrl: `/assets/images/avatars/avatar_${Names.length % index}.jpg`,
   name: WorkerName,
   department: sample(['Women', 'Men', 'Kids']),
   status: sample(['filled', 'not yet']),
@@ -53,5 +55,15 @@ const users = Names.map((WorkerName, index) => ({
   skills: sample(['Manager', 'VC Designer', 'Sales Assistant', 'Casher', 'CE-NT', 'OP']),
 }));
 
+export const tempUsers = Names.map((WorkerName, index) => ({
+  id: auth?.currentUser?.uid,
+  Name: WorkerName,
+  Gender: sample(['male', 'female', 'other']),
+  PhoneNumber: sample(['male', 'female', 'other']),
+  MainDepartment: sample(['Women', 'Men', 'Kids']),
+  Status: sample(['filled', 'not yet']),
+  MainRole: sample(['Manager', 'VC Designer', 'Sales Assistant', 'Casher', 'CE-NT', 'OP']),
+  Skills: sample(['Manager', 'VC Designer', 'Sales Assistant', 'Casher', 'CE-NT', 'OP']),
+}));
 
 export default users;

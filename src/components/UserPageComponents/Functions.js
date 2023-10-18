@@ -1,3 +1,5 @@
+import { filter } from 'lodash';
+
 export function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;

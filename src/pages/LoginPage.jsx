@@ -1,12 +1,7 @@
 import { Helmet } from 'react-helmet-async';
-// @mui
 import { Link, Container, Typography, Divider, Stack, Button } from '@mui/material';
-// hooks
 import useResponsive from '../hooks/useResponsive';
-// components
 import Logo from '../components/logo';
-import Iconify from '../components/iconify';
-// sections
 import { signOut } from 'firebase/auth';
 import { auth, googleProvider, facebookProvider } from 'src/config/FireBase';
 import { useNavigate } from 'react-router-dom';

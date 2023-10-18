@@ -8,6 +8,8 @@ import LoginPage from './pages/LoginPage';
 import Page404 from './pages/Page404';
 import DashboardAppPage from './pages/DashboardAppPage';
 import { InvitationPage } from './components/UserPageComponents';
+import { employeesPage } from './components/ConstraintSystemComponents/index';
+import { LetsGetStarting } from './components/DashboardComponent';
 
 // ----------------------------------------------------------------------
 
@@ -27,8 +29,16 @@ export default function Router() {
       element: <LoginPage />,
     },
     {
+      path: 'LetsGetStarting',
+      element: <LetsGetStarting />,
+    },
+    {
       path: 'InvitationPage/:param1/',
       element: <InvitationPage />,
+    },
+    {
+      path: 'EmployeesPage/:param1/',
+      element: <employeesPage />,
     },
     {
       element: <SimpleLayout />,

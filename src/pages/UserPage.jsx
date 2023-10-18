@@ -1,8 +1,9 @@
 import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AddWorkerStack } from 'src/components/UserPageComponents';
+import { collection, getDocs } from 'firebase/firestore';
 
 // @mui
 import {
@@ -34,6 +35,8 @@ import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
 import USERLIST from '../_mock/user';
 import { applySortFilter, getComparator } from 'src/components/UserPageComponents/Functions';
+import { auth, db } from 'src/config/FireBase';
+import { getAllUsers } from 'src/config/FireBase/CRUD';
 
 // ----------------------------------------------------------------------
 
@@ -51,7 +54,9 @@ const TABLE_HEAD = [
 export default function UserPage() {
   const [open, setOpen] = useState(null);
 
-  const [AddWorker, setAddWorker] = useState(false);
+  const UsersCollectionRef = collection(db, 'WM-UsersDataBase');
+
+  const [Users, setUsers] = useState([]);
 
   const [page, setPage] = useState(0);
 
@@ -81,11 +86,18 @@ export default function UserPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = Users.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
+  };
+
+  useEffect(() => {
+    getAllUsers(UpdateUsers);
+  }, []);
+  const UpdateUsers = async (val) => {
+    setUsers(val);
   };
 
   const handleClick = (event, name) => {
@@ -120,9 +132,9 @@ export default function UserPage() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
-  
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Users.length) : 0;
+
+  const filteredUsers = applySortFilter(Users, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -145,7 +157,7 @@ export default function UserPage() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
+                  rowCount={Users.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
@@ -225,7 +237,7 @@ export default function UserPage() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={Users.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

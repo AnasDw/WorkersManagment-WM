@@ -4,11 +4,11 @@ import { Stack, Button, Typography } from '@mui/material';
 import Checkout from './AddNewWorker/Checkout';
 import Iconify from '../iconify/Iconify';
 import GenerateInvitation from './AddNewWorkerByInvitation/GenerateInvitation';
+import { getAllUsers, pushAllUsers } from 'src/config/FireBase/CRUD';
 
 const AddWorkerStack = () => {
   const [AddWorker, setAddWorker] = useState();
   const [GenerateInvitationBool, setGenerateInvitation] = useState(false);
-  const [Copied, setCopied] = useState(false);
 
   return (
     <>
