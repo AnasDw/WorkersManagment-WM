@@ -1,6 +1,6 @@
-import { auth, db } from './index';
 import { collection, getDocs, setDoc, doc, getDoc } from 'firebase/firestore';
 import tempUsers from 'src/_mock/user';
+import { auth, db } from './index';
 
 const getAllUsers = async (CallBackFunc) => {
   try {
@@ -20,9 +20,9 @@ const getUserDataByEmail = async (email) => {
     const data = await getDoc(UsersCollectionRef);
     if (data.exists()) {
       return data.data();
-    } else {
+    } 
       return false;
-    }
+    
   } catch (error) {
     console.error(error);
     return false;

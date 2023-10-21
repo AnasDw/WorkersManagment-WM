@@ -5,7 +5,6 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Checkout from '../AddNewWorker/Checkout';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import {
@@ -14,6 +13,7 @@ import {
   getTimeDifferenceInHours,
   getTimeDifferenceInMinutes,
 } from 'src/constants/functions';
+import Checkout from '../AddNewWorker/Checkout';
 
 const defaultTheme = createTheme();
 
@@ -35,6 +35,13 @@ const InvitationPage = () => {
         case 'M':
           if (getTimeDifferenceInMinutes(currentTime, Time) > ValidateValue || currentDate > Date)
             navigate('/404', { replace: true });
+          else {
+            const a = ValidateValue - getTimeDifferenceInMinutes(currentTime, Time);
+            setTimeout(() => {
+              navigate('/404', { replace: true });
+            }, a * 60000);
+          }
+
           break;
         case 'H':
           if (getTimeDifferenceInHours(currentTime, Time) > ValidateValue || currentDate > Date)

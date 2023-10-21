@@ -1,14 +1,14 @@
 import { Helmet } from 'react-helmet-async';
 import { Link, Container, Typography, Divider } from '@mui/material';
-import useResponsive from '../hooks/useResponsive';
-import Logo from '../components/logo';
 import { signOut } from 'firebase/auth';
 import { auth } from 'src/config/FireBase';
 import { LoginForm, SignUp } from 'src/components/LoginPageComponents';
 // ----------------------------------------------------------------------
-import { StyledContent, StyledRoot, StyledSection } from '../components/LoginPageComponents/Styles/LogInPageStyles';
 import { useState } from 'react';
 import IconsForm from 'src/components/LoginPageComponents/IconsForm';
+import { StyledContent, StyledRoot, StyledSection } from '../components/LoginPageComponents/Styles/LogInPageStyles';
+import Logo from '../components/logo';
+import useResponsive from '../hooks/useResponsive';
 
 // ----------------------------------------------------------------------
 

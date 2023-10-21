@@ -1,11 +1,11 @@
 import { Stack, Button } from '@mui/material';
 import React from 'react';
-import Iconify from '../iconify/Iconify';
 
 import { auth, googleProvider, facebookProvider } from 'src/config/FireBase';
 import { signInWithPopup } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { getUserDataByEmail, pushNewUser } from 'src/config/FireBase/CRUD';
+import Iconify from '../iconify/Iconify';
 
 const icons = [
   { name: 'eva:google-fill', color: '#5a5a5a' },

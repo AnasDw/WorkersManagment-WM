@@ -4,6 +4,14 @@ import { faker } from '@faker-js/faker';
 import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography } from '@mui/material';
 
+
+import { ShortReport } from 'src/components/DashboardComponent/SharedLists';
+
+import { auth } from 'src/config/FireBase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { useEffect, useState } from 'react';
+import { getUserDataByEmail } from 'src/config/FireBase/CRUD';
+import Iconify from '../components/iconify';
 import {
   AppTasks,
   AppNewsUpdate,
@@ -13,14 +21,6 @@ import {
   AppTrafficBySite,
   AppWidgetSummary,
 } from '../sections/@dashboard/app';
-
-import { ShortReport } from 'src/components/DashboardComponent/SharedLists';
-
-import { auth } from 'src/config/FireBase';
-import { onAuthStateChanged } from 'firebase/auth';
-import { useEffect, useState } from 'react';
-import Iconify from '../components/iconify';
-import { getUserDataByEmail } from 'src/config/FireBase/CRUD';
 
 // ----------------------------------------------------------------------
 

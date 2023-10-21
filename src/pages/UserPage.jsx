@@ -1,19 +1,16 @@
 import { Helmet } from 'react-helmet-async';
-import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { useEffect, useState } from 'react';
 import { AddWorkerStack } from 'src/components/UserPageComponents';
-import { collection, getDocs } from 'firebase/firestore';
 
 // @mui
 import {
   Card,
   Table,
+  Popover,
   Stack,
   Paper,
   Avatar,
-  Button,
-  Popover,
   Checkbox,
   TableRow,
   MenuItem,
@@ -27,16 +24,14 @@ import {
 } from '@mui/material';
 // components
 
+import { applySortFilter, getComparator } from 'src/components/UserPageComponents/Functions';
+import { getAllUsers } from 'src/config/FireBase/CRUD';
 import Label from '../components/label';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
 // sections
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
-import USERLIST from '../_mock/user';
-import { applySortFilter, getComparator } from 'src/components/UserPageComponents/Functions';
-import { auth, db } from 'src/config/FireBase';
-import { getAllUsers } from 'src/config/FireBase/CRUD';
 
 // ----------------------------------------------------------------------
 
@@ -53,8 +48,6 @@ const TABLE_HEAD = [
 
 export default function UserPage() {
   const [open, setOpen] = useState(null);
-
-  const UsersCollectionRef = collection(db, 'WM-UsersDataBase');
 
   const [Users, setUsers] = useState([]);
 

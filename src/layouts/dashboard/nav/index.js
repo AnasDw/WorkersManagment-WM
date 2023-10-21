@@ -3,10 +3,11 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
-import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from '@mui/material';
+import { Box, Link, Drawer, Typography, Avatar } from '@mui/material';
 // mock
-import { getAccount } from '../../../_mock/account';
 // hooks
+import { auth } from 'src/config/FireBase';
+import { onAuthStateChanged } from 'firebase/auth';
 import useResponsive from '../../../hooks/useResponsive';
 // components
 import Logo from '../../../components/logo';
@@ -14,14 +15,10 @@ import Scrollbar from '../../../components/scrollbar';
 import NavSection from '../../../components/nav-section';
 //
 import navConfig from './config';
-import { auth } from 'src/config/FireBase';
-import { onAuthStateChanged } from 'firebase/auth';
 
 // ----------------------------------------------------------------------
 
 const NAV_WIDTH = 280;
-const account = getAccount();
-
 const StyledAccount = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',

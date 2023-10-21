@@ -12,12 +12,12 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Copyright, FormList } from './Styles/SignUpStyles';
-import IconsForm from './IconsForm';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from 'src/config/FireBase';
 import { useNavigate } from 'react-router-dom';
 import { pushNewUser } from 'src/config/FireBase/CRUD';
+import IconsForm from './IconsForm';
+import { Copyright, FormList } from './Styles/SignUpStyles';
 
 const defaultTheme = createTheme();
 

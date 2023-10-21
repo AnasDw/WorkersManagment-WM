@@ -1,18 +1,18 @@
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import { Box, Stack, AppBar, Toolbar, IconButton, Typography } from '@mui/material';
-import Iconify from '../iconify';
 import LoginIcon from '@mui/icons-material/Login';
+import { useEffect, useState } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from 'src/config/FireBase';
+import { useNavigate } from 'react-router-dom';
+import Iconify from '../iconify';
 import { bgBlur } from '../../utils/cssStyles';
 
 import Searchbar from './Searchbar';
 import LanguagePopover from './LanguagePopover';
 import NotificationsPopover from './NotificationsPopover';
 import AccountPopover from './AccountPopover/AccountPopover';
-import { useEffect, useState } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from 'src/config/FireBase';
-import { useNavigate } from 'react-router-dom';
 
 const NAV_WIDTH = 280;
 const HEADER_MOBILE = 64;
