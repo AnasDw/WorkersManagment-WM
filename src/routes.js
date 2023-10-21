@@ -1,15 +1,13 @@
 import { Navigate, useRoutes } from 'react-router-dom';
-// layouts
 import DashboardLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
-//
 import UserPage from './pages/UserPage';
 import LoginPage from './pages/LoginPage';
 import Page404 from './pages/Page404';
 import DashboardAppPage from './pages/DashboardAppPage';
 import { InvitationPage } from './components/UserPageComponents';
-import { employeesPage } from './components/ConstraintSystemComponents/index';
 import { LetsGetStarting } from './components/DashboardComponent';
+import WorkplacePage from './pages/WorkplacePage';
 
 // ----------------------------------------------------------------------
 
@@ -22,6 +20,7 @@ export default function Router() {
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: 'app', element: <DashboardAppPage /> },
         { path: 'user', element: <UserPage /> },
+        { path: 'workplace', element: <WorkplacePage /> },
       ],
     },
     {

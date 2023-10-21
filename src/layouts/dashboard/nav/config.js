@@ -1,6 +1,6 @@
 // component
 import SvgColor from '../../../components/svg-color';
-
+import ApartmentIcon from '@mui/icons-material/Apartment';
 // ----------------------------------------------------------------------
 
 const icon = (name) => <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />;
@@ -10,6 +10,11 @@ const navConfig = [
     title: 'dashboard',
     path: '/dashboard/app',
     icon: icon('ic_analytics'),
+  },
+  {
+    title: 'Workplace',
+    path: '/dashboard/workplace',
+    icon: <ApartmentIcon />,
   },
   {
     title: 'workers',
