@@ -1,6 +1,7 @@
 import { collection, getDocs, setDoc, doc, getDoc } from 'firebase/firestore';
 import tempUsers from 'src/_mock/user';
 import { auth, db } from './index';
+import { DocumentScanner } from '@mui/icons-material';
 
 const getAllUsers = async (CallBackFunc) => {
   try {
@@ -20,9 +21,22 @@ const getUserDataByEmail = async (email) => {
     const data = await getDoc(UsersCollectionRef);
     if (data.exists()) {
       return data.data();
-    } 
-      return false;
-    
+    }
+    return false;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
+const getDataFromDocByEmail = async (email, Document) => {
+  try {
+    const UsersCollectionRef = doc(db, Document, email);
+    const data = await getDoc(UsersCollectionRef);
+    if (data.exists()) {
+      return data.data();
+    }
+    return false;
   } catch (error) {
     console.error(error);
     return false;
@@ -37,12 +51,24 @@ const pushNewUser = async (user) => {
   }
 };
 
-const pushAllUsers = async () => {
+const pushData = async (place, dataToPush, user) => {
   try {
-    setDoc(doc(db, 'workers', 'ZaraWorkers'), { data: tempUsers });
+    await setDoc(doc(db, place, user), dataToPush).catch((err) => {
+      console.log(err);
+    });
   } catch (error) {
     console.error(error);
   }
 };
 
-export { getAllUsers, pushAllUsers, pushNewUser, getUserDataByEmail };
+const pushAllUsers = async () => {
+  try {
+    setDoc(doc(db, 'workers', 'ZaraWorkers'), { data: tempUsers }).then((res) => {
+      return res;
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { getAllUsers, pushAllUsers, pushNewUser, getUserDataByEmail, pushData, getDataFromDocByEmail };

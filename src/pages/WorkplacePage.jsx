@@ -1,60 +1,49 @@
-import React from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { useEffect, useState } from 'react';
+
 import { Helmet } from 'react-helmet-async';
 
-import { Typography, Container, Box, Grid } from '@mui/material';
-import { Image } from 'mui-image';
+import { WelcomeContainer, WorkPlaceCard } from 'src/components/WorkPlaceComponnents';
+import { auth } from 'src/config/FireBase';
+import { getDataFromDocByEmail } from 'src/config/FireBase/CRUD';
 
-const WorkplacePage = () => (
-  <>
-    <Helmet>
-      <title> Workplace | WM </title>
-    </Helmet>
-    <Container maxWidth="xl">
-      <Grid alignItems={'center'} direction="row" container spacing={12} mb={5}>
-        <Grid item xs={12} sm={4} md={4}>
-          <Typography variant="h3" sx={{ color: '#AC86C3' }}>
-            Workplace
-          </Typography>
-        </Grid>
-        <Grid item xs={0} sm={4} md={4}>
-          <Box sx={{ flexGrow: 1 }} />
-        </Grid>
+const WorkplacePage = () => {
+  const [SignedIn, setSignedIn] = useState(false);
+  const [Loading, setLoading] = useState(true);
+  const [WorkplaceData, setWorkplaceData] = useState(null);
 
-        <Grid item xs={12} sm={4} md={4}>
-          <Typography variant="h7" sx={{ color: '#9a9999c3' }}>
-            Here you will build your own business
-          </Typography>
-        </Grid>
-      </Grid>
+  useEffect(() => {
+    onAuthStateChanged(auth, (newUser) => {
+      if (newUser) {
+        try {
+          if (newUser.SignedIn) console.log('123123');
+          getDataFromDocByEmail(auth?.currentUser?.email, 'Managers')
+            .then((response) => {
+              if (response != false) {
+                setWorkplaceData(response);
+                setSignedIn(true);
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+              setLoading(false);
+            });
+        } catch (error) {
+          console.error(error);
+          setLoading(false);
+        }
+      }
+    });
+  }, []);
 
-      <Grid container xs={12} sm={12} md={12} justifyContent={'center'} alignItems={'center'} spacing={3}>
-        <Grid container p={4} spacing={5} direction={'column'} item xs={12} sm={6} md={6}>
-          <Grid item>
-            <Typography variant="h1" sx={{ color: '#462F53', fontWeight: 'bolder' }}>
-              Let's make work easier.
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Typography variant="h6" sx={{ color: '#AC86C3' }}>
-              How will you be using WM - Workers Management ?
-            </Typography>
-          </Grid>
-        </Grid>
-        <Grid item p={8}>
-          <div
-            style={{
-              backgroundColor: '#462F53',
-              width: '400px',
-              height: '420px',
-            }}
-          >
-            {' '}
-            <Image src="../assets/WM.png" alt="login" />
-          </div>
-        </Grid>
-      </Grid>
-    </Container>
-  </>
-);
+  return (
+    <>
+      <Helmet>
+        <title> Workplace | WM </title>
+      </Helmet>
+      {SignedIn ? <WorkPlaceCard data={WorkplaceData} /> : !Loading ? <WelcomeContainer /> : null}
+    </>
+  );
+};
 
 export default WorkplacePage;
