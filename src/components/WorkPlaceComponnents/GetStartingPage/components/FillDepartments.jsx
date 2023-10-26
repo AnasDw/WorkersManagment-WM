@@ -19,7 +19,7 @@ const FillDepartments = ({ Bool, handleData }) => {
   const addChange = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    let newData = [];
+    const newData = [];
     data.forEach((item) => newData.push(item));
     setDepartmentsNames(newData);
   };

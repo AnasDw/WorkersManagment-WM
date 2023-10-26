@@ -1,7 +1,5 @@
-import React from 'react';
-
-import { Typography, Container, Box, Grid } from '@mui/material';
 import { useState } from 'react';
+import { Typography, Container, Box, Grid } from '@mui/material';
 import StoreMallDirectoryIcon from '@mui/icons-material/StoreMallDirectory';
 import Diversity1Icon from '@mui/icons-material/Diversity1';
 import { GetStartingPage } from '..';

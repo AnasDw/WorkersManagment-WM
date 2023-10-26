@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
@@ -7,9 +7,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
-import { useState } from 'react';
 import { TransferList } from '.';
-import { useEffect } from 'react';
 
 const FillPositions = ({ data }) => {
   const [Data, setData] = useState(data);
@@ -18,7 +16,7 @@ const FillPositions = ({ data }) => {
   const initialCounterValues = Array(Data.DepartmentsNames.length).fill(0);
   const [CounterValues, setCounterValues] = useState(initialCounterValues);
 
-  let TEMP = Data.DepartmentsNames.map((item, index) => ({
+  const TEMP = Data.DepartmentsNames.map((item, index) => ({
     dep: item,
     pos: Array(CounterValues[index]).fill(null),
   }));
@@ -28,19 +26,21 @@ const FillPositions = ({ data }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     let NextBoolean = true;
-    for (let index = 0; index < PosValues.length; index++) {
+    for (let index = 0; index < PosValues.length; ) {
       if (PosValues[index].pos.length < 1) {
         NextBoolean = false;
         return false;
       }
       if (PosValues[index].pos >= 1) {
-        for (let j = 0; index < PosValues[index].pos.length; j++) {
+        for (let j = 0; index < PosValues[index].pos.length; ) {
           if (PosValues[index].pos[j] == null) {
             NextBoolean = false;
             return false;
           }
+          j += 1;
         }
       }
+      index += 1;
     }
     if (NextBoolean) {
       setData((old) => {
@@ -50,6 +50,7 @@ const FillPositions = ({ data }) => {
       });
       setBool(true);
     }
+    return true;
   };
 
   const addChange = (event, index, dep) => {
@@ -125,6 +126,7 @@ const FillPositions = ({ data }) => {
               <Box key={'ab'} rowGap={1} columnGap={1} component="form">
                 {Array.from({ length: CounterValues[index] }, (_, index) => (
                   <TextField
+                    key={index}
                     margin="normal"
                     required
                     value={PosValues.find((v) => v.dep === dep).pos[index]}

@@ -88,10 +88,10 @@ export default function TimeTable({ days, data }) {
           window.location.reload();
         })
         .catch((err) => {
-          clg.error(err);
+          console.error(err);
         });
     } catch (error) {
-      clg.error(error);
+      console.error(error);
     }
   };
 

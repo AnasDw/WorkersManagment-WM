@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,9 +11,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import Typography from '@mui/material/Typography';
 
-import { useState } from 'react';
 import { FillDepartments, FillPositions } from './components';
-import { useEffect } from 'react';
 
 const GetStartingPage = () => {
   const [Bool, setBool] = useState(false);
