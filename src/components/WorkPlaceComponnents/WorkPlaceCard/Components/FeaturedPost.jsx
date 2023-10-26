@@ -2,7 +2,7 @@ import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import CardActionArea from '@mui/material/CardActionArea';
-import Background from '../../../../assets/backgrounds/pexels-pixabay-509922.jpg';
+import BG from '/Users/anasdweik/WorkersManagment-WM-1/src/assets/backgrounds/pexels-huseyn-kamaladdin-667838.jpg';
 
 const FeaturedPost = (props) => {
   return (
@@ -13,7 +13,7 @@ const FeaturedPost = (props) => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'end',
-          backgroundImage: `url(${Background})`,
+          backgroundImage: `url(${BG})`,
           height: '30vw',
           backgroundSize: 'contain',
           backgroundRepeat: 'no-repeat',
