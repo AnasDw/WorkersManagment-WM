@@ -4,7 +4,6 @@ import { faker } from '@faker-js/faker';
 import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography } from '@mui/material';
 
-
 import { ShortReport } from 'src/components/DashboardComponent/SharedLists';
 
 import { auth } from 'src/config/FireBase';
@@ -54,8 +53,6 @@ export default function DashboardAppPage() {
           {SignedIn ? ` Hi, Welcome back ${auth.currentUser.displayName}` : null}
         </Typography>
 
-        
-
         <Grid container spacing={3}>
           {ShortReport.map((item, index) => (
             <Grid key={index} item xs={12} sm={6} md={3}>
@@ -65,37 +62,6 @@ export default function DashboardAppPage() {
 
           <Grid item xs={12} md={6} lg={8}>
             <AppWebsiteVisits />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={4}>
-            <AppCurrentVisits
-              title="Current Visits"
-              chartData={[
-                { label: 'America', value: 4344 },
-                { label: 'Asia', value: 5435 },
-                { label: 'Europe', value: 1443 },
-                { label: 'Africa', value: 4443 },
-              ]}
-              chartColors={[
-                theme.palette.primary.main,
-                theme.palette.info.main,
-                theme.palette.warning.main,
-                theme.palette.error.main,
-              ]}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={12} lg={12}>
-            <AppNewsUpdate
-              title="News Update"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.datatype.uuid(),
-                title: faker.name.jobTitle(),
-                description: faker.name.jobTitle(),
-                image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                postedAt: faker.date.recent(),
-              }))}
-            />
           </Grid>
 
           <Grid item xs={12} md={4} lg={4}>
