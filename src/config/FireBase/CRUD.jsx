@@ -53,9 +53,13 @@ const pushNewUser = async (user) => {
 
 const pushData = async (place, dataToPush, user) => {
   try {
-    await setDoc(doc(db, place, user), dataToPush).catch((err) => {
-      console.log(err);
-    });
+    await setDoc(doc(db, place, user), dataToPush)
+      .then((res) => {
+        return true;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   } catch (error) {
     console.error(error);
   }

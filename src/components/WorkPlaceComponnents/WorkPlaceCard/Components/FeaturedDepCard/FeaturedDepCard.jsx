@@ -14,21 +14,33 @@ import b2 from '/Users/anasdweik/WorkersManagment-WM-1/src/assets/backgrounds/b2
 import b3 from '/Users/anasdweik/WorkersManagment-WM-1/src/assets/backgrounds/b3.jpg';
 import b4 from '/Users/anasdweik/WorkersManagment-WM-1/src/assets/backgrounds/b4.jpg';
 import b5 from '/Users/anasdweik/WorkersManagment-WM-1/src/assets/backgrounds/b5.jpg';
+import ResponsiveDialog from './ResponsiveDialog';
+import { useState } from 'react';
 
 const ImgByIndex = (i) => {
-  if (i == 1) return b1;
-  if (i == 2) return b2;
-  if (i == 3) return b3;
-  if (i == 4) return b4;
-  if (i == 5) return b5;
+  if (i === 1) return b1;
+  if (i === 2) return b2;
+  if (i === 3) return b3;
+  if (i === 4) return b4;
+  if (i === 5) return b5;
 };
 
 export default function FeaturedDepCard({ props }) {
+  const [open, setOpen] = useState(false);
+  const [Data, setData] = useState();
+
+  const handleClickEdit = (item) => {
+    setData(item);
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <>
-      <Grid container spacing={3} mt={8} justifyContent={'center'}>
+      <Grid container spacing={3} mt={8} alignItems={'center'} justifyContent={'center'}>
         {props.data.Positions.map((item, index) => (
-          <Grid key={index} item xs={12} sm={6} md={3}>
+          <Grid key={index} item xs={12} sm={6} md={3} lg={3}>
             <Card sx={{ maxWidth: 345 }}>
               <CardActionArea>
                 <CardMedia component="img" height="140" src={ImgByIndex(index + 1)} alt="green iguana" />
@@ -48,7 +60,12 @@ export default function FeaturedDepCard({ props }) {
                 <Button size="small" color="primary">
                   Share
                 </Button>
-                <Button size="small">
+                <Button
+                  onClick={() => {
+                    handleClickEdit(item);
+                  }}
+                  size="small"
+                >
                   <EditNoteIcon />
                 </Button>
               </CardActions>
@@ -56,6 +73,7 @@ export default function FeaturedDepCard({ props }) {
           </Grid>
         ))}
       </Grid>
+      <ResponsiveDialog data={Data} boolean={open} func={handleClose} data2push={props.data} />
     </>
   );
 }
