@@ -19,14 +19,16 @@ import {
   AppWebsiteVisits,
   AppTrafficBySite,
   AppWidgetSummary,
+  AppLinkGeneratorTaskEnforcer,
 } from '../sections/@dashboard/app';
+import { useNavigate } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
 export default function DashboardAppPage() {
   const theme = useTheme();
   const [SignedIn, setSignedIn] = useState(false);
-
+  const navigate = useNavigate();
   useEffect(() => {
     onAuthStateChanged(auth, (newUser) => {
       if (newUser) {
@@ -38,6 +40,7 @@ export default function DashboardAppPage() {
         });
       } else {
         setSignedIn(false);
+        navigate('/login', { replace: true });
       }
     });
   }, []);
@@ -59,6 +62,10 @@ export default function DashboardAppPage() {
               <AppWidgetSummary title={item.title} total={item.total} icon={item.icon} color={item.color} />
             </Grid>
           ))}
+
+          <Grid item xs={12} md={12} lg={12}>
+            <AppLinkGeneratorTaskEnforcer />
+          </Grid>
 
           <Grid item xs={12} md={6} lg={8}>
             <AppWebsiteVisits />

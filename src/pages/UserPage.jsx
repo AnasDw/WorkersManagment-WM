@@ -2,6 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { sentenceCase } from 'change-case';
 import { useEffect, useState } from 'react';
 import { AddWorkerStack } from 'src/components/UserPageComponents';
+import { sample } from 'lodash';
 
 // @mui
 import {
@@ -62,6 +63,8 @@ export default function UserPage() {
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const [Counter, setCounter] = useState(0);
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -131,6 +134,16 @@ export default function UserPage() {
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
+  const generateAvatar = () => {
+    const avatar = `/assets/images/avatars/avatar_${Users.length % Counter}.jpg`;
+    console.log(avatar);
+    setCounter((old) => {
+      const n = old + 1;
+      return n;
+    });
+    return avatar;
+  };
+
   return (
     <>
       <Helmet>
@@ -139,7 +152,6 @@ export default function UserPage() {
 
       <Container>
         <AddWorkerStack />
-
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
@@ -156,7 +168,7 @@ export default function UserPage() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, j) => {
                     const { id, name, role, status, department, avatarUrl, skills } = row;
                     const selectedUser = selected.indexOf(name) !== -1;
 
@@ -168,7 +180,12 @@ export default function UserPage() {
 
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} />
+                            <Avatar
+                              alt={name}
+                              src={`/assets/images/avatars/avatar_${
+                                Users.length % (Math.floor(Math.random() * Users.length) + 1)
+                              }.jpg`}
+                            />
                             <Typography variant="subtitle2" noWrap>
                               {name}
                             </Typography>

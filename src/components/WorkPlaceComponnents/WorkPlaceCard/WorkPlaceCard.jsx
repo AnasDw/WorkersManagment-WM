@@ -8,7 +8,7 @@ import { AppCurrentVisits } from 'src/sections/@dashboard/app';
 const WorkPlaceCard = (data) => {
   return (
     <>
-      <Container maxWidth="xl" height={100} sx={{ backgroundColor: '' }}>
+      <Container maxWidth="xl" height={100}>
         <FeaturedPost props={data} />
 
         <Grid container justifyContent={'center'} sx={{ display: 'flex' }}>
@@ -24,7 +24,7 @@ const WorkPlaceCard = (data) => {
             <FormatQuoteIcon />
           </Grid>
           <Grid item>
-            <Typography textAlign={'center'} variant="h4">
+            <Typography sx={{ color: '#5050507d' }} textAlign={'center'} variant="h4">
               Success is the product of relentless effort, unwavering dedication, and a shared passion for excellence.
               Together, we build a future where each day is a step closer to greatness.
             </Typography>

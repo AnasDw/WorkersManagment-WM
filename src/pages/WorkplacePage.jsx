@@ -16,12 +16,13 @@ const WorkplacePage = () => {
     onAuthStateChanged(auth, (newUser) => {
       if (newUser) {
         try {
-          if (newUser.SignedIn) console.log('123123');
           getDataFromDocByEmail(auth?.currentUser?.email, 'Managers')
             .then((response) => {
               if (response != false) {
                 setWorkplaceData(response);
                 setSignedIn(true);
+              } else {
+                setLoading(false);
               }
             })
             .catch((error) => {
