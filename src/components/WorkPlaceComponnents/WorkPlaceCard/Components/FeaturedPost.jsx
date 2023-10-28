@@ -21,7 +21,12 @@ const FeaturedPost = (props) => {
         component="a"
         href="#"
       >
-        <Typography marginRight={4} md={{ marginRight: 1 }} variant="h2" sx={{ fontFamily: 'Garamond' }}>
+        <Typography
+          marginRight={4}
+          md={{ marginRight: 1 }}
+          variant="h2"
+          sx={{ fontFamily: 'Garamond', color: '#324E87' }}
+        >
           {props.props.data.WorkPlaceName}
         </Typography>
       </CardActionArea>

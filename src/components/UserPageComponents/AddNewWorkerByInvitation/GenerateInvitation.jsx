@@ -21,7 +21,8 @@ import { getCurrentDate, getCurrentTime } from 'src/constants/functions';
 
 const SelectList = [{ id: 'Minutes' }, { id: 'Hours' }, { id: 'Days' }];
 
-const GenerateInvitation = () => {
+const GenerateInvitation = ({ boolean }) => {
+
   const [Copied, setCopied] = React.useState(false);
   const [ValidateType, setValidateType] = React.useState('None');
   const [ValidateValue, setValidateValue] = React.useState(0);
@@ -36,6 +37,9 @@ const GenerateInvitation = () => {
 
       await copy(URL).then(() => {
         setCopied(true);
+        if(boolean){
+          
+        }
         setTimeout(() => {
           setCopied(false);
           window.location.reload();
@@ -50,7 +54,6 @@ const GenerateInvitation = () => {
     setValidateType(event.target.value);
     const a = SelectList.find((obj) => obj.id === ValidateType);
     setTemp(a);
-    console.log(temp);
   };
   return (
     <>

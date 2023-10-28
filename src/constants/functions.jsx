@@ -1,3 +1,4 @@
+
 export function getCurrentDate(separator = '') {
   const newDate = new Date();
   const date = newDate.getDate();
@@ -41,7 +42,7 @@ export function getTimeDifferenceInHours(time1, time2) {
     if (meridian === 'PM' && hours !== 12) {
       hours += 12;
     } else if (meridian === 'AM' && hours === 12) {
-      hours = 0; 
+      hours = 0;
     }
 
     return hours * 60 + minutes;

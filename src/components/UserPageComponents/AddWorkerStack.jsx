@@ -46,7 +46,7 @@ const AddWorkerStack = () => {
       </Stack>
 
       {AddWorker ? <Checkout PropCancelIcon /> : null}
-      {GenerateInvitationBool ? <GenerateInvitation /> : null}
+      {GenerateInvitationBool ? <GenerateInvitation boolean={false} /> : null}
     </>
   );
 };

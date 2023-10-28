@@ -45,7 +45,7 @@ export default function FeaturedDepCard({ props }) {
               <CardActionArea>
                 <CardMedia component="img" height="140" src={ImgByIndex(index + 1)} alt="green iguana" />
                 <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
+                  <Typography gutterBottom variant="h5" component="div" sx={{ color: '#324E87' }}>
                     {`${item.Dep} Department`}
                   </Typography>
                   <Grid mt={2} display={'flex'} container variant="body2" sx={{ gap: 1 }}>

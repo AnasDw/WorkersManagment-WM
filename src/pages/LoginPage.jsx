@@ -9,6 +9,7 @@ import IconsForm from 'src/components/LoginPageComponents/IconsForm';
 import { StyledContent, StyledRoot, StyledSection } from '../components/LoginPageComponents/Styles/LogInPageStyles';
 import Logo from '../components/logo';
 import useResponsive from '../hooks/useResponsive';
+import logoBG from '/Users/anasdweik/WorkersManagment-WM-1/src/assets/WM.png';
 
 // ----------------------------------------------------------------------
 
@@ -38,20 +39,9 @@ export default function LoginPage() {
       </Helmet>
 
       <StyledRoot>
-        <Logo
-          sx={{
-            position: 'fixed',
-            top: { xs: 16, sm: 24, md: 40 },
-            left: { xs: 16, sm: 24, md: 40 },
-          }}
-        />
-
         {mdUp && (
-          <StyledSection>
-            <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Hi, Welcome Back
-            </Typography>
-            <img src="/assets/illustrations/illustration_login.png" alt="login" />
+          <StyledSection sx={{backgroundColor: "#000000e4"}}>
+            <img src={logoBG} alt="login" />
           </StyledSection>
         )}
 
