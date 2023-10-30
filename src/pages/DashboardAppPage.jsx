@@ -28,13 +28,16 @@ import { useNavigate } from 'react-router-dom';
 export default function DashboardAppPage() {
   const theme = useTheme();
   const [SignedIn, setSignedIn] = useState(false);
+  const [Email, setEmail] = useState(null);
   const navigate = useNavigate();
+
   useEffect(() => {
     onAuthStateChanged(auth, (newUser) => {
       if (newUser) {
         getUserDataByEmail(auth.currentUser.email).then((res) => {
           if (res) {
             auth.currentUser.displayName = res.UserName;
+            setEmail(auth.currentUser.email);
             setSignedIn(true);
           }
         });
@@ -64,7 +67,7 @@ export default function DashboardAppPage() {
           ))}
 
           <Grid item xs={12} md={12} lg={12}>
-            <AppLinkGeneratorTaskEnforcer />
+            <AppLinkGeneratorTaskEnforcer email={Email} />
           </Grid>
 
           <Grid item xs={12} md={6} lg={8}>

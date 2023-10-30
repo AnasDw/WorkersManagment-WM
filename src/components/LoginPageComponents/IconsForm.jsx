@@ -8,8 +8,8 @@ import { getUserDataByEmail, pushNewUser } from 'src/config/FireBase/CRUD';
 import Iconify from '../iconify/Iconify';
 
 const icons = [
-  { name: 'eva:google-fill', color: '#5a5a5a' },
-  { name: 'eva:facebook-fill', color: '#1877F2' },
+  { name: 'eva:google-fill', color: '#D8BE78' },
+  { name: 'eva:facebook-fill', color: '#D8BE78' },
 ];
 
 const IconsForm = () => {

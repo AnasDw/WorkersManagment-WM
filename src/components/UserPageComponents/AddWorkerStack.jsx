@@ -4,7 +4,7 @@ import { Stack, Button, Typography } from '@mui/material';
 import { getAllUsers, pushAllUsers } from 'src/config/FireBase/CRUD';
 import Checkout from './AddNewWorker/Checkout';
 import Iconify from '../iconify/Iconify';
-import GenerateInvitation from './AddNewWorkerByInvitation/GenerateInvitation';
+import GenerateInvitation from '../GenerateInvitationPageComponents/GenerateInvitation';
 
 const AddWorkerStack = () => {
   const [AddWorker, setAddWorker] = useState();

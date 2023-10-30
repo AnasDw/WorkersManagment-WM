@@ -1,3 +1,3 @@
-import { employeesPage } from './Employees_Side';
+import { TaskEnforcerPage } from './TaskEnforcerPage';
 
-export { employeesPage };
+export { TaskEnforcerPage };
