@@ -18,32 +18,72 @@ import Select from '@mui/material/Select';
 import Iconify from 'src/components/iconify/Iconify';
 import { Button } from '@mui/material';
 import { getCurrentDate, getCurrentTime } from 'src/constants/functions';
+import { auth } from 'src/config/FireBase';
+import { getDataFromDocByEmail, pushData } from 'src/config/FireBase/CRUD';
+import { useState } from 'react';
 
 const SelectList = [{ id: 'Minutes' }, { id: 'Hours' }, { id: 'Days' }];
 
 const GenerateInvitation = ({ boolean }) => {
+  const [Copied, setCopied] = useState(false);
+  const [Error, setError] = useState(false);
+  const [ValidateType, setValidateType] = useState('None');
+  const [ValidateValue, setValidateValue] = useState(0);
+  const [ShortMsg, setShortMsg] = useState();
+  const [temp, setTemp] = useState({});
 
-  const [Copied, setCopied] = React.useState(false);
-  const [ValidateType, setValidateType] = React.useState('None');
-  const [ValidateValue, setValidateValue] = React.useState(0);
-  const [ShortMsg, setShortMsg] = React.useState();
-  const [temp, setTemp] = React.useState({});
-
+  const SetWorkersStatus = async () => {
+    try {
+      await getDataFromDocByEmail(auth.currentUser.email, 'workers').then((res) => {
+        if (res !== false) {
+          const Data2Push = res.data.map((data) => {
+            const temp = { ...data };
+            temp.status = 'not yet';
+            temp.Requests = null;
+            return temp;
+          });
+          pushData('workers', { data: Data2Push }, auth.currentUser.email);
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const CopyLink = async () => {
     try {
+      if (boolean) SetWorkersStatus();
       const date = getCurrentDate();
       const showTime = getCurrentTime();
-      const URL = `http://localhost:3000/InvitationPage/${ValidateType.charAt(0)}${ValidateValue}${date}${showTime}`;
 
-      await copy(URL).then(() => {
-        setCopied(true);
-        if(boolean){
-          
-        }
-        setTimeout(() => {
-          setCopied(false);
-          window.location.reload();
-        }, 1000);
+      var CryptoJS = require('crypto-js');
+      const encrypted = CryptoJS.AES.encrypt(`${auth.currentUser.email}`, process.env.REACT_APP_SecretKey);
+
+      const encodedURL = encodeURIComponent(encrypted.toString());
+      let URL = `http://localhost:3000/InvitationPage/${encodedURL}`;
+      let place = 'AddUserInvitation';
+      if (boolean) {
+        URL = `http://localhost:3000/TaskEnforcerPage/${encodedURL}`;
+        place = 'TaskEnforcer';
+      }
+
+      await pushData(
+        place,
+        {
+          ValidateType: ValidateType.charAt(0),
+          ValidateValue: ValidateValue,
+          date: date,
+          showTime: showTime,
+          link: URL,
+        },
+        auth.currentUser.email
+      ).then((res) => {
+        copy(URL).then(() => {
+          setCopied(true);
+          setTimeout(() => {
+            setCopied(false);
+            window.location.reload();
+          }, 1000);
+        });
       });
     } catch (e) {
       console.error(e);
@@ -54,6 +94,13 @@ const GenerateInvitation = ({ boolean }) => {
     setValidateType(event.target.value);
     const a = SelectList.find((obj) => obj.id === ValidateType);
     setTemp(a);
+  };
+
+  const handleSubmitForm = (event) => {
+    event.preventDefault();
+    setError(false);
+    if (ValidateType != 'None' && ValidateValue != 0) CopyLink();
+    else setError(true);
   };
   return (
     <>
@@ -76,7 +123,7 @@ const GenerateInvitation = ({ boolean }) => {
             <Grid container spacing={3}>
               <Grid item xs={12} sm={12}>
                 <>
-                  <FormControl sx={{ m: 1, minWidth: 120 }}>
+                  <FormControl sx={{ m: 1, minWidth: 120 }} error={Error}>
                     <InputLabel id="demo-simple-select-helper-label">Valid For</InputLabel>
                     <Select
                       labelId="demo-simple-select-helper-label"
@@ -94,7 +141,7 @@ const GenerateInvitation = ({ boolean }) => {
                     <FormHelperText>Invitation Valid For</FormHelperText>
                   </FormControl>
 
-                  <FormControl sx={{ m: 1, minWidth: 120 }}>
+                  <FormControl sx={{ m: 1, minWidth: 120 }} error={Error}>
                     <Select
                       onChange={(e) => {
                         setValidateValue(e.target.value);
@@ -130,8 +177,7 @@ const GenerateInvitation = ({ boolean }) => {
             <Grid my={2} item xs={12} md={12}>
               <Button
                 onClick={(e) => {
-                  e.preventDefault();
-                  CopyLink();
+                  handleSubmitForm(e);
                 }}
                 variant="outlined"
                 startIcon={

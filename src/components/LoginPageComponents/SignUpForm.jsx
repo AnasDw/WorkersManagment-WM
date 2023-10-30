@@ -21,6 +21,17 @@ import { Copyright, FormList } from './Styles/SignUpStyles';
 
 const defaultTheme = createTheme();
 
+const customTheme = createTheme({
+  palette: {
+    ...defaultTheme.palette,
+    customColor: {
+      main: '#D8BE78',
+      dark: '#D8BE78',
+      light: '#D8BE78',
+    },
+  },
+});
+
 export default function SignUp() {
   const navigate = useNavigate();
 
@@ -44,7 +55,7 @@ export default function SignUp() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={customTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -55,7 +66,7 @@ export default function SignUp() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: '#D8BE78' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -67,6 +78,7 @@ export default function SignUp() {
                 <>
                   <Grid key={i} item xs={item.xs} sm={item.sm}>
                     <TextField
+                      color="customColor"
                       key={i}
                       autoComplete={item.autoComplete}
                       name={item.id}
@@ -82,12 +94,24 @@ export default function SignUp() {
 
               <Grid key={1} item xs={12}>
                 <FormControlLabel
-                  control={<Checkbox id="allowExtraEmails" value="allowExtraEmails" color="primary" />}
+                  control={
+                    <Checkbox
+                      color="customColor"
+                      id="allowExtraEmails"
+                      value="allowExtraEmails"
+                      sx={{ color: '#D8BE78' }}
+                    />
+                  }
                   label="I want to receive inspiration, marketing promotions and updates via email."
                 />
               </Grid>
             </Grid>
-            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2, backgroundColor: '#3A8E93', '&:hover': { backgroundColor: '#1e6467' } }}
+            >
               Sign Up
             </Button>
 
@@ -101,6 +125,7 @@ export default function SignUp() {
             <Grid container sx={{ marginTop: 2 }} justifyContent="flex-end">
               <Grid item>
                 <Link
+                  sx={{ color: '#3A8E93' }}
                   onClick={() => {
                     window.location.reload();
                   }}

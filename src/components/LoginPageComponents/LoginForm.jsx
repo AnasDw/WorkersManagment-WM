@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 // @mui
 import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 import { LoadingButton } from '@mui/lab';
 // components
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -34,46 +36,70 @@ export default function LoginForm() {
       console.log(e);
     }
   };
+
+  const defaultTheme = createTheme();
+
+  const customTheme = createTheme({
+    palette: {
+      ...defaultTheme.palette,
+      customColor: {
+        main: '#D8BE78',
+        dark: '#D8BE78',
+        light: '#D8BE78',
+      },
+    },
+  });
   return (
     <>
-      <Stack spacing={3}>
-        <TextField
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-          name="email"
-          label="Email address"
-        />
+      <ThemeProvider theme={customTheme}>
+        <Stack spacing={3}>
+          <TextField
+            color="customColor"
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+            name="email"
+            label="Email address"
+          />
 
-        <TextField
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-          name="password"
-          label="Password"
-          type={showPassword ? 'text' : 'password'}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                  <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Stack>
+          <TextField
+            color="customColor"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+            name="password"
+            label="Password"
+            type={showPassword ? 'text' : 'password'}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                    <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Stack>
 
-      <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-        <Checkbox name="remember" label="Remember me" />
-        <Link sx={{ color: '#6e6e6e' }} variant="subtitle2" underline="hover">
-          Forgot password?
-        </Link>
-      </Stack>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
+          <Checkbox color="customColor" name="remember" label="Remember me" />
+          <Link sx={{ color: '#6e6e6e' }} variant="subtitle2" underline="hover">
+            Forgot password?
+          </Link>
+        </Stack>
 
-      <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
-        Login
-      </LoadingButton>
+        <LoadingButton
+          sx={{ backgroundColor: '#3A8E93', '&:hover': { backgroundColor: '#1e6467' } }}
+          fullWidth
+          size="large"
+          type="submit"
+          variant="contained"
+          onClick={handleClick}
+        >
+          Login
+        </LoadingButton>
+      </ThemeProvider>
     </>
   );
 }

@@ -27,6 +27,7 @@ export const SignOut = async () => {
   }
 };
 
+
 export default function LoginPage() {
   const [ShowSignUp, setShowSignUp] = useState(false);
 
@@ -40,7 +41,7 @@ export default function LoginPage() {
 
       <StyledRoot>
         {mdUp && (
-          <StyledSection sx={{backgroundColor: "#000000e4"}}>
+          <StyledSection sx={{ backgroundColor: '#3A8E93' }}>
             <img src={logoBG} alt="login" />
           </StyledSection>
         )}
@@ -67,6 +68,7 @@ export default function LoginPage() {
                       setShowSignUp(true);
                     }}
                     variant="subtitle2"
+                    sx={{ color: '#3A8E93' }}
                   >
                     Get started
                   </Link>
@@ -76,7 +78,7 @@ export default function LoginPage() {
 
                 <Divider sx={{ my: 3 }}>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    OR
+                    OR  
                   </Typography>
                 </Divider>
                 <LoginForm />

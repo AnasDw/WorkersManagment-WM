@@ -2,6 +2,8 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 
 import { Helmet } from 'react-helmet-async';
+import Skeleton from '@mui/material/Skeleton';
+import Box from '@mui/material/Box';
 
 import { WelcomeContainer, WorkPlaceCard } from 'src/components/WorkPlaceComponnents';
 import { auth } from 'src/config/FireBase';
@@ -42,7 +44,17 @@ const WorkplacePage = () => {
       <Helmet>
         <title> Workplace | WM </title>
       </Helmet>
-      {SignedIn ? <WorkPlaceCard data={WorkplaceData} /> : !Loading ? <WelcomeContainer /> : null}
+      {SignedIn ? (
+        <WorkPlaceCard data={WorkplaceData} />
+      ) : !Loading ? (
+        <WelcomeContainer />
+      ) : (
+        <Box sx={{ m: 4, mt: 8 }}>
+          <Skeleton />
+          <Skeleton animation="wave" />
+          <Skeleton animation={false} />
+        </Box>
+      )}
     </>
   );
 };

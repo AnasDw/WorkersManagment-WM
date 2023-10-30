@@ -26,12 +26,14 @@ import {
 // components
 
 import { applySortFilter, getComparator } from 'src/components/UserPageComponents/Functions';
-import { getAllUsers } from 'src/config/FireBase/CRUD';
+import { getAllUsers, getDataFromDocByEmail } from 'src/config/FireBase/CRUD';
 import Label from '../components/label';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
 // sections
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from 'src/config/FireBase';
 // mock
 
 // ----------------------------------------------------------------------
@@ -90,11 +92,16 @@ export default function UserPage() {
   };
 
   useEffect(() => {
-    getAllUsers(UpdateUsers);
+    onAuthStateChanged(auth, (newUser) => {
+      if (newUser) {
+        getDataFromDocByEmail(auth.currentUser.email, 'workers').then((res) => {
+          if (res != false) {
+            setUsers(res.data);
+          }
+        });
+      }
+    });
   }, []);
-  const UpdateUsers = async (val) => {
-    setUsers(val);
-  };
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -111,9 +118,6 @@ export default function UserPage() {
     setSelected(newSelected);
   };
 
-  const handleAddWorker = (event) => {
-    event.preventDefault();
-  };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -133,16 +137,6 @@ export default function UserPage() {
   const filteredUsers = applySortFilter(Users, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
-
-  const generateAvatar = () => {
-    const avatar = `/assets/images/avatars/avatar_${Users.length % Counter}.jpg`;
-    console.log(avatar);
-    setCounter((old) => {
-      const n = old + 1;
-      return n;
-    });
-    return avatar;
-  };
 
   return (
     <>

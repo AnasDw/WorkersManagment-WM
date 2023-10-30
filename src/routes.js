@@ -3,12 +3,13 @@ import DashboardLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
 import UserPage from './pages/UserPage';
 import LoginPage from './pages/LoginPage';
+import Page200 from './pages/Page200';
 import Page404 from './pages/Page404';
 import DashboardAppPage from './pages/DashboardAppPage';
 import { InvitationPage } from './components/UserPageComponents';
 import { LetsGetStarting } from './components/DashboardComponent';
 import WorkplacePage from './pages/WorkplacePage';
-
+import { TaskEnforcerPage } from './components/GeneratorTaskEnforcerComponents';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -36,8 +37,12 @@ export default function Router() {
       element: <InvitationPage />,
     },
     {
-      path: 'EmployeesPage/:param1/',
-      element: <employeesPage />,
+      path: 'TaskEnforcerPage/:param1/',
+      element: <TaskEnforcerPage />,
+    },
+    {
+      path: '200',
+      element: <Page200 />,
     },
     {
       element: <SimpleLayout />,
