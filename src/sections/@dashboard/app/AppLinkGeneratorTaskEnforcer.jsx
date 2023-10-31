@@ -7,47 +7,111 @@ import { Button, CardActionArea, CardActions } from '@mui/material';
 import BG from '/Users/anasdweik/WorkersManagment-WM-1/src/assets/backgrounds/pexels-kate-trifo-4057060.jpg';
 import Iconify from 'src/components/iconify/Iconify';
 import GenerateInvitation from 'src/components/GenerateInvitationPageComponents/GenerateInvitation';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import { getDataFromDocByEmail } from 'src/config/FireBase/CRUD';
-import { getCurrentDate } from 'src/constants';
+import { useState, useEffect, useReducer } from 'react';
+
+import { DeleteData, getDataFromDocByEmail } from 'src/config/FireBase/CRUD';
+import { getCurrentDate, getCurrentTime, getTimeDifferenceInHours, getTimeDifferenceInMinutes } from 'src/constants';
 import copy from 'clipboard-copy';
 
+const ACTIONS = {
+  UPDATE_DATA: 'UPDATE_DATA',
+  DELETE_DATA: 'DELETE_DATA',
+  ADD_NEW_INVITATION: 'ADD_NEW_INVITATION',
+  TOGGLE_COPY_BTN: 'TOGGLE_COPY_BTN',
+  TOGGLE_LOADING_BTN: 'TOGGLE_COPY_BTN',
+  FORMAT_TIME: 'FORMAT_TIME',
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    //---------------------------------------------------
+    case ACTIONS.UPDATE_DATA:
+      return { ...state, OnlineReq: action.payload };
+    //---------------------------------------------------
+    case ACTIONS.ADD_NEW_INVITATION:
+      return { ...state, displayGenerateInvitation: true };
+    //---------------------------------------------------
+    case ACTIONS.TOGGLE_COPY_BTN:
+      return { ...state, Copied: !state.Copied };
+    //---------------------------------------------------
+    case ACTIONS.TOGGLE_LOADING_BTN:
+      return { ...state, Loading: !state.Loading };
+    //---------------------------------------------------
+    case ACTIONS.FORMAT_TIME:
+      const currentDate = getCurrentDate();
+      const currentTime = getCurrentTime();
+
+      switch (state.OnlineReq.ValidateType) {
+        case 'D':
+          return {
+            ...state,
+            tempStored: state.OnlineReq.date - currentDate + state.OnlineReq.ValidateValue,
+            RemainingTime: `${state.tempStored} Days`,
+          };
+        case 'H':
+          return {
+            ...state,
+            tempStored: state.OnlineReq.ValidateValue - getTimeDifferenceInHours(currentTime, state.OnlineReq.showTime),
+            RemainingTime: `${state.tempStored} Hours`,
+          };
+        case 'M':
+          return {
+            ...state,
+            tempStored:
+              state.OnlineReq.ValidateValue - getTimeDifferenceInMinutes(currentTime, state.OnlineReq.showTime),
+            RemainingTime: `${state.tempStored} Minutes`,
+          };
+      }
+
+    default:
+      return state;
+  }
+}
+
 const AppLinkGeneratorTaskEnforcer = ({ email }) => {
-  const [Show, setShow] = useState(false);
-  const [Copied, setCopied] = useState(false);
-  const [OnlineReq, setOnlineReq] = useState(null);
-  const [RemainingTime, setRemainingTime] = useState();
+  const [state, dispatch] = useReducer(reducer, {
+    OnlineReq: null,
+    tempStored: null,
+    Loading: false,
+    displayGenerateInvitation: false,
+    Copied: false,
+    RemainingTime: null,
+  });
 
   useEffect(() => {
-    try {
-      if (email != null) {
+    if (email != null) {
+      try {
+        dispatch({ type: ACTIONS.TOGGLE_LOADING_BTN });
         getDataFromDocByEmail(email, 'TaskEnforcer').then((res) => {
           if (res != false) {
-            setOnlineReq(res);
+            dispatch({ type: ACTIONS.UPDATE_DATA, payload: res });
+            dispatch({ type: ACTIONS.FORMAT_TIME });
+            dispatch({ type: ACTIONS.TOGGLE_LOADING_BTN });
           }
         });
+      } catch (e) {
+        console.error(e);
       }
-    } catch (error) {
-      console.error(error);
     }
   }, [email]);
 
-  useEffect(() => {
-    if (OnlineReq) formatTime();
-  }, [OnlineReq]);
-
-  const formatTime = () => {
-    const currentDate = getCurrentDate();
-
-    if (OnlineReq.ValidateType === 'D') {
-      const temp = OnlineReq.date - currentDate + OnlineReq.ValidateValue;
-      setRemainingTime(`${temp} Days`);
-    }
-  };
+  // useEffect(() => {
+  //   if (email && !state.Loading) {
+  //     clg
+  //     try {
+  //       if (state.tempStored === 0 || state.tempStored === null) {
+  //         DeleteData('TaskEnforcer', email).then((res) => {
+  //           dispatch({ type: ACTIONS.UPDATE_DATA, payload: false });
+  //         });
+  //       }
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   }
+  // }, [state.tempStored]);
 
   return (
-    <Card sx={{}}>
+    <Card>
       <CardActionArea>
         <CardMedia component="img" height="340" image={BG} alt="green iguana" />
         <CardContent>
@@ -62,31 +126,32 @@ const AppLinkGeneratorTaskEnforcer = ({ email }) => {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        {Show ? (
+        {state.displayGenerateInvitation ? (
           <GenerateInvitation boolean={true} />
         ) : (
           <>
-            {OnlineReq ? (
+            {state.OnlineReq ? (
               <>
                 <Typography variant="body2" ml={2} color="text.secondary">
-                  You have active requests, Time remaining: {<strong> {RemainingTime} </strong>}
+                  You have active requests, Time remaining:
+                  {<strong> {state.RemainingTime} </strong>}
                 </Typography>
                 <Button
                   size="small"
                   sx={{ m: 1 }}
                   onClick={(e) => {
                     e.preventDefault();
-                    copy(OnlineReq.link).then(() => {
-                      setCopied(true);
+                    copy(state.OnlineReq.link).then(() => {
+                      dispatch({ type: ACTIONS.TOGGLE_COPY_BTN });
                       setTimeout(() => {
-                        setCopied(false);
+                        dispatch({ type: ACTIONS.TOGGLE_COPY_BTN });
                       }, 1000);
                     });
                   }}
                   variant="outlined"
                   startIcon={<Iconify icon="icon-park:copy" />}
                 >
-                  {!Copied ? 'Copy Link' : 'Copied'}
+                  {!state.Copied ? 'Copy Link' : 'Copied'}
                 </Button>
               </>
             ) : null}
@@ -95,12 +160,12 @@ const AppLinkGeneratorTaskEnforcer = ({ email }) => {
               sx={{ m: 1 }}
               onClick={(e) => {
                 e.preventDefault();
-                setShow(true);
+                dispatch({ type: ACTIONS.ADD_NEW_INVITATION });
               }}
               variant="outlined"
               startIcon={<Iconify icon="vscode-icons:file-type-dartlang-generated" />}
             >
-              {OnlineReq ? 'Generate New Invitation' : 'Generate Invitation'}
+              {state.OnlineReq ? 'Generate New Invitation' : 'Generate Invitation'}
             </Button>
           </>
         )}

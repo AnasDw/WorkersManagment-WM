@@ -1,4 +1,3 @@
-
 export function getCurrentDate(separator = '') {
   const newDate = new Date();
   const date = newDate.getDate();

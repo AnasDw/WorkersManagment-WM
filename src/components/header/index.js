@@ -10,7 +10,6 @@ import Iconify from '../iconify';
 import { bgBlur } from '../../utils/cssStyles';
 
 import Searchbar from './Searchbar';
-import LanguagePopover from './LanguagePopover';
 import NotificationsPopover from './NotificationsPopover';
 import AccountPopover from './AccountPopover/AccountPopover';
 
@@ -77,7 +76,6 @@ export default function Header({ onOpenNav }) {
               sm: 1,
             }}
           >
-            <LanguagePopover />
             <NotificationsPopover />
             <AccountPopover />
           </Stack>
