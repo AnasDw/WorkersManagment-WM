@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 
 import { Stack, Button, Typography } from '@mui/material';
-import { getAllUsers, pushAllUsers } from 'src/config/FireBase/CRUD';
-import Checkout from './AddNewWorker/Checkout';
-import Iconify from '../iconify/Iconify';
-import GenerateInvitation from '../GenerateInvitationPageComponents/GenerateInvitation';
+import Checkout from '../../AddNewWorker/Checkout';
+import Iconify from '../../../iconify/Iconify';
+import GenerateInvitation from '../../../GenerateInvitationPageComponents/GenerateInvitation';
 
 const AddWorkerStack = () => {
   const [AddWorker, setAddWorker] = useState();
@@ -21,8 +20,6 @@ const AddWorkerStack = () => {
             <Stack direction="row" sx={{ gap: 1 }} alignItems="center" justifyContent="space-between">
               <Button
                 onClick={() => {
-                  localStorage.removeItem('FormalDetails');
-                  localStorage.removeItem('WorkerSkills');
                   setAddWorker(true);
                 }}
                 variant="contained"

@@ -1,4 +1,6 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
+
+// -- mui --
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -8,10 +10,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import TextField from '@mui/material/TextField';
 import { useTheme } from '@mui/material/styles';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import { pushData } from 'src/config/FireBase/CRUD';
-import { auth } from 'src/config/FireBase';
+
+// -- FireBase --
+import { pushData } from '../../../../../config/FireBase/CRUD';
+import { auth } from '../../../../../config/FireBase';
 
 export default function ResponsiveDialog({ data, boolean, func, data2push }) {
   const [open, setOpen] = useState(false);
@@ -33,7 +35,7 @@ export default function ResponsiveDialog({ data, boolean, func, data2push }) {
         }
         return item;
       });
-      pushData('Managers', data2push, auth.currentUser.email).then((res) => {
+      pushData('Managers', data2push, auth.currentUser.email).then(() => {
         window.location.reload();
       });
     } catch (error) {
@@ -59,7 +61,7 @@ export default function ResponsiveDialog({ data, boolean, func, data2push }) {
             <>
               <DialogContentText>
                 <TextField
-                  sx={{ margin: 3 }}
+                  sx={{ margin: 4, minWidth: 470 }}
                   label="Department name"
                   value={Dep.Dep}
                   onChange={(e) => {

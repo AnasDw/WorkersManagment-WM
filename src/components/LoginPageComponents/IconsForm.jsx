@@ -1,10 +1,10 @@
 import { Stack, Button } from '@mui/material';
 import React from 'react';
 
-import { auth, googleProvider, facebookProvider } from 'src/config/FireBase';
 import { signInWithPopup } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { getUserDataByEmail, pushNewUser } from 'src/config/FireBase/CRUD';
+import { auth, googleProvider, facebookProvider } from '../../config/FireBase';
+import { getUserDataByEmail, pushData } from '../../config/FireBase/CRUD';
 import Iconify from '../iconify/Iconify';
 
 const icons = [
@@ -21,19 +21,21 @@ const IconsForm = () => {
     } else {
       await SignInWithFaceBook();
     }
+    pushData(
+      'Users',
+      { email: auth.currentUser.email, UserName: auth.currentUser.displayName },
+      auth.currentUser.email
+    ).then(() => {
+      navigate('/', { replace: true });
+    });
   };
   const SignInWithGoogle = async () => {
     try {
-      await signInWithPopup(auth, googleProvider).then((res) => {
-        if (getUserDataByEmail(res.user.email)) {
-          pushNewUser({
-            email: res.user.email,
-            password: res.user.providerId,
-            name: res.user.displayName,
-          }).then(() => {
-            navigate('/', { replace: true });
-          });
+      await signInWithPopup(auth, googleProvider).then(() => {
+        if (!getUserDataByEmail(auth.currentUser.email)) {
+          return;
         }
+        navigate('/', { replace: true });
       });
     } catch (e) {
       console.log(e);
@@ -41,16 +43,11 @@ const IconsForm = () => {
   };
   const SignInWithFaceBook = async () => {
     try {
-      await signInWithPopup(auth, facebookProvider).then((res) => {
-        if (getUserDataByEmail(res.user.email)) {
-          pushNewUser({
-            email: res.user.email,
-            password: res.user.providerId,
-            name: res.user.displayName,
-          }).then(() => {
-            navigate('/', { replace: true });
-          });
+      await signInWithPopup(auth, facebookProvider).then(() => {
+        if (!getUserDataByEmail(auth.currentUser.email)) {
+          return;
         }
+        navigate('/', { replace: true });
       });
     } catch (e) {
       console.log(e);

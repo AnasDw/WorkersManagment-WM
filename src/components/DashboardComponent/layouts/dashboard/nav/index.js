@@ -1,19 +1,19 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { onAuthStateChanged } from 'firebase/auth';
+
 // @mui
 import { styled, alpha } from '@mui/material/styles';
 import { Box, Link, Drawer, Typography, Avatar } from '@mui/material';
 // mock
 // hooks
-import { auth } from 'src/config/FireBase';
-import { onAuthStateChanged } from 'firebase/auth';
-import useResponsive from '../../../hooks/useResponsive';
+import { auth } from '../../../../../config/FireBase';
+import useResponsive from '../../../../../hooks/useResponsive';
 // components
-import Logo from '../../../components/logo';
-import Scrollbar from '../../../components/scrollbar';
-import NavSection from '../../../components/nav-section';
-import logoBG from '/Users/anasdweik/WorkersManagment-WM-1/src/assets/WM.png';
+import Logo from '../../../../logo';
+import Scrollbar from '../../../../scrollbar';
+import NavSection from '../../../../nav-section';
 
 //
 import navConfig from './config';

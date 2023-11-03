@@ -1,4 +1,7 @@
 import * as React from 'react';
+import { useReducer, useEffect, useState } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -14,40 +17,78 @@ import Typography from '@mui/material/Typography';
 import FormalDetails from './FormalDetails';
 import Skills from './Skills';
 import Review from './Review';
+import { reducer, ACTIONS } from './constants';
+
+import { auth } from '../../../config/FireBase';
+import { AddNewWorker } from '../../../config/FireBase/CRUD';
 
 const steps = ['Formal Details', 'Skills', 'Review your Worker'];
 
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return <FormalDetails />;
-    case 1:
-      return <Skills />;
-    case 2:
-      return <Review />;
-    default:
-      throw new Error('Unknown step');
-  }
-}
-
 export default function Checkout({ PropCancelIcon }) {
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [CancelIcon, setCancelIcon] = React.useState(PropCancelIcon);
 
-  CancelIcon;
+  const [CancelIcon, setCancelIcon] = useState(PropCancelIcon);
+  const [state, dispatch] = useReducer(reducer, {
+    FirstName: '',
+    LastName: '',
+    PhoneNumber: '',
+    Gender: '',
+    Under18: false,
+    Department: '',
+    Position: '',
+    activeStep: 0,
+    error: false,
+    Email: '',
+  });
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (newUser) => {
+      if (newUser) {
+        dispatch({ type: ACTIONS.UPDATE_EMAIL, payload: auth.currentUser.email });
+      }
+    });
+  }, []);
+
+  function getStepContent(step) {
+    switch (step) {
+      case 0:
+        return <FormalDetails state={state} dispatch={dispatch} />;
+      case 1:
+        return <Skills state={state} dispatch={dispatch} />;
+      case 2:
+        return <Review state={state} />;
+      default:
+        throw new Error('Unknown step');
+    }
+  }
 
   const handleNext = () => {
-    setActiveStep(activeStep + 1);
+    dispatch({ type: ACTIONS.VALIDATE });
   };
 
   const handleBack = () => {
-    setActiveStep(activeStep - 1);
+    dispatch({ type: ACTIONS.DECREES });
   };
 
   const SubmitForm = () => {
-    setTimeout(() => {
-      window.location.reload();
-    }, 3000);
+    try {
+      AddNewWorker(state.Email, {
+        name: ` ${state.FirstName} ${state.LastName}`,
+        department: state.Department,
+        role: state.Position,
+        PhoneNumber: state.PhoneNumber,
+        status: 'not yet',
+        Requests: null,
+        skills: 'Not Found',
+      }).then((res) => {
+        if (res !== false) {
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -73,14 +114,14 @@ export default function Checkout({ PropCancelIcon }) {
             ) : null}
           </Stack>
 
-          <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
+          <Stepper activeStep={state.activeStep} sx={{ pt: 3, pb: 5 }}>
             {steps.map((label) => (
               <Step key={label}>
                 <StepLabel>{label}</StepLabel>
               </Step>
             ))}
           </Stepper>
-          {activeStep === steps.length ? (
+          {state.activeStep === steps.length ? (
             <>
               {SubmitForm()}
               <Typography variant="h5" gutterBottom>
@@ -89,16 +130,16 @@ export default function Checkout({ PropCancelIcon }) {
             </>
           ) : (
             <>
-              {getStepContent(activeStep)}
+              {getStepContent(state.activeStep)}
               <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                {activeStep !== 0 && (
+                {state.activeStep !== 0 && (
                   <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
                     Back
                   </Button>
                 )}
 
                 <Button variant="contained" onClick={handleNext} sx={{ mt: 3, ml: 1 }}>
-                  {activeStep === steps.length - 1 ? 'Save' : 'Next'}
+                  {state.activeStep === steps.length - 1 ? 'Save' : 'Next'}
                 </Button>
               </Box>
             </>

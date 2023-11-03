@@ -3,15 +3,15 @@ import ReactApexChart from 'react-apexcharts';
 // @mui
 import { Card, CardHeader, Box } from '@mui/material';
 // components
-import { useChart } from '../../../components/chart';
+import { useChart } from '../../../../chart';
 
 // ----------------------------------------------------------------------
 
 AppWebsiteVisits.propTypes = {
   title: PropTypes.string,
   subheader: PropTypes.string,
-  chartData: PropTypes.array.isRequired,
-  chartLabels: PropTypes.arrayOf(PropTypes.string).isRequired,
+  chartData: PropTypes.array,
+  chartLabels: PropTypes.arrayOf(PropTypes.string),
 };
 
 const title = 'Website Visits';

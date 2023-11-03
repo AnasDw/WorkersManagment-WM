@@ -4,7 +4,7 @@ import { faker } from '@faker-js/faker';
 
 import { useTheme } from '@mui/material/styles';
 
-import { AppCurrentVisits, AppNewsUpdate } from 'src/sections/@dashboard/app';
+import { AppCurrentVisits, AppNewsUpdate } from 'src/components/DashboardComponent/Apps/@dashboard/app';
 
 const FeaturedCharts = ({ data }) => {
   const theme = useTheme();

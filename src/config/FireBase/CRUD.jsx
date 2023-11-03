@@ -1,5 +1,5 @@
 import { setDoc, doc, getDoc, deleteDoc } from 'firebase/firestore';
-import { auth, db } from './index';
+import { db } from './index';
 
 const getUserDataByEmail = async (email) => {
   try {
@@ -31,22 +31,32 @@ const getDataFromDocByEmail = async (email, Document) => {
 
 const pushData = async (place, dataToPush, user) => {
   try {
-    await setDoc(doc(db, place, user), dataToPush)
-      .then((res) => {
-        return true;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    await setDoc(doc(db, place, user), dataToPush).catch((err) => {
+      console.log(err);
+    });
   } catch (error) {
     console.error(error);
   }
 };
 const DeleteData = async (place, dataToDelete) => {
   try {
-    await deleteDoc(doc(db, place, dataToDelete))
+    await deleteDoc(doc(db, place, dataToDelete)).catch((err) => {
+      console.log(err);
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const AddNewWorker = async (place, dataToPush) => {
+  try {
+    await getDataFromDocByEmail(place, 'workers')
       .then((res) => {
-        return true;
+        if (res !== false) {
+          const workers = res.data;
+          workers.push(dataToPush);
+          pushData('workers', { data: workers }, place);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -56,4 +66,4 @@ const DeleteData = async (place, dataToDelete) => {
   }
 };
 
-export { getUserDataByEmail, pushData, getDataFromDocByEmail, DeleteData };
+export { getUserDataByEmail, pushData, getDataFromDocByEmail, DeleteData, AddNewWorker };

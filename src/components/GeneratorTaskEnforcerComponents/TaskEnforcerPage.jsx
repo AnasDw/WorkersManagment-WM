@@ -11,117 +11,19 @@ import Diversity3Icon from '@mui/icons-material/Diversity3';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import TextField from '@mui/material/TextField';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect } from 'react';
-import {
-  getCurrentDate,
-  getCurrentTime,
-  getTimeDifferenceInHours,
-  getTimeDifferenceInMinutes,
-} from 'src/constants/functions';
-import { getDataFromDocByEmail, pushData } from 'src/config/FireBase/CRUD';
-import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import FormTable from './Components/FormTable';
+import TaskEnforcerHook from './hooks/TaskEnforcerHook';
+import { CryptoHook } from '../GenerateInvitationPageComponents/hooks/CryptoHook';
 
 const defaultTheme = createTheme();
 
 const TaskEnforcerPage = () => {
   const param = useParams();
-  const navigate = useNavigate();
+  const BoolHook = CryptoHook(param.param1, 'TaskEnforcer');
+  const [PulledUser, Boolean, handleChange] = TaskEnforcerHook(BoolHook.SecretParam);
 
-  const [Email, setEmail] = useState();
-  const [Users, setUsers] = useState(null);
-  const [PulledUser, setPulledUser] = useState(null);
-  const [Boolean, setBoolean] = useState(false);
-  const [UserPhoneNumber, setUserPhoneNumber] = useState();
-
-  useEffect(() => {
-    if (Users != null) {
-      const userToPull = Users.find((worker) => worker.PhoneNumber == UserPhoneNumber);
-      if (userToPull) setPulledUser(userToPull);
-      else setBoolean(true);
-    }
-  }, [UserPhoneNumber]);
-
-  useEffect(() => {
-    if (Email) {
-      try {
-        getDataFromDocByEmail(Email, 'workers').then((data) => {
-          if (data != false) {
-            setUsers(data.data);
-          }
-        });
-      } catch (e) {
-        console.log(e);
-      }
-    }
-  }, [Email]);
-
-  useEffect(
-    (e) => {
-      var CryptoJS = require('crypto-js');
-      const decrypted = CryptoJS.AES.decrypt(param.param1.toString(), process.env.REACT_APP_SecretKey);
-      const temp = decrypted.toString(CryptoJS.enc.Utf8);
-      setEmail(temp);
-      try {
-        getDataFromDocByEmail(temp, 'TaskEnforcer')
-          .then((response) => {
-            if (response != false) {
-              const currentDate = getCurrentDate();
-              const currentTime = getCurrentTime();
-              switch (response.ValidateType) {
-                case 'M':
-                  if (
-                    getTimeDifferenceInMinutes(currentTime, response.showTime) > response.ValidateValue ||
-                    currentDate > response.Date
-                  )
-                    navigate('/404', { replace: true });
-                  else {
-                    const a = response.ValidateValue - getTimeDifferenceInMinutes(currentTime, response.showTime);
-                    setTimeout(() => {
-                      navigate('/404', { replace: true });
-                    }, a * 60000);
-                  }
-
-                  break;
-                case 'H':
-                  if (
-                    getTimeDifferenceInHours(currentTime, response.showTime) > response.ValidateValue ||
-                    currentDate > response.Date
-                  )
-                    navigate('/404', { replace: true });
-                  break;
-                case 'D':
-                  if (currentDate - response.Date > response.ValidateValue) navigate('/404', { replace: true });
-                  break;
-              }
-            } else {
-              navigate('/404', { replace: true });
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      } catch (error) {
-        console.error(error);
-        navigate('/404', { replace: true });
-      }
-    },
-    [param]
-  );
-
-  const handleChange = (event) => {
-    try {
-      setBoolean(false);
-      event.preventDefault();
-      const data = new FormData(event.currentTarget);
-      setUserPhoneNumber(data.get('PhoneNumber').slice(1));
-      setPulledUser(null);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  return (
+  return BoolHook.Bool ? (
     <>
       <ThemeProvider theme={defaultTheme}>
         <Grid container component="main" sx={{ height: '100vh' }}>
@@ -176,14 +78,14 @@ const TaskEnforcerPage = () => {
                   </Button>
                 </Box>
               ) : (
-                <FormTable Email={Email} PulledUser={PulledUser} />
+                <FormTable Email={BoolHook.SecretParam} PulledUser={PulledUser} />
               )}
             </Box>
           </Grid>
         </Grid>
       </ThemeProvider>
     </>
-  );
+  ) : null;
 };
 
 export { TaskEnforcerPage };

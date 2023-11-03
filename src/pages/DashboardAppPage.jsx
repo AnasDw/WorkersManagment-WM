@@ -20,7 +20,7 @@ import {
   AppTrafficBySite,
   AppWidgetSummary,
   AppLinkGeneratorTaskEnforcer,
-} from '../sections/@dashboard/app';
+} from '../components/DashboardComponent/Apps/@dashboard/app';
 import { useNavigate } from 'react-router-dom';
 
 // ----------------------------------------------------------------------

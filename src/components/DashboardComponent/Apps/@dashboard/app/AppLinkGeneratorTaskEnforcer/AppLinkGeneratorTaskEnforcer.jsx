@@ -1,72 +1,22 @@
 import * as React from 'react';
+import { useEffect, useReducer } from 'react';
+import copy from 'clipboard-copy';
+
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
-import BG from '/Users/anasdweik/WorkersManagment-WM-1/src/assets/backgrounds/pexels-kate-trifo-4057060.jpg';
-import Iconify from 'src/components/iconify/Iconify';
-import GenerateInvitation from 'src/components/GenerateInvitationPageComponents/GenerateInvitation';
-import { useState, useEffect, useReducer } from 'react';
 
-import { DeleteData, getDataFromDocByEmail } from 'src/config/FireBase/CRUD';
-import { getCurrentDate, getCurrentTime, getTimeDifferenceInHours, getTimeDifferenceInMinutes } from 'src/constants';
-import copy from 'clipboard-copy';
+import Iconify from '../../../../../iconify';
+import GenerateInvitation from '../../../../../GenerateInvitationPageComponents/GenerateInvitation';
 
-const ACTIONS = {
-  UPDATE_DATA: 'UPDATE_DATA',
-  DELETE_DATA: 'DELETE_DATA',
-  ADD_NEW_INVITATION: 'ADD_NEW_INVITATION',
-  TOGGLE_COPY_BTN: 'TOGGLE_COPY_BTN',
-  TOGGLE_LOADING_BTN: 'TOGGLE_COPY_BTN',
-  FORMAT_TIME: 'FORMAT_TIME',
-};
+import { DeleteData, getDataFromDocByEmail } from '../../../../../../config/FireBase/CRUD';
 
-function reducer(state, action) {
-  switch (action.type) {
-    //---------------------------------------------------
-    case ACTIONS.UPDATE_DATA:
-      return { ...state, OnlineReq: action.payload };
-    //---------------------------------------------------
-    case ACTIONS.ADD_NEW_INVITATION:
-      return { ...state, displayGenerateInvitation: true };
-    //---------------------------------------------------
-    case ACTIONS.TOGGLE_COPY_BTN:
-      return { ...state, Copied: !state.Copied };
-    //---------------------------------------------------
-    case ACTIONS.TOGGLE_LOADING_BTN:
-      return { ...state, Loading: !state.Loading };
-    //---------------------------------------------------
-    case ACTIONS.FORMAT_TIME:
-      const currentDate = getCurrentDate();
-      const currentTime = getCurrentTime();
+import BG from '../../../../../../assets/backgrounds/pexels-kate-trifo-4057060.jpg';
+import { ACTIONS, reducer } from './Constants';
 
-      switch (state.OnlineReq.ValidateType) {
-        case 'D':
-          return {
-            ...state,
-            tempStored: state.OnlineReq.date - currentDate + state.OnlineReq.ValidateValue,
-            RemainingTime: `${state.tempStored} Days`,
-          };
-        case 'H':
-          return {
-            ...state,
-            tempStored: state.OnlineReq.ValidateValue - getTimeDifferenceInHours(currentTime, state.OnlineReq.showTime),
-            RemainingTime: `${state.tempStored} Hours`,
-          };
-        case 'M':
-          return {
-            ...state,
-            tempStored:
-              state.OnlineReq.ValidateValue - getTimeDifferenceInMinutes(currentTime, state.OnlineReq.showTime),
-            RemainingTime: `${state.tempStored} Minutes`,
-          };
-      }
-
-    default:
-      return state;
-  }
-}
+const TRUE = true;
 
 const AppLinkGeneratorTaskEnforcer = ({ email }) => {
   const [state, dispatch] = useReducer(reducer, {
@@ -83,9 +33,11 @@ const AppLinkGeneratorTaskEnforcer = ({ email }) => {
       try {
         dispatch({ type: ACTIONS.TOGGLE_LOADING_BTN });
         getDataFromDocByEmail(email, 'TaskEnforcer').then((res) => {
-          if (res != false) {
+          if (res !== false) {
             dispatch({ type: ACTIONS.UPDATE_DATA, payload: res });
             dispatch({ type: ACTIONS.FORMAT_TIME });
+            dispatch({ type: ACTIONS.TOGGLE_LOADING_BTN });
+          } else {
             dispatch({ type: ACTIONS.TOGGLE_LOADING_BTN });
           }
         });
@@ -95,20 +47,35 @@ const AppLinkGeneratorTaskEnforcer = ({ email }) => {
     }
   }, [email]);
 
-  // useEffect(() => {
-  //   if (email && !state.Loading) {
-  //     clg
-  //     try {
-  //       if (state.tempStored === 0 || state.tempStored === null) {
-  //         DeleteData('TaskEnforcer', email).then((res) => {
-  //           dispatch({ type: ACTIONS.UPDATE_DATA, payload: false });
-  //         });
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   }
-  // }, [state.tempStored]);
+  useEffect(() => {
+    if (email && !state.Loading) {
+      switch (state.OnlineReq.ValidateType) {
+        case 'D':
+          dispatch({ type: ACTIONS.UPDATE_TIME, payload: 'Days' });
+          break;
+        case 'H':
+          dispatch({ type: ACTIONS.UPDATE_TIME, payload: 'Hours' });
+          break;
+        case 'M':
+          dispatch({ type: ACTIONS.UPDATE_TIME, payload: 'Minutes' });
+          break;
+        default:
+          break;
+      }
+
+      try {
+        if (state.tempStored <= 0 || state.tempStored === null) {
+          if (state.OnlineReq != null) {
+            DeleteData('TaskEnforcer', email).then(() => {
+              dispatch({ type: ACTIONS.UPDATE_DATA, payload: false });
+            });
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }, [state.tempStored]);
 
   return (
     <Card>
@@ -127,7 +94,7 @@ const AppLinkGeneratorTaskEnforcer = ({ email }) => {
       </CardActionArea>
       <CardActions>
         {state.displayGenerateInvitation ? (
-          <GenerateInvitation boolean={true} />
+          <GenerateInvitation boolean={TRUE} />
         ) : (
           <>
             {state.OnlineReq ? (

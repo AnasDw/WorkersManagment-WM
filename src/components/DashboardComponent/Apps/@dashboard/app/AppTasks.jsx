@@ -15,7 +15,7 @@ import {
   FormControlLabel,
 } from '@mui/material';
 // components
-import Iconify from '../../../components/iconify';
+import Iconify from '../../../../iconify';
 
 // ----------------------------------------------------------------------
 
