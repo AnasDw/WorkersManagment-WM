@@ -1,16 +1,35 @@
 import React, { useState } from 'react';
-import { auth } from 'src/config/FireBase';
+import { useNavigate } from 'react-router-dom';
+
 import { Box, Divider, Typography, Stack, MenuItem } from '@mui/material';
-import { SignOut } from 'src/pages/LoginPage';
+
+import { signOut } from 'firebase/auth';
+import { auth } from '../../../config/FireBase';
+
 import { MENU_OPTIONS } from './constants';
 
 const RoleOver = () => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(null);
 
   const handleClose = () => {
     setOpen(null);
   };
-  
+
+  const SignOut = async () => {
+    try {
+      signOut(auth, auth?.currentUser?.providerData[0].providerId)
+        .then(() => {
+          navigate('/login', { replace: true });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <>
       <Box sx={{ my: 1.5, px: 2.5 }}>

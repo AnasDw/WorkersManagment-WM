@@ -8,27 +8,9 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import RadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
+import { ACTIONS } from './constants';
 
-export default function FormalDetails() {
-  const temp = localStorage.getItem("FormalDetails");
-  const ob = JSON.parse(temp);
-  const [FName, setFName] = React.useState(ob?.FirstName);
-  const [LName, setLName] = React.useState(ob?.LastName);
-  const [Phone, setPhone] = React.useState(ob?.PhoneNumber);
-  const [Gender, setGender] = React.useState(ob?.Gender);
-  const [IsUnder18, setIsUnder18] = React.useState(ob?.IsUnder18);
-
-  React.useEffect(() => {
-    const FormalDetails = {
-      FirstName: FName,
-      LastName: LName,
-      PhoneNumber: Phone,
-      "Gender": Gender,
-      "IsUnder18": IsUnder18
-    };
-    localStorage.setItem('FormalDetails', JSON.stringify(FormalDetails));
-  }, [FName, LName, Phone,Gender, IsUnder18]);
-
+export default function FormalDetails({ state, dispatch }) {
   return (
     <>
       <Typography variant="h6" gutterBottom>
@@ -38,22 +20,28 @@ export default function FormalDetails() {
         <Grid item xs={12} sm={6}>
           <TextField
             required
-            value={FName}
+            error={state.error && state.FirstName.length < 2}
+            value={state.FirstName}
             id="firstName"
             name="firstName"
+            focused={state.error}
             label="First name"
             fullWidth
+            color={state.error ? 'success' : null}
             autoComplete="given-name"
             variant="standard"
             onChange={(e) => {
-              setFName(e.target.value);
+              dispatch({ type: ACTIONS.UPDATE_FIRST_NAME, payload: e.target.value });
             }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             required
-            value={LName}
+            color={state.error ? 'success' : null}
+            focused={state.error}
+            error={state.error && state.LastName.length < 2}
+            value={state.LastName}
             id="lastName"
             name="lastName"
             label="Last name"
@@ -61,17 +49,20 @@ export default function FormalDetails() {
             autoComplete="family-name"
             variant="standard"
             onChange={(e) => {
-              setLName(e.target.value);
+              dispatch({ type: ACTIONS.UPDATE_LAST_NAME, payload: e.target.value });
             }}
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
             required
-            value={Phone}
+            focused={state.error}
+            error={state.error && state.PhoneNumber.length < 10}
+            value={state.PhoneNumber}
             id="phoneNumber"
+            color={state.error ? 'success' : null}
             onChange={(e) => {
-              setPhone(e.target.value);
+              dispatch({ type: ACTIONS.UPDATE_PHONE, payload: e.target.value });
             }}
             name="phoneNumber"
             label="Phone Number"
@@ -85,9 +76,9 @@ export default function FormalDetails() {
             <RadioGroup
               row
               aria-labelledby="demo-radio-buttons-group-label"
-              value={Gender}
-              onChange={(event) => {
-                setGender(event.target.value);
+              value={state.Gender}
+              onChange={(e) => {
+                dispatch({ type: ACTIONS.UPDATE_GENDER, payload: e.target.value });
               }}
             >
               <FormControlLabel value="female" control={<Radio />} label="Female" />
@@ -98,9 +89,9 @@ export default function FormalDetails() {
         </Grid>
         <Grid item xs={12}>
           <FormControlLabel
-            checked={IsUnder18}
+            checked={state.Under18}
             onChange={(e) => {
-              setIsUnder18(e.target.checked);
+              dispatch({ type: ACTIONS.UPDATE_IS18 });
             }}
             control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
             label="Is the worker under the age of 18?"

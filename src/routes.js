@@ -1,5 +1,5 @@
 import { Navigate, useRoutes } from 'react-router-dom';
-import DashboardLayout from './layouts/dashboard';
+import DashboardLayout from './components/DashboardComponent/layouts/dashboard';
 import SimpleLayout from './layouts/simple';
 import UserPage from './pages/UserPage';
 import LoginPage from './pages/LoginPage';
@@ -7,7 +7,6 @@ import Page200 from './pages/Page200';
 import Page404 from './pages/Page404';
 import DashboardAppPage from './pages/DashboardAppPage';
 import { InvitationPage } from './components/UserPageComponents';
-import { LetsGetStarting } from './components/DashboardComponent';
 import WorkplacePage from './pages/WorkplacePage';
 import { TaskEnforcerPage } from './components/GeneratorTaskEnforcerComponents';
 // ----------------------------------------------------------------------
@@ -27,10 +26,6 @@ export default function Router() {
     {
       path: 'login',
       element: <LoginPage />,
-    },
-    {
-      path: 'LetsGetStarting',
-      element: <LetsGetStarting />,
     },
     {
       path: 'InvitationPage/:param1/',

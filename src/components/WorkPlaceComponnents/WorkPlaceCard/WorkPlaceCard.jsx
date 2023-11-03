@@ -3,7 +3,7 @@ import { Container, Typography, Grid } from '@mui/material';
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 
 import { FeaturedCharts, FeaturedDepCard, FeaturedPost, FeraturedButtonNav } from './Components';
-import { AppCurrentVisits } from 'src/sections/@dashboard/app';
+import { AppCurrentVisits } from 'src/components/DashboardComponent/Apps/@dashboard/app';
 
 const WorkPlaceCard = (data) => {
   return (

@@ -84,6 +84,7 @@ export default function FormTable({ Email, PulledUser }) {
             }
             return worker;
           });
+          SetLoading(true);
           pushData('workers', { data: Users2Push }, auth.currentUser.email).then((res) => {
             if (res != false) {
               navigate('/200', { replace: true });

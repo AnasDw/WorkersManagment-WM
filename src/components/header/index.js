@@ -1,16 +1,16 @@
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import { Box, Stack, AppBar, Toolbar, IconButton, Typography } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
-import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from 'src/config/FireBase';
-import { useNavigate } from 'react-router-dom';
+import { auth } from '../../config/FireBase';
 import Iconify from '../iconify';
 import { bgBlur } from '../../utils/cssStyles';
 
 import Searchbar from './Searchbar';
-import LanguagePopover from './LanguagePopover';
 import NotificationsPopover from './NotificationsPopover';
 import AccountPopover from './AccountPopover/AccountPopover';
 
@@ -44,10 +44,9 @@ export default function Header({ onOpenNav }) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setIsSignedIn(!!user); // Use double negation to convert to a boolean
+      setIsSignedIn(!!user);
     });
 
-    // Clean up the listener when the component unmounts
     return () => unsubscribe();
   }, []);
 
@@ -77,7 +76,6 @@ export default function Header({ onOpenNav }) {
               sm: 1,
             }}
           >
-            <LanguagePopover />
             <NotificationsPopover />
             <AccountPopover />
           </Stack>

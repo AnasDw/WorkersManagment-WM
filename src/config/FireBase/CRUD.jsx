@@ -1,20 +1,6 @@
-import { collection, getDocs, setDoc, doc, getDoc } from 'firebase/firestore';
-import tempUsers from 'src/_mock/user';
-import { auth, db } from './index';
-import { DocumentScanner } from '@mui/icons-material';
+import { setDoc, doc, getDoc, deleteDoc } from 'firebase/firestore';
+import { db } from './index';
 
-const getAllUsers = async (CallBackFunc) => {
-  try {
-    const UsersCollectionRef = doc(db, 'workers', 'ZaraWorkers');
-    const data = await getDoc(UsersCollectionRef);
-    if (data.exists()) {
-      CallBackFunc(data.data().data);
-      return data.data().data;
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
 const getUserDataByEmail = async (email) => {
   try {
     const UsersCollectionRef = doc(db, 'Users', email);
@@ -43,19 +29,34 @@ const getDataFromDocByEmail = async (email, Document) => {
   }
 };
 
-const pushNewUser = async (user) => {
+const pushData = async (place, dataToPush, user) => {
   try {
-    setDoc(doc(db, 'Users', user.email), { UserName: user.name, Password: user.password });
+    await setDoc(doc(db, place, user), dataToPush).catch((err) => {
+      console.log(err);
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+const DeleteData = async (place, dataToDelete) => {
+  try {
+    await deleteDoc(doc(db, place, dataToDelete)).catch((err) => {
+      console.log(err);
+    });
   } catch (error) {
     console.error(error);
   }
 };
 
-const pushData = async (place, dataToPush, user) => {
+const AddNewWorker = async (place, dataToPush) => {
   try {
-    await setDoc(doc(db, place, user), dataToPush)
+    await getDataFromDocByEmail(place, 'workers')
       .then((res) => {
-        return true;
+        if (res !== false) {
+          const workers = res.data;
+          workers.push(dataToPush);
+          pushData('workers', { data: workers }, place);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -65,14 +66,4 @@ const pushData = async (place, dataToPush, user) => {
   }
 };
 
-const pushAllUsers = async () => {
-  try {
-    setDoc(doc(db, 'workers', 'ZaraWorkers'), { data: tempUsers }).then((res) => {
-      return res;
-    });
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export { getAllUsers, pushAllUsers, pushNewUser, getUserDataByEmail, pushData, getDataFromDocByEmail };
+export { getUserDataByEmail, pushData, getDataFromDocByEmail, DeleteData, AddNewWorker };

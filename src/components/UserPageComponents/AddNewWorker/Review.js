@@ -2,56 +2,44 @@ import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import { Grid } from '@mui/material';
 
-export default function Review() {
-  const temp = localStorage.getItem('FormalDetails');
-  const temp2 = localStorage.getItem('WorkerSkills');
-
-  const FormalDetails = JSON.parse(temp);
-  const WorkerSkills = JSON.parse(temp2);
-
+export default function Review({ state }) {
   return (
     <>
       <Typography variant="h6" gutterBottom>
         Form summary
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={6} md={6}>
             <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
               Formal Detail
             </Typography>
             <Typography gutterBottom>
-              {' '}
               <strong>Name: </strong>
-              {`${FormalDetails?.FirstName} ${FormalDetails?.LastName}`}
+              {` ${state.FirstName} ${state.LastName}`}
             </Typography>
             <Typography gutterBottom>
-              {' '}
               <strong>PhoneNumber: </strong>
-              {`${FormalDetails?.PhoneNumber}`}
+              {` ${state.PhoneNumber}`}
             </Typography>
             <Typography gutterBottom>
               <strong> Gender:</strong>
-              {`${FormalDetails?.Gender}`}
+              {` ${state.Gender}`}
             </Typography>
-            <Typography gutterBottom>
-              {FormalDetails?.Gender ? 'Young' : null}
-            </Typography>
+            <Typography gutterBottom>{state.Under18 ? ' Young' : null}</Typography>
           </Grid>
-          <Grid item container direction="column" xs={12} sm={6}>
+          <Grid item container direction="column" xs={12} sm={6} md={6}>
             <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
               Skills
             </Typography>
             <Grid container direction="column">
               <fragment>
-                <Grid item xs={6}>
+                <Grid item>
                   <Typography gutterBottom>
-                    {' '}
-                    <strong>Main Department: </strong> {WorkerSkills?.MainDepartement}
+                    <strong>Main Department: </strong> {state.Department}
                   </Typography>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item>
                   <Typography gutterBottom>
-                    {' '}
-                    <strong> Main Role: </strong> {WorkerSkills?.MainRole}
+                    <strong> Main Role: </strong> {state.Position}
                   </Typography>
                 </Grid>
               </fragment>

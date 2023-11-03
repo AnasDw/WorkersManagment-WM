@@ -1,11 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Avatar, IconButton, Popover } from '@mui/material';
 
-import { auth } from 'src/config/FireBase';
-import { useNavigate } from 'react-router-dom';
+import { auth } from '../../../config/FireBase';
 import RoleOver from './RoleOver';
 
 // ----------------------------------------------------------------------
@@ -13,7 +13,6 @@ import RoleOver from './RoleOver';
 export default function AccountPopover() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(null);
-  
 
   const handleOpen = (event) => {
     if (auth.currentUser == null) {

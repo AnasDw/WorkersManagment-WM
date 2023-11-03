@@ -13,11 +13,11 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from 'src/config/FireBase';
 import { useNavigate } from 'react-router-dom';
-import { pushNewUser } from 'src/config/FireBase/CRUD';
+import { auth } from '../../config/FireBase';
 import IconsForm from './IconsForm';
 import { Copyright, FormList } from './Styles/SignUpStyles';
+import { pushData } from '../../config/FireBase/CRUD';
 
 const defaultTheme = createTheme();
 
@@ -40,14 +40,14 @@ export default function SignUp() {
     const data = new FormData(event.currentTarget);
 
     createUserWithEmailAndPassword(auth, data.get('email'), data.get('password'))
-      .then((res) => {
-        res.user.displayName = `${data.get('firstName')} ${data.get('lastName')}`;
-        pushNewUser({
-          email: data.get('email'),
-          password: data.get('password'),
-          name: `${data.get('firstName')} ${data.get('lastName')}`,
-        });
-        navigate('/', { replace: true });
+      .then(() => {
+        const displayName = `${data.get('firstName')} ${data.get('lastName')}`;
+        try {
+          pushData('Users', { email: data.get('email'), name: displayName }, auth.currentUser.email);
+          navigate('/', { replace: true });
+        } catch (error) {
+          console.log(error);
+        }
       })
       .catch((err) => {
         console.error(err);
