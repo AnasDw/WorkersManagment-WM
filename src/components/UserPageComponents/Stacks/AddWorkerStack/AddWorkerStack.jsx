@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { Stack, Button, Typography } from '@mui/material';
-import Checkout from '../../AddNewWorker/Checkout';
+import Checkout from '../../components/AddNewWorker/Checkout';
 import Iconify from '../../../iconify/Iconify';
 import GenerateInvitation from '../../../GenerateInvitationPageComponents/GenerateInvitation';
 

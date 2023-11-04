@@ -10,6 +10,7 @@ import { MENU_OPTIONS } from './constants';
 
 const RoleOver = () => {
   const navigate = useNavigate();
+  // eslint-disable-next-line
   const [open, setOpen] = useState(null);
 
   const handleClose = () => {

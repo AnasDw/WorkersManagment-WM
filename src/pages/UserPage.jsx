@@ -16,7 +16,7 @@ import {
 // sections
 
 import { UserListHead, UserListToolbar } from '../components/UserPageComponents/Apps/user';
-import TableHook from '../components/UserPageComponents/UsersListTable/hooks/TableHook';
+import TableHook from '../components/UserPageComponents/components/UsersListTable/hooks/TableHook';
 
 // ----------------------------------------------------------------------
 
@@ -68,7 +68,6 @@ export default function UserPage() {
       </Helmet>
 
       <Container>
-      
         <AddWorkerStack />
 
         <Card>

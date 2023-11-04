@@ -15,7 +15,9 @@ export function getCurrentTime() {
 export function getTimeDifferenceInMinutes(time1, time2) {
   const parseTime = (time) => {
     const [timePart, meridian] = time.split(' ');
-    let [hours, minutes, seconds] = timePart.split(':').map(Number);
+    // eslint-disable-next-line
+    const [temp, minutes, seconds] = timePart.split(':').map(Number);
+    let hours = temp;
 
     // Convert to 24-hour format if it's PM
     if (meridian === 'PM' && hours !== 12) {
@@ -36,7 +38,9 @@ export function getTimeDifferenceInMinutes(time1, time2) {
 export function getTimeDifferenceInHours(time1, time2) {
   const parseTime = (time) => {
     const [timePart, meridian] = time.split(' ');
-    let [hours, minutes, seconds] = timePart.split(':').map(Number);
+    // eslint-disable-next-line
+    const [temp, minutes, seconds] = timePart.split(':').map(Number);
+    let hours = temp;
 
     if (meridian === 'PM' && hours !== 12) {
       hours += 12;

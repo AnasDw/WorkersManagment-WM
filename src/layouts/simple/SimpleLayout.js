@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import Logo from '../../components/logo';
 
 // ----------------------------------------------------------------------
-
+// eslint-disable-next-line
 const StyledHeader = styled('header')(({ theme }) => ({
   top: 0,
   left: 0,

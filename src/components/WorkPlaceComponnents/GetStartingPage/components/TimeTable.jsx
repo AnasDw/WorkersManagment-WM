@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -14,10 +14,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import { pushData } from 'src/config/FireBase/CRUD';
-import { auth } from 'src/config/FireBase';
+import { pushData } from '../../../../config/FireBase/CRUD';
+import { auth } from '../../../../config/FireBase';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -49,7 +47,7 @@ export default function TimeTable({ days, data }) {
       const order = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
       return order.indexOf(a) - order.indexOf(b);
     });
-    setDaysList((old) => {
+    setDaysList(() => {
       return sortedWeekdays;
     });
   }, [days]);
@@ -71,20 +69,23 @@ export default function TimeTable({ days, data }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const temp = DaysList.map((day, i) => ({ day: day, open: OTList[i].$d, close: CTList[i].$d }));
-    temp.forEach((day) => {
-      if (day.open == null || day.close == null) {
+    const temp = DaysList.map((item, i) => ({ day: item, open: OTList[i].$d, close: CTList[i].$d }));
+
+    for (let i = 0; i < temp.length; ) {
+      if (temp[i].open == null || temp[i].close == null) {
         return false;
       }
-    });
+      i += 1;
+    }
     data.OperatingDaysAndTimes = temp;
     SendRequest(data);
+    return true;
   };
 
   const SendRequest = async (req) => {
     try {
       await pushData('Managers', req, auth.currentUser.email)
-        .then((response) => {
+        .then(() => {
           window.location.reload();
         })
         .catch((err) => {
