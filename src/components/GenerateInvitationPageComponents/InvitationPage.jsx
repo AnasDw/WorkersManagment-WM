@@ -42,7 +42,7 @@ const InvitationPage = () => {
               alignItems: 'center',
             }}
           >
-            <Checkout PropCancelIcon={false} />
+            <Checkout PropCancelIcon={false} email={hook.SecretParam} />
           </Box>
         </Grid>
       </Grid>

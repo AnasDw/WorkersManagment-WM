@@ -1,4 +1,6 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
+
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -6,10 +8,12 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import RadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
-import { ACTIONS } from './constants';
+import { ACTIONS } from '../constants/constants';
 
-const Departements = ['Women', 'Men', 'Kids'];
-const Role = ['Manager', 'VC Designer', 'Sales Assistant', 'Casher', 'CE-NT', 'OP'];
+Skills.propTypes = {
+  state: PropTypes.object,
+  dispatch: PropTypes.func,
+};
 
 export default function Skills({ state, dispatch }) {
   return (
@@ -33,31 +37,34 @@ export default function Skills({ state, dispatch }) {
               dispatch({ type: ACTIONS.UPDATE_DEPARTMENT, payload: event.target.value });
             }}
           >
-            {Departements.map((data, j) => (
+            {state.WorkPlace.DepartmentsNames.map((data, j) => (
               <FormControlLabel key={j} value={`${data}`} control={<Radio />} label={`${data}`} />
             ))}
           </RadioGroup>
         </FormControl>
-        <FormControl
-          sx={{ marginTop: 2 }}
-          color={state.error ? 'success' : null}
-          focused={state.error}
-          error={state.error && state.Position === ''}
-        >
-          <FormLabel id="demo-radio-buttons-group-label">What would be the main role of the worker?</FormLabel>
-          <RadioGroup
-            row
-            aria-labelledby="demo-radio-buttons-group-label"
-            value={state.Position}
-            onChange={(event) => {
-              dispatch({ type: ACTIONS.UPDATE_POSITION, payload: event.target.value });
-            }}
+
+        {state.Possibilities.length > 0 ? (
+          <FormControl
+            sx={{ marginTop: 2 }}
+            color={state.error ? 'success' : null}
+            focused={state.error}
+            error={state.error && state.Position === ''}
           >
-            {Role.map((data, j) => (
-              <FormControlLabel key={j} value={`${data}`} control={<Radio />} label={`${data}`} />
-            ))}
-          </RadioGroup>
-        </FormControl>
+            <FormLabel id="demo-radio-buttons-group-label">What would be the main role of the worker?</FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-radio-buttons-group-label"
+              value={state.Position}
+              onChange={(event) => {
+                dispatch({ type: ACTIONS.UPDATE_POSITION, payload: event.target.value });
+              }}
+            >
+              {state.Possibilities.map((data, j) => (
+                <FormControlLabel key={j} value={`${data}`} control={<Radio />} label={`${data}`} />
+              ))}
+            </RadioGroup>
+          </FormControl>
+        ) : null}
       </Grid>
     </>
   );

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import { Typography, Divider } from '@mui/material';
 import Button from '@mui/material/Button';
@@ -32,18 +32,62 @@ const customTheme = createTheme({
   },
 });
 
+function validateForm(firstName, lastName, email, password) {
+  const errors = [true, true, true, true];
+
+  if (!firstName) {
+    errors[0] = 'First Name is required';
+  }
+
+  if (!lastName) {
+    errors[1] = 'Last Name is required';
+  }
+
+  if (!email) {
+    errors[2] = 'Email is required';
+  } else if (!isValidEmail(email)) {
+    errors[2] = 'Invalid email format';
+  }
+
+  if (!password) {
+    errors[3] = 'Password is required';
+  } else if (password.length < 6) {
+    errors[3] = 'Password must be at least 6 characters long';
+  } else {
+    const passwordRegExp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    if (!passwordRegExp.test(password)) errors[3] = 'Week password';
+  }
+
+  return errors;
+}
+
+function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
 export default function SignUp() {
+  const [Errors, setErrors] = useState();
+  const [Error, setError] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setError(false);
     const data = new FormData(event.currentTarget);
+
+    setErrors(validateForm(data.get('firstName'), data.get('lastName'), data.get('email'), data.get('password')));
+
+    if (Errors !== true) {
+      setError(true);
+      return false;
+    }
 
     createUserWithEmailAndPassword(auth, data.get('email'), data.get('password'))
       .then(() => {
         const displayName = `${data.get('firstName')} ${data.get('lastName')}`;
         try {
-          pushData('Users', { email: data.get('email'), name: displayName }, auth.currentUser.email);
+          pushData('Users', { email: data.get('email'), UserName: displayName }, auth.currentUser.email);
           navigate('/', { replace: true });
         } catch (error) {
           console.log(error);
@@ -52,6 +96,8 @@ export default function SignUp() {
       .catch((err) => {
         console.error(err);
       });
+
+    return true;
   };
 
   return (
@@ -79,7 +125,10 @@ export default function SignUp() {
                   <Grid key={i} item xs={item.xs} sm={item.sm}>
                     <TextField
                       color="customColor"
+                      error={Error && Errors[i] !== true}
+                      helperText={Error && Errors[i] !== true ? Errors[i] : null}
                       key={i}
+                      type={item.id}
                       autoComplete={item.autoComplete}
                       name={item.id}
                       required

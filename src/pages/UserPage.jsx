@@ -10,6 +10,7 @@ import {
   EditDeletePopover,
   EditWorkerDialog,
   NoResultsMessage,
+  UsersReportsTable,
   UsersTableBody,
 } from '../components/UserPageComponents';
 
@@ -134,6 +135,8 @@ export default function UserPage() {
           email={Email}
         />
       )}
+
+      <UsersReportsTable users={Users} email={Email} />
     </>
   );
 }

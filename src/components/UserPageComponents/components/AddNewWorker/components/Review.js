@@ -2,6 +2,10 @@ import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import { Grid } from '@mui/material';
 
+import PropTypes from 'prop-types';
+
+Review.propTypes = { state: PropTypes.object };
+
 export default function Review({ state }) {
   return (
     <>
