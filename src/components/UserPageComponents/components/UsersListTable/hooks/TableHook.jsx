@@ -11,7 +11,7 @@ const TableHook = () => {
   const [ShowDialog, setShowDialog] = useState(false);
   const [Users, setUsers] = useState([]);
   const [Email, setEmail] = useState();
-  const [WorkPlace, setWorkPlace] = useState([]);
+  const [WorkPlace, setWorkPlace] = useState();
   const [User2Edit, setUser2Edit] = useState({});
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');

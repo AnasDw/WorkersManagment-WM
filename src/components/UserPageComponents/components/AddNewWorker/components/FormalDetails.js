@@ -6,11 +6,8 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import RadioGroup from '@mui/material/RadioGroup';
-import Radio from '@mui/material/Radio';
-import { ACTIONS } from './constants';
+
+import { ACTIONS } from '../constants/constants';
 
 FormalDetails.propTypes = {
   state: PropTypes.object.isRequired,
@@ -76,23 +73,6 @@ export default function FormalDetails({ state, dispatch }) {
             fullWidth
             variant="standard"
           />
-        </Grid>
-        <Grid item xs={12}>
-          <FormControl>
-            <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
-            <RadioGroup
-              row
-              aria-labelledby="demo-radio-buttons-group-label"
-              value={state.Gender}
-              onChange={(e) => {
-                dispatch({ type: ACTIONS.UPDATE_GENDER, payload: e.target.value });
-              }}
-            >
-              <FormControlLabel value="female" control={<Radio />} label="Female" />
-              <FormControlLabel value="male" control={<Radio />} label="Male" />
-              <FormControlLabel value="other" control={<Radio />} label="Other" />
-            </RadioGroup>
-          </FormControl>
         </Grid>
         <Grid item xs={12}>
           <FormControlLabel

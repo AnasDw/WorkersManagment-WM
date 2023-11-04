@@ -3,17 +3,20 @@ const ACTIONS = {
   UPDATE_LAST_NAME: 'update-last-name',
   UPDATE_EMAIL: 'update-email',
   UPDATE_PHONE: 'update-phone',
-  UPDATE_GENDER: 'update-gender',
   UPDATE_IS18: 'update-is18',
   UPDATE_DEPARTMENT: 'update-department',
   UPDATE_POSITION: 'update-position',
   VALIDATE: 'validate-form',
   DECREES: 'decrees-form',
+  UPDATE_WORK_PLACE: 'update-workplace',
 };
 function reducer(state, action) {
   switch (action.type) {
     case ACTIONS.UPDATE_EMAIL:
       return { ...state, Email: action.payload };
+
+    case ACTIONS.UPDATE_WORKPLACE:
+      return { ...state, WorkPlace: action.payload };
 
     case ACTIONS.UPDATE_FIRST_NAME:
       return { ...state, FirstName: action.payload };
@@ -24,9 +27,6 @@ function reducer(state, action) {
     case ACTIONS.UPDATE_PHONE:
       return { ...state, PhoneNumber: action.payload };
 
-    case ACTIONS.UPDATE_GENDER:
-      return { ...state, Gender: action.payload };
-
     case ACTIONS.UPDATE_IS18:
       return { ...state, Under18: !state.Under18 };
 
@@ -34,7 +34,11 @@ function reducer(state, action) {
       return { ...state, activeStep: state.activeStep - 1 };
 
     case ACTIONS.UPDATE_DEPARTMENT:
-      return { ...state, Department: action.payload };
+      return {
+        ...state,
+        Department: action.payload,
+        Possibilities: state.WorkPlace.Positions.find((pos) => pos.Dep === action.payload).Pos,
+      };
 
     case ACTIONS.UPDATE_POSITION:
       return { ...state, Position: action.payload };

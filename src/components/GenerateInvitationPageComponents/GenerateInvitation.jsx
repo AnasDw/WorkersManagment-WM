@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
@@ -18,6 +20,8 @@ import GenerateInvitationHook from './hooks/GenerateInvitationHook';
 
 const SelectList = [{ id: 'Minutes' }, { id: 'Hours' }, { id: 'Days' }];
 
+GenerateInvitation.propTypes = { boolean: PropTypes.bool };
+
 const GenerateInvitation = ({ boolean }) => {
   const [
     Copied,
@@ -33,8 +37,8 @@ const GenerateInvitation = ({ boolean }) => {
 
   return (
     <>
-      <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
-        <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+      <Container component="main" maxWidth="lg" sx={{ mb: 4 }}>
+        <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 9 } }}>
           <Stack direction={'row'} sx={{ gap: 1 }} alignItems="center" justifyContent="space-between">
             <Typography variant="h6" gutterBottom>
               Invitation Details
