@@ -1,8 +1,8 @@
 import { Helmet } from 'react-helmet-async';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Button, Typography, Container, Box } from '@mui/material';
-import BG from '/Users/anasdweik/WorkersManagment-WM-1/src/assets/icons/4926149-removebg-preview.png';
+import { Typography, Container, Box } from '@mui/material';
+import BG from '../assets/icons/4926149-removebg-preview.png';
 
 // ----------------------------------------------------------------------
 

@@ -15,13 +15,13 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import { getDataFromDocByEmail, pushData } from 'src/config/FireBase/CRUD';
-import { auth } from 'src/config/FireBase';
+import { useState, useEffect } from 'react';
 import Skeleton from '@mui/material/Skeleton';
 import { cleanDigitSectionValue } from '@mui/x-date-pickers/internals/hooks/useField/useField.utils';
 import { useNavigate } from 'react-router-dom';
+
+import { getDataFromDocByEmail, pushData } from '../../../config/FireBase/CRUD';
+import { auth } from '../../../config/FireBase';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -53,7 +53,7 @@ export default function FormTable({ Email, PulledUser }) {
     try {
       SetLoading(true);
       getDataFromDocByEmail(Email, 'Managers').then((res) => {
-        if (res != false) {
+        if (res !== false) {
           setData(res);
         }
       });
@@ -76,9 +76,9 @@ export default function FormTable({ Email, PulledUser }) {
     event.preventDefault();
     try {
       getDataFromDocByEmail(Email, 'workers').then((res) => {
-        if (res != false) {
+        if (res !== false) {
           const Users2Push = res.data.map((worker) => {
-            if (worker.name == PulledUser.name) {
+            if (worker.name === PulledUser.name) {
               worker.status = 'filled';
               worker.Requests = Request;
             }
@@ -86,7 +86,7 @@ export default function FormTable({ Email, PulledUser }) {
           });
           SetLoading(true);
           pushData('workers', { data: Users2Push }, auth.currentUser.email).then((res) => {
-            if (res != false) {
+            if (res !== false) {
               navigate('/200', { replace: true });
             }
           });

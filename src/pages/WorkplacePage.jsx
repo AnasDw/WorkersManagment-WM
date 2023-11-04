@@ -1,13 +1,13 @@
-import { onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
 
 import { Helmet } from 'react-helmet-async';
 import Skeleton from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
 
-import { WelcomeContainer, WorkPlaceCard } from 'src/components/WorkPlaceComponnents';
-import { auth } from 'src/config/FireBase';
-import { getDataFromDocByEmail } from 'src/config/FireBase/CRUD';
+import { auth } from '../config/FireBase';
+import { WelcomeContainer, WorkPlaceCard } from '../components/WorkPlaceComponnents';
+import { getDataFromDocByEmail } from '../config/FireBase/CRUD';
 
 const WorkplacePage = () => {
   const [SignedIn, setSignedIn] = useState(false);
@@ -20,7 +20,7 @@ const WorkplacePage = () => {
         try {
           getDataFromDocByEmail(auth?.currentUser?.email, 'Managers')
             .then((response) => {
-              if (response != false) {
+              if (response !== false) {
                 setWorkplaceData(response);
                 setSignedIn(true);
               } else {

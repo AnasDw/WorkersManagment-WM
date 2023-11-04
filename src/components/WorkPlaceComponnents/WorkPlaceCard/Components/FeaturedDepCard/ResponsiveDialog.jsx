@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
 // -- mui --
 import Button from '@mui/material/Button';
@@ -14,6 +15,13 @@ import { useTheme } from '@mui/material/styles';
 // -- FireBase --
 import { pushData } from '../../../../../config/FireBase/CRUD';
 import { auth } from '../../../../../config/FireBase';
+
+ResponsiveDialog.propTypes = {
+  data: PropTypes.object.isRequired,
+  boolean: PropTypes.bool.isRequired,
+  func: PropTypes.func.isRequired,
+  data2push: PropTypes.array.isRequired,
+};
 
 export default function ResponsiveDialog({ data, boolean, func, data2push }) {
   const [open, setOpen] = useState(false);
@@ -46,6 +54,7 @@ export default function ResponsiveDialog({ data, boolean, func, data2push }) {
   useEffect(() => {
     setDep(data);
     setOpen(boolean);
+    // eslint-disable-next-line 
   }, [boolean]);
 
   return (

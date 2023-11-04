@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useParams } from 'react-router-dom';
-import Checkout from '../UserPageComponents/AddNewWorker/Checkout';
+import Checkout from '../UserPageComponents/components/AddNewWorker/Checkout';
 import { CryptoHook } from './hooks/CryptoHook';
 
 const defaultTheme = createTheme();
@@ -14,7 +14,7 @@ const defaultTheme = createTheme();
 const InvitationPage = () => {
   const param = useParams();
   const hook = CryptoHook(param.param1, 'AddUserInvitation');
-  
+
   return hook.Bool ? (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>

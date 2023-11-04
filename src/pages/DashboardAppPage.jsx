@@ -1,32 +1,28 @@
-import { Helmet } from 'react-helmet-async';
-import { faker } from '@faker-js/faker';
-// @mui
-import { useTheme } from '@mui/material/styles';
-import { Grid, Container, Typography } from '@mui/material';
-
-import { ShortReport } from 'src/components/DashboardComponent/SharedLists';
-
-import { auth } from 'src/config/FireBase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
-import { getUserDataByEmail } from 'src/config/FireBase/CRUD';
+import { Helmet } from 'react-helmet-async';
+import { faker } from '@faker-js/faker';
+import { useNavigate } from 'react-router-dom';
+
+// @mui
+import { Grid, Container, Typography } from '@mui/material';
+
+import { ShortReport } from '../components/DashboardComponent/SharedLists';
+import { auth } from '../config/FireBase';
+import { getUserDataByEmail } from '../config/FireBase/CRUD';
 import Iconify from '../components/iconify';
 import {
   AppTasks,
-  AppNewsUpdate,
   AppOrderTimeline,
-  AppCurrentVisits,
   AppWebsiteVisits,
   AppTrafficBySite,
   AppWidgetSummary,
   AppLinkGeneratorTaskEnforcer,
 } from '../components/DashboardComponent/Apps/@dashboard/app';
-import { useNavigate } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
 export default function DashboardAppPage() {
-  const theme = useTheme();
   const [SignedIn, setSignedIn] = useState(false);
   const [Email, setEmail] = useState(null);
   const navigate = useNavigate();
@@ -46,6 +42,7 @@ export default function DashboardAppPage() {
         navigate('/login', { replace: true });
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

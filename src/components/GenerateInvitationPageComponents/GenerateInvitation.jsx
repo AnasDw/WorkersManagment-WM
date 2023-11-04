@@ -1,107 +1,36 @@
-import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
-import copy from 'clipboard-copy';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
+import { Button } from '@mui/material';
 
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-
-import Iconify from 'src/components/iconify/Iconify';
-import { Button } from '@mui/material';
-import { getCurrentDate, getCurrentTime } from 'src/constants/functions';
-import { auth } from 'src/config/FireBase';
-import { getDataFromDocByEmail, pushData } from 'src/config/FireBase/CRUD';
-import { useState } from 'react';
+import Iconify from '../iconify/Iconify';
+import GenerateInvitationHook from './hooks/GenerateInvitationHook';
 
 const SelectList = [{ id: 'Minutes' }, { id: 'Hours' }, { id: 'Days' }];
 
 const GenerateInvitation = ({ boolean }) => {
-  const [Copied, setCopied] = useState(false);
-  const [Error, setError] = useState(false);
-  const [ValidateType, setValidateType] = useState('None');
-  const [ValidateValue, setValidateValue] = useState(0);
-  const [ShortMsg, setShortMsg] = useState();
-  const [temp, setTemp] = useState({});
+  const [
+    Copied,
+    Error,
+    InputValidateType,
+    InputValidateValue,
+    ShortMsg,
+    handleChange,
+    handleSubmitForm,
+    setShortMsg,
+    setInputValidateValue,
+  ] = GenerateInvitationHook(boolean);
 
-  const SetWorkersStatus = async () => {
-    try {
-      await getDataFromDocByEmail(auth.currentUser.email, 'workers').then((res) => {
-        if (res !== false) {
-          const Data2Push = res.data.map((data) => {
-            const temp = { ...data };
-            temp.status = 'not yet';
-            temp.Requests = null;
-            return temp;
-          });
-          pushData('workers', { data: Data2Push }, auth.currentUser.email);
-        }
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  const CopyLink = async () => {
-    try {
-      if (boolean) SetWorkersStatus();
-      const date = getCurrentDate();
-      const showTime = getCurrentTime();
-
-      var CryptoJS = require('crypto-js');
-      const encrypted = CryptoJS.AES.encrypt(`${auth.currentUser.email}`, process.env.REACT_APP_SecretKey);
-
-      const encodedURL = encodeURIComponent(encrypted.toString());
-      let URL = `http://localhost:3000/InvitationPage/${encodedURL}`;
-      let place = 'AddUserInvitation';
-      if (boolean) {
-        URL = `http://localhost:3000/TaskEnforcerPage/${encodedURL}`;
-        place = 'TaskEnforcer';
-      }
-
-      await pushData(
-        place,
-        {
-          ValidateType: ValidateType.charAt(0),
-          ValidateValue: ValidateValue,
-          date: date,
-          showTime: showTime,
-          link: URL,
-        },
-        auth.currentUser.email
-      ).then((res) => {
-        copy(URL).then(() => {
-          setCopied(true);
-          setTimeout(() => {
-            setCopied(false);
-            window.location.reload();
-          }, 1000);
-        });
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const handleChange = (event) => {
-    setValidateType(event.target.value);
-    const a = SelectList.find((obj) => obj.id === ValidateType);
-    setTemp(a);
-  };
-
-  const handleSubmitForm = (event) => {
-    event.preventDefault();
-    setError(false);
-    if (ValidateType != 'None' && ValidateValue != 0) CopyLink();
-    else setError(true);
-  };
   return (
     <>
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
@@ -128,7 +57,7 @@ const GenerateInvitation = ({ boolean }) => {
                     <Select
                       labelId="demo-simple-select-helper-label"
                       id="demo-simple-select-helper"
-                      value={ValidateType}
+                      value={InputValidateType}
                       label="Valid For"
                       onChange={handleChange}
                     >
@@ -144,9 +73,9 @@ const GenerateInvitation = ({ boolean }) => {
                   <FormControl sx={{ m: 1, minWidth: 120 }} error={Error}>
                     <Select
                       onChange={(e) => {
-                        setValidateValue(e.target.value);
+                        setInputValidateValue(e.target.value);
                       }}
-                      value={ValidateValue}
+                      value={InputValidateValue}
                       displayEmpty
                       inputProps={{ 'aria-label': 'Without label' }}
                     >
