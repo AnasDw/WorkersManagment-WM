@@ -1,7 +1,5 @@
 {
-  "name": "Workers Managment - WM",
   "author": "A.D",
-  "licence": "Anas Dweik",
   "version": "1.7.0",
   "private": false,
   "scripts": {
