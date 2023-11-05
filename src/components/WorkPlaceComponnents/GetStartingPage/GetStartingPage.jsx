@@ -38,6 +38,7 @@ const GetStartingPage = () => {
     } else {
       setBool(false);
     }
+    // eslint-disable-next-line
   }, [DepForm]);
 
   const handleData = (newData) => {

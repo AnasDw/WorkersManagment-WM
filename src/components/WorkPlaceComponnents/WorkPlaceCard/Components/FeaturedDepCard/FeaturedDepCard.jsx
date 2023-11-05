@@ -26,7 +26,6 @@ const ImgByIndex = (i) => {
   return null;
 };
 
-FeaturedDepCard.propTypes = { props: PropTypes.object.isRequired };
 export default function FeaturedDepCard({ props }) {
   const [open, setOpen] = useState(false);
   const [Data, setData] = useState();
@@ -41,46 +40,54 @@ export default function FeaturedDepCard({ props }) {
   return (
     <>
       <Grid container spacing={3} mt={8} alignItems={'center'} justifyContent={'center'}>
-        {props.data.Positions.map(
-          (
-            item,
-            index // eslint-disable-line
-          ) => (
-            <Grid key={index} item xs={12} sm={6} md={3} lg={3}>
-              <Card sx={{ maxWidth: 345 }}>
-                <CardActionArea>
-                  <CardMedia component="img" height="140" src={ImgByIndex(index + 1)} alt="green iguana" />
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="div" sx={{ color: '#324E87' }}>
-                      {`${item.Dep} Department`}
-                    </Typography>
-                    <Grid mt={2} display={'flex'} container variant="body2" sx={{ gap: 1 }}>
-                      <EventNoteIcon />
-                      <Typography variant="body2" color="text.secondary">
-                        {`Contains ${item.Pos.length} Positions`}
+        {
+          // eslint-disable-next-line
+          props.data.Positions.map(
+            (
+              item,
+              index // eslint-disable-line
+            ) => (
+              <Grid key={index} item xs={12} sm={6} md={3} lg={3}>
+                <Card sx={{ maxWidth: 345 }}>
+                  <CardActionArea>
+                    <CardMedia component="img" height="140" src={ImgByIndex(index + 1)} alt="green iguana" />
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="div" sx={{ color: '#324E87' }}>
+                        {`${item.Dep} Department`}
                       </Typography>
-                    </Grid>
-                  </CardContent>
-                </CardActionArea>
-                <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Button size="small" color="primary">
-                    Share
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      handleClickEdit(item);
-                    }}
-                    size="small"
-                  >
-                    <EditNoteIcon />
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
+                      <Grid mt={2} display={'flex'} container variant="body2" sx={{ gap: 1 }}>
+                        <EventNoteIcon />
+                        <Typography variant="body2" color="text.secondary">
+                          {`Contains ${item.Pos.length} Positions`}
+                        </Typography>
+                      </Grid>
+                    </CardContent>
+                  </CardActionArea>
+                  <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Button size="small" color="primary">
+                      Share
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        handleClickEdit(item);
+                      }}
+                      size="small"
+                    >
+                      <EditNoteIcon />
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            )
           )
-        )}
+        }
       </Grid>
-      <ResponsiveDialog data={Data} boolean={open} func={handleClose} data2push={props.data} />
+      {
+        // eslint-disable-next-line
+        <ResponsiveDialog data={Data} boolean={open} func={handleClose} data2push={props.data} />
+      }
     </>
   );
 }
+
+FeaturedDepCard.propTypes = { props: PropTypes.object.isRequired };

@@ -14,6 +14,7 @@ const GenerateInvitationHook = ({ boolean }) => {
   const [InputValidateType, setInputValidateType] = useState('None');
   const [InputValidateValue, setInputValidateValue] = useState(0);
   const [ShortMsg, setShortMsg] = useState();
+  // eslint-disable-next-line
   const [temp, setTemp] = useState({});
 
   const CopyLink = async () => {

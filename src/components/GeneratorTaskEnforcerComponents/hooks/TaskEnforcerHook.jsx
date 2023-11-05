@@ -13,6 +13,7 @@ const TaskEnforcerHook = (SecretParam) => {
       if (userToPull) setPulledUser(userToPull);
       else setBoolean(true);
     }
+    // eslint-disable-next-line
   }, [UserPhoneNumber]);
 
   useEffect(() => {

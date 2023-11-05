@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import Button from '@mui/material/Button';
+import PropTypes from 'prop-types';
+
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -168,5 +170,6 @@ const FillPositions = ({ data }) => {
     </>
   );
 };
+FillPositions.propTypes = { data: PropTypes.object };
 
 export default FillPositions;

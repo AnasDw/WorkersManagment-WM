@@ -39,6 +39,7 @@ const EditHook = (data, boolean, func, WorkPlace, email) => {
   useEffect(() => {
     setEmployee(data);
     setOpen(boolean);
+    // eslint-disable-next-line
   }, [boolean]);
 
   const getWorkPlaceLists = (value) => {

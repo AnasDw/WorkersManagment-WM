@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -47,9 +48,7 @@ export default function TimeTable({ days, data }) {
       const order = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
       return order.indexOf(a) - order.indexOf(b);
     });
-    setDaysList(() => {
-      return sortedWeekdays;
-    });
+    setDaysList(sortedWeekdays);
   }, [days]);
 
   const handleOTChange = (index, val) => {
@@ -178,3 +177,8 @@ export default function TimeTable({ days, data }) {
     </Box>
   );
 }
+
+TimeTable.propTypes = {
+  days: PropTypes.array,
+  data: PropTypes.object,
+};

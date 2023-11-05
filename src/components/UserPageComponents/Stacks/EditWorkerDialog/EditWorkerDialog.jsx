@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -54,8 +55,10 @@ export default function EditWorkerDialog({ data, boolean, func, WorkPlace, email
                   />
                 ))}
                 {WORKPLACE_LIST.map((item, index) => (
-                  <FormControl variant="filled" sx={{ m: 1, minWidth: 220 }}>
-                    <InputLabel id="demo-simple-select-filled-label">{item.label}</InputLabel>
+                  <FormControl key={index} variant="filled" sx={{ m: 1, minWidth: 220 }}>
+                    <InputLabel key={index} id="demo-simple-select-filled-label">
+                      {item.label}
+                    </InputLabel>
                     <Select
                       key={index}
                       labelId="demo-simple-select-filled-label"
@@ -89,3 +92,11 @@ export default function EditWorkerDialog({ data, boolean, func, WorkPlace, email
     </div>
   );
 }
+
+EditWorkerDialog.propTypes = {
+  data: PropTypes.object,
+  boolean: PropTypes.bool,
+  func: PropTypes.func,
+  WorkPlace: PropTypes.object,
+  email: PropTypes.string,
+};

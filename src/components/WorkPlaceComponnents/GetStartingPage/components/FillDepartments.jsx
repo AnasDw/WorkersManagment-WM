@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { PropTypes } from 'prop-types';
+
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -14,6 +16,7 @@ const FillDepartments = ({ Bool, handleData }) => {
     if (Bool) {
       handleData(DepartmentsNames);
     }
+    // eslint-disable-next-line
   }, [Bool]);
 
   const addChange = (event) => {
@@ -38,13 +41,16 @@ const FillDepartments = ({ Bool, handleData }) => {
           }}
         >
           {['One', 'Two', 'Three', 'Four', 'Five'].map((value, index) => (
-            <MenuItem value={index + 1}>{value}</MenuItem>
+            <MenuItem key={index} value={index + 1}>
+              {value}
+            </MenuItem>
           ))}
         </Select>
 
         <Box spacing={2} component="form" onChange={addChange}>
           {Array.from({ length: DepartmentsVal }, (_, index) => (
             <TextField
+              key={index}
               margin="normal"
               required
               xs={12}
@@ -59,6 +65,11 @@ const FillDepartments = ({ Bool, handleData }) => {
       </FormControl>
     </>
   );
+};
+
+FillDepartments.propTypes = {
+  Bool: PropTypes.bool,
+  handleData: PropTypes.func,
 };
 
 export default FillDepartments;

@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import { Grid } from '@mui/material';
 import { faker } from '@faker-js/faker';
 
@@ -38,4 +40,5 @@ const FeaturedCharts = ({ data }) => {
   );
 };
 
+FeaturedCharts.propTypes = { data: PropTypes.object };
 export default FeaturedCharts;

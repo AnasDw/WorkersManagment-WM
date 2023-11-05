@@ -56,6 +56,7 @@ export default function Nav({ openNav, onCloseNav }) {
     if (openNav) {
       onCloseNav();
     }
+    // eslint-disable-next-line
   }, [pathname]);
 
   const renderContent = (

@@ -67,6 +67,7 @@ const CryptoHook = (data2decrypt, place) => {
       console.error(error);
       navigate('/404', { replace: true });
     }
+    // eslint-disable-next-line
   }, [data2decrypt]);
   return { Bool, SecretParam };
 };

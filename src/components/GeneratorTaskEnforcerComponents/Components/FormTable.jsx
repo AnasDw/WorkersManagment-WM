@@ -1,4 +1,6 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
+
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -17,7 +19,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useState, useEffect } from 'react';
 import Skeleton from '@mui/material/Skeleton';
-import { cleanDigitSectionValue } from '@mui/x-date-pickers/internals/hooks/useField/useField.utils';
 import { useNavigate } from 'react-router-dom';
 
 import { getDataFromDocByEmail, pushData } from '../../../config/FireBase/CRUD';
@@ -189,3 +190,9 @@ export default function FormTable({ Email, PulledUser }) {
     </>
   );
 }
+
+
+FormTable.propTypes = {
+  Email: PropTypes.string,
+  PulledUser: PropTypes.object,
+};

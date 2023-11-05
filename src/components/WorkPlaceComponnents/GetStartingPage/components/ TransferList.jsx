@@ -26,6 +26,7 @@ function union(a, b) {
   return [...a, ...not(b, a)];
 }
 
+// eslint-disable-next-line
 export default function TransferList({ data }) {
   const [checked, setChecked] = useState([]);
   const [Bool, setBool] = useState(false);
