@@ -56,9 +56,9 @@ const IconsForm = () => {
   return (
     <>
       <Stack direction="row" spacing={2}>
-        {icons.map((item, index) => (
+        {icons.map((item) => (
           <Button
-            onClick={(e) => {
+            onClick={() => {
               handleClick(item.name);
             }}
             key={item.name}
