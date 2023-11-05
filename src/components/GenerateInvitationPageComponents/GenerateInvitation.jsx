@@ -20,8 +20,6 @@ import GenerateInvitationHook from './hooks/GenerateInvitationHook';
 
 const SelectList = [{ id: 'Minutes' }, { id: 'Hours' }, { id: 'Days' }];
 
-GenerateInvitation.propTypes = { boolean: PropTypes.bool };
-
 const GenerateInvitation = ({ boolean }) => {
   const [
     Copied,
@@ -126,5 +124,7 @@ const GenerateInvitation = ({ boolean }) => {
     </>
   );
 };
+
+GenerateInvitation.propTypes = { boolean: PropTypes.bool };
 
 export default GenerateInvitation;
