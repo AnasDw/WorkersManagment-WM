@@ -26,10 +26,10 @@ const GenerateInvitationHook = ({ boolean }) => {
       const encrypted = CryptoJS.AES.encrypt(`${auth.currentUser.email}`, process.env.REACT_APP_SecretKey);
 
       const encodedURL = encodeURIComponent(encrypted.toString());
-      let URL = `http://localhost:3000/InvitationPage/${encodedURL}`;
+      let URL = `https://wm-sys.netlify.app/InvitationPage/${encodedURL}`;
       let place = 'AddUserInvitation';
       if (boolean) {
-        URL = `http://localhost:3000/TaskEnforcerPage/${encodedURL}`;
+        URL = `https://wm-sys.netlify.app/TaskEnforcerPage/${encodedURL}`;
         place = 'TaskEnforcer';
       }
 
