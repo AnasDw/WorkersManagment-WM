@@ -24,27 +24,27 @@ export default function Router() {
       ],
     },
     {
-      path: 'login',
+      path: '/login',
       element: <LoginPage />,
     },
     {
-      path: 'InvitationPage/:param1/',
+      path: '/InvitationPage/:param1/',
       element: <InvitationPage />,
     },
     {
-      path: 'TaskEnforcerPage/:param1/',
+      path: '/TaskEnforcerPage/:param1/',
       element: <TaskEnforcerPage />,
     },
     {
-      path: '200',
+      path: '/200',
       element: <Page200 />,
     },
     {
       element: <SimpleLayout />,
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
-        { path: '404', element: <Page404 /> },
-        { path: '*', element: <Navigate to="/404" /> },
+        { path: '/404', element: <Page404 /> },
+        { path: '/*', element: <Navigate to="/404" /> },
       ],
     },
     {
