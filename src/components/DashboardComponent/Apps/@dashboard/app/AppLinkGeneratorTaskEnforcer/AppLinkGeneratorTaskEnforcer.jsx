@@ -3,6 +3,7 @@ import copy from 'clipboard-copy';
 import PropTypes from 'prop-types';
 
 import Card from '@mui/material/Card';
+import Grid from '@mui/material/Grid';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
@@ -40,43 +41,51 @@ const AppLinkGeneratorTaskEnforcer = ({ email }) => {
           <GenerateInvitation boolean={TRUE} />
         ) : (
           <>
-            {state.OnlineReq ? (
-              <>
-                <Typography variant="body2" ml={2} color="text.secondary">
-                  You have active requests, Time remaining:
-                  {<strong> {state.RemainingTime} </strong>}
-                </Typography>
+            <Grid container minWidth={'xl'} alignItems={'center'}>
+              {state.OnlineReq ? (
+                <>
+                  <Grid item>
+                    <Typography variant="body2" ml={2} color="text.secondary">
+                      You have active requests, Time remaining:
+                      {<strong> {state.RemainingTime} </strong>}
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      size="small"
+                      sx={{ m: 1 }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        copy(state.OnlineReq.link).then(() => {
+                          dispatch({ type: ACTIONS.TOGGLE_COPY_BTN });
+                          setTimeout(() => {
+                            dispatch({ type: ACTIONS.TOGGLE_COPY_BTN });
+                          }, 1000);
+                        });
+                      }}
+                      variant="outlined"
+                      startIcon={<Iconify icon="icon-park:copy" />}
+                    >
+                      {!state.Copied ? 'Copy Link' : 'Copied'}
+                    </Button>
+                  </Grid>
+                </>
+              ) : null}
+              <Grid item>
                 <Button
                   size="small"
                   sx={{ m: 1 }}
                   onClick={(e) => {
                     e.preventDefault();
-                    copy(state.OnlineReq.link).then(() => {
-                      dispatch({ type: ACTIONS.TOGGLE_COPY_BTN });
-                      setTimeout(() => {
-                        dispatch({ type: ACTIONS.TOGGLE_COPY_BTN });
-                      }, 1000);
-                    });
+                    dispatch({ type: ACTIONS.ADD_NEW_INVITATION });
                   }}
                   variant="outlined"
-                  startIcon={<Iconify icon="icon-park:copy" />}
+                  startIcon={<Iconify icon="vscode-icons:file-type-dartlang-generated" />}
                 >
-                  {!state.Copied ? 'Copy Link' : 'Copied'}
+                  {state.OnlineReq ? 'Generate New Invitation' : 'Generate Invitation'}
                 </Button>
-              </>
-            ) : null}
-            <Button
-              size="small"
-              sx={{ m: 1 }}
-              onClick={(e) => {
-                e.preventDefault();
-                dispatch({ type: ACTIONS.ADD_NEW_INVITATION });
-              }}
-              variant="outlined"
-              startIcon={<Iconify icon="vscode-icons:file-type-dartlang-generated" />}
-            >
-              {state.OnlineReq ? 'Generate New Invitation' : 'Generate Invitation'}
-            </Button>
+              </Grid>
+            </Grid>
           </>
         )}
       </CardActions>

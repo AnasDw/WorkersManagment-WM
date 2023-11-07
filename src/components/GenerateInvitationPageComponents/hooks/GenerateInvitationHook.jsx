@@ -8,7 +8,7 @@ import { getDataFromDocByEmail, pushData } from '../../../config/FireBase/CRUD';
 const SelectList = [{ id: 'Minutes' }, { id: 'Hours' }, { id: 'Days' }];
 const CryptoJS = require('crypto-js');
 
-const GenerateInvitationHook = ({ boolean }) => {
+const GenerateInvitationHook = (boolean) => {
   const [Copied, setCopied] = useState(false);
   const [Error, setError] = useState(false);
   const [InputValidateType, setInputValidateType] = useState('None');
