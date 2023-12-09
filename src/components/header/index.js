@@ -5,14 +5,13 @@ import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import { Box, Stack, AppBar, Toolbar, IconButton, Typography } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../../config/FireBase';
 import Iconify from '../iconify';
 import { bgBlur } from '../../utils/cssStyles';
 
 import Searchbar from './Searchbar';
 import NotificationsPopover from './NotificationsPopover';
 import AccountPopover from './AccountPopover/AccountPopover';
+import onAuthStateChanged from '../utils/onAuthStateChanged';
 
 const NAV_WIDTH = 280;
 const HEADER_MOBILE = 64;
@@ -41,13 +40,15 @@ Header.propTypes = {
 export default function Header({ onOpenNav }) {
   const navigate = useNavigate();
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [Response, setResponse] = useState();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setIsSignedIn(!!user);
+    onAuthStateChanged(document.cookie.split('=')[1]).then((res) => {
+      if (res) {
+        setResponse(res.data.data);
+        setIsSignedIn(true);
+      }
     });
-
-    return () => unsubscribe();
   }, []);
 
   return (
@@ -77,7 +78,7 @@ export default function Header({ onOpenNav }) {
             }}
           >
             <NotificationsPopover />
-            <AccountPopover />
+            <AccountPopover param={Response} />
           </Stack>
         ) : (
           <Stack

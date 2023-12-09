@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
@@ -15,8 +16,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { pushData } from '../../../../config/FireBase/CRUD';
-import { auth } from '../../../../config/FireBase';
+import onAuthStateChanged from '../../../utils/onAuthStateChanged';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -83,13 +83,26 @@ export default function TimeTable({ days, data }) {
 
   const SendRequest = async (req) => {
     try {
-      await pushData('Managers', req, auth.currentUser.email)
-        .then(() => {
-          window.location.reload();
+      onAuthStateChanged(document.cookie.split('=')[1])
+        .then((res) => {
+          axios.post(
+            'http://localhost:3000/workplace',
+            {
+              name: req.WorkPlaceName,
+              departmentsNames: req.DepartmentsNames,
+              positions: req.Positions,
+              operatingDaysAndTimes: req.OperatingDaysAndTimes,
+              provider: res.data.data.email,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${document.cookie.split('=')[1]}`,
+              },
+              withCredentials: true,
+            }
+          );
         })
-        .catch((err) => {
-          console.error(err);
-        });
+        .then(window.location.reload());
     } catch (error) {
       console.error(error);
     }

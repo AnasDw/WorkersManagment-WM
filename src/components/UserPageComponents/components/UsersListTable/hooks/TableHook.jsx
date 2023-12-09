@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
+import axios from 'axios';
 
 import { applySortFilter, getComparator } from '../../../Constants/Functions';
-
-import { getDataFromDocByEmail } from '../../../../../config/FireBase/CRUD';
-import { auth } from '../../../../../config/FireBase';
+import onAuthStateChanged from '../../../../utils/onAuthStateChanged';
 
 const TableHook = () => {
   const [open, setOpen] = useState(null);
   const [ShowDialog, setShowDialog] = useState(false);
+  const [DeleteDialog, setDeleteDialog] = useState(false);
   const [Users, setUsers] = useState([]);
   const [Email, setEmail] = useState();
   const [WorkPlace, setWorkPlace] = useState();
@@ -58,24 +57,25 @@ const TableHook = () => {
   };
 
   useEffect(() => {
-    onAuthStateChanged(auth, (newUser) => {
-      if (newUser) {
-        setEmail(auth.currentUser.email);
-        getDataFromDocByEmail(auth.currentUser.email, 'workers').then((res) => {
-          if (res !== false) {
-            try {
-              setUsers(res.data);
-              getDataFromDocByEmail(auth.currentUser.email, 'Managers').then((response) => {
-                setWorkPlace(response);
-              });
-            } catch (error) {
-              console.error(error);
-            }
-          }
-        });
-      }
+    onAuthStateChanged(document.cookie.split('=')[1]).then((response) => {
+      setEmail(response?.data?.data?.email);
     });
   }, []);
+
+  useEffect(() => {
+    if (Email) {
+      try {
+        axios.get(`http://localhost:3000/workers/${Email}`).then((response) => {
+          setUsers(response.data.data);
+        });
+        axios.get(`http://localhost:3000/workPlace/${Email}`).then((response) => {
+          setWorkPlace(response.data.data);
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }, [Email]);
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -98,8 +98,9 @@ const TableHook = () => {
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
-  const setShowDialogState = (val) => {
-    setShowDialog(val);
+  const setShowDialogState = (val, category) => {
+    if (category === 1) setShowDialog(val);
+    else setDeleteDialog(val);
   };
   const setUser2EditState = (val) => {
     setUser2Edit(val);
@@ -131,6 +132,8 @@ const TableHook = () => {
     handleChangeRowsPerPage,
     setShowDialogState,
     setUser2EditState,
+    DeleteDialog,
+    setDeleteDialog,
   ];
 };
 

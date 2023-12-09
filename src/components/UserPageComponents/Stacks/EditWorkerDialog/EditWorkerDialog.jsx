@@ -17,17 +17,16 @@ import Select from '@mui/material/Select';
 import EditHook from './hook/EditHook';
 
 const FORMAL_LIST = [{ label: 'Employee name' }, { label: 'Employee Phone Number' }];
-const WORKPLACE_LIST = [{ label: 'Department' }, { label: 'Main Role' }];
+const WORKPLACE_LIST = [{ label: 'Department' }, { label: 'Position' }, { label: 'Main Role' }];
 
-export default function EditWorkerDialog({ data, boolean, func, WorkPlace, email }) {
+export default function EditWorkerDialog({ data, boolean, func, WorkPlace }) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const [open, handleClose, handleSave, getEmployeeValue, getWorkPlaceLists, setEmployeeValue] = EditHook(
     data,
     boolean,
     func,
-    WorkPlace,
-    email
+    WorkPlace
   );
 
   return (
@@ -40,7 +39,7 @@ export default function EditWorkerDialog({ data, boolean, func, WorkPlace, email
           </DialogContentText>
           {open ? (
             <>
-              <DialogContentText sx={{ margin: 3 }}>
+              <DialogContentText textAlign={'center'} sx={{ margin: 3 }}>
                 {FORMAL_LIST.map((item, index) => (
                   <TextField
                     sx={{ margin: 1, minWidth: 220 }}
@@ -68,8 +67,8 @@ export default function EditWorkerDialog({ data, boolean, func, WorkPlace, email
                         setEmployeeValue(item.label, e.target.value);
                       }}
                     >
-                      {getWorkPlaceLists(item.label).map((list, j) => (
-                        <MenuItem key={j} value={list}>
+                      {getWorkPlaceLists(item.label)?.map((list, j) => (
+                        <MenuItem sx={{ maxHeight: '150px', overflow: 'scroll' }} key={j} value={list}>
                           {list}
                         </MenuItem>
                       ))}

@@ -19,7 +19,7 @@ const UsersTableBody = ({
 }) => (
   <TableBody>
     {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, j) => {
-      const { name, role, status, department, PhoneNumber } = row;
+      const { name, phoneNumber, department, position, role, status } = row;
       const selectedUser = selected.indexOf(name) !== -1;
       return (
         <TableRow hover key={j} tabIndex={-1} role="checkbox" selected={selectedUser}>
@@ -41,14 +41,16 @@ const UsersTableBody = ({
             </Stack>
           </TableCell>
 
-          <TableCell align="left">{PhoneNumber}</TableCell>
+          <TableCell align="left">{`0${phoneNumber}`}</TableCell>
 
           <TableCell align="left">{department}</TableCell>
+
+          <TableCell align="left">{position}</TableCell>
 
           <TableCell align="left">{role}</TableCell>
 
           <TableCell align="left">
-            <Label color={(status === 'not yet' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+            <Label color={(status === 'Incomplete' && 'error') || 'success'}>{sentenceCase(status)}</Label>
           </TableCell>
 
           <TableCell align="right">

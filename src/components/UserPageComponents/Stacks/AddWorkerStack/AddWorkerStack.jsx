@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 import { Stack, Button, Typography } from '@mui/material';
 import Checkout from '../../components/AddNewWorker/Checkout';
 import Iconify from '../../../iconify/Iconify';
 import GenerateInvitation from '../../../GenerateInvitationPageComponents/GenerateInvitation';
 
-const AddWorkerStack = () => {
+const AddWorkerStack = ({ WorkPlace }) => {
   const [AddWorker, setAddWorker] = useState();
   const [GenerateInvitationBool, setGenerateInvitation] = useState(false);
 
@@ -42,10 +43,12 @@ const AddWorkerStack = () => {
         ) : null}
       </Stack>
 
-      {AddWorker ? <Checkout PropCancelIcon /> : null}
-      {GenerateInvitationBool ? <GenerateInvitation boolean={false} /> : null}
+      {AddWorker ? <Checkout PropCancelIcon WorkPlace={WorkPlace} /> : null}
+      {GenerateInvitationBool ? <GenerateInvitation boolean={false} WorkPlace={WorkPlace} /> : null}
     </>
   );
 };
+
+AddWorkerStack.propTypes = { WorkPlace: PropTypes.object };
 
 export default AddWorkerStack;

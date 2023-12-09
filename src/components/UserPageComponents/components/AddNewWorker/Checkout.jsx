@@ -16,10 +16,10 @@ import CheckOutHook from './hooks/CheckOutHook';
 
 const steps = ['Formal Details', 'Skills', 'Review your Worker'];
 
-Checkout.propTypes = { PropCancelIcon: PropTypes.bool, email: PropTypes.string };
+Checkout.propTypes = { PropCancelIcon: PropTypes.bool, WorkPlace: PropTypes.object };
 
-export default function Checkout({ PropCancelIcon, email }) {
-  const [state, handleBack, SubmitForm, getStepContent, handleNext] = CheckOutHook(email);
+export default function Checkout({ PropCancelIcon, WorkPlace }) {
+  const [state, handleBack, SubmitForm, getStepContent, handleNext] = CheckOutHook(WorkPlace);
 
   return (
     <>
@@ -28,7 +28,7 @@ export default function Checkout({ PropCancelIcon, email }) {
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 8 } }}>
           <Stack direction="row" sx={{ gap: 1 }} alignItems="center" justifyContent="space-between">
             <Typography component="h1" variant="h4" align="center">
-              {state.WorkPlace?.WorkPlaceName} - New Worker SetUp
+              {WorkPlace?.name} - New Worker SetUp
             </Typography>
             {PropCancelIcon ? (
               <IconButton>

@@ -5,6 +5,7 @@ import UsersTableBody from './components/UsersListTable/components/UsersTableBod
 import NoResultsMessage from './components/UsersListTable/components/NoResultsMessage';
 import EditDeletePopover from './components/UsersListTable/components/EditDeletePopover';
 import { UsersReportsTable } from './components/UsersReportsTable/UsersReportsTable';
+import DeleteWorkerDialog from './Stacks/DeleteWorkerDialog/DeleteWorkerDialog';
 
 export {
   AddWorkerStack,
@@ -14,4 +15,5 @@ export {
   NoResultsMessage,
   EditDeletePopover,
   UsersReportsTable,
+  DeleteWorkerDialog,
 };

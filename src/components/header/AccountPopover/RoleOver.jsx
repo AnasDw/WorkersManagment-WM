@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Divider, Typography, Stack, MenuItem } from '@mui/material';
-
-import { signOut } from 'firebase/auth';
-import { auth } from '../../../config/FireBase';
+import axios from 'axios';
 
 import { MENU_OPTIONS } from './constants';
 
-const RoleOver = () => {
+const RoleOver = ({ param }) => {
   const navigate = useNavigate();
   // eslint-disable-next-line
   const [open, setOpen] = useState(null);
@@ -19,13 +17,14 @@ const RoleOver = () => {
 
   const SignOut = async () => {
     try {
-      signOut(auth, auth?.currentUser?.providerData[0].providerId)
-        .then(() => {
-          navigate('/login', { replace: true });
+      await axios
+        .get('http://localhost:3000/auth/logout', {
+          headers: {
+            Authorization: `Bearer ${document.cookie.split('=')[1]}`,
+          },
+          withCredentials: true,
         })
-        .catch((e) => {
-          console.log(e);
-        });
+        .then(navigate('/login', { replace: true }));
     } catch (e) {
       console.log(e);
     }
@@ -35,10 +34,10 @@ const RoleOver = () => {
     <>
       <Box sx={{ my: 1.5, px: 2.5 }}>
         <Typography variant="subtitle2" noWrap>
-          {auth?.currentUser?.displayName}
+          {param?.name}
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-          {auth?.currentUser?.email}
+          {param?.email}
         </Typography>
       </Box>
 

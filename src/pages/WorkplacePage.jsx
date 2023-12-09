@@ -1,52 +1,47 @@
 import { useEffect, useState } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
-
+import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
 import Skeleton from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
 
-import { auth } from '../config/FireBase';
-import { WelcomeContainer, WorkPlaceCard } from '../components/WorkPlaceComponnents';
-import { getDataFromDocByEmail } from '../config/FireBase/CRUD';
+import { WelcomeContainer, WorkPlaceCard } from '../components/WorkPlaceComponents';
+import onAuthStateChanged from '../components/utils/onAuthStateChanged';
 
 const WorkplacePage = () => {
   const [SignedIn, setSignedIn] = useState(false);
+  const [Provider, setProvider] = useState();
   const [Loading, setLoading] = useState(true);
   const [WorkplaceData, setWorkplaceData] = useState(null);
 
   useEffect(() => {
-    onAuthStateChanged(auth, (newUser) => {
-      if (newUser) {
-        try {
-          getDataFromDocByEmail(auth?.currentUser?.email, 'Managers')
-            .then((response) => {
-              if (response !== false) {
-                setWorkplaceData(response);
-                setSignedIn(true);
-              } else {
-                setLoading(false);
-              }
-            })
-            .catch((error) => {
-              console.error(error);
-              setLoading(false);
-            });
-        } catch (error) {
-          console.error(error);
-          setLoading(false);
-        }
-      }
+    onAuthStateChanged(document.cookie.split('=')[1]).then((response) => {
+      setProvider(response.data.data.email);
+      setSignedIn(true);
     });
   }, []);
+
+  useEffect(() => {
+    if (Provider && SignedIn) {
+      try {
+        axios.get(`http://localhost:3000/workplace/${Provider}`).then((response) => {
+          console.log(response);
+          setWorkplaceData(response.data.data);
+          setLoading(false);
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }, [Provider, SignedIn]);
 
   return (
     <>
       <Helmet>
         <title> Workplace | WM </title>
       </Helmet>
-      {SignedIn ? (
+      {SignedIn && WorkplaceData ? (
         <WorkPlaceCard data={WorkplaceData} />
-      ) : !Loading ? (
+      ) : Loading ? (
         <WelcomeContainer />
       ) : (
         <Box sx={{ m: 4, mt: 8 }}>

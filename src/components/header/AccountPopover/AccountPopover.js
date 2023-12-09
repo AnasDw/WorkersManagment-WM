@@ -10,12 +10,12 @@ import RoleOver from './RoleOver';
 
 // ----------------------------------------------------------------------
 
-export default function AccountPopover() {
+export default function AccountPopover({ param }) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(null);
 
   const handleOpen = (event) => {
-    if (auth.currentUser == null) {
+    if (param == null) {
       navigate('/login', { replace: true });
     } else {
       setOpen(event.currentTarget);
@@ -45,7 +45,7 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={auth?.currentUser?.photoURL} alt="photoURL" />
+        <Avatar src={param?.photoURL} alt="photoURL" />
       </IconButton>
 
       <Popover
@@ -67,7 +67,7 @@ export default function AccountPopover() {
           },
         }}
       >
-        <RoleOver />
+        <RoleOver param={param} />
       </Popover>
     </>
   );

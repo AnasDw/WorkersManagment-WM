@@ -1,14 +1,12 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { onAuthStateChanged } from 'firebase/auth';
 
 // @mui
 import { styled, alpha } from '@mui/material/styles';
 import { Box, Link, Drawer, Typography, Avatar } from '@mui/material';
 // mock
 // hooks
-import { auth } from '../../../../../config/FireBase';
 import useResponsive from '../../../../../hooks/useResponsive';
 // components
 import Logo from '../../../../logo';
@@ -17,6 +15,7 @@ import NavSection from '../../../../nav-section';
 
 //
 import navConfig from './config';
+import onAuthStateChanged from '../../../../utils/onAuthStateChanged';
 
 // ----------------------------------------------------------------------
 
@@ -41,15 +40,17 @@ export default function Nav({ openNav, onCloseNav }) {
   const isDesktop = useResponsive('up', 'lg');
 
   const [SignedIn, setSignedIn] = useState(false);
+  const [Manager, setManager] = useState({});
 
   useEffect(() => {
-    onAuthStateChanged(auth, (newUser) => {
-      if (newUser) {
+    onAuthStateChanged(document.cookie.split('=')[1])
+      .then((response) => {
+        setManager(response.data.data);
         setSignedIn(true);
-      } else {
-        setSignedIn(false);
-      }
-    });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }, []);
 
   useEffect(() => {
@@ -74,11 +75,11 @@ export default function Nav({ openNav, onCloseNav }) {
         <Link underline="none">
           {SignedIn ? (
             <StyledAccount>
-              <Avatar src={auth.currentUser?.photoURL} alt="photoURL" />
+              <Avatar src={Manager?.photoURL} alt="photoURL" />
 
               <Box sx={{ ml: 2 }}>
                 <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                  {auth.currentUser?.displayName}
+                  {Manager?.name}
                 </Typography>
               </Box>
             </StyledAccount>
@@ -98,7 +99,7 @@ export default function Nav({ openNav, onCloseNav }) {
         width: { lg: NAV_WIDTH },
       }}
     >
-      {isDesktop ? (
+      {isDesktop && SignedIn ? (
         <Drawer
           open
           variant="permanent"
