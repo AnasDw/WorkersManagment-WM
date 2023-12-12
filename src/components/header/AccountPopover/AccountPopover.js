@@ -1,25 +1,20 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Avatar, IconButton, Popover } from '@mui/material';
+import { useGlobalAuthContext } from '../../../hooks/useGlobalAuthContext';
 
-import { auth } from '../../../config/FireBase';
 import RoleOver from './RoleOver';
 
 // ----------------------------------------------------------------------
-
-export default function AccountPopover({ param }) {
-  const navigate = useNavigate();
+// eslint-disable-next-line
+export default function AccountPopover() {
   const [open, setOpen] = useState(null);
+  const { Manager } = useGlobalAuthContext();
 
   const handleOpen = (event) => {
-    if (param == null) {
-      navigate('/login', { replace: true });
-    } else {
-      setOpen(event.currentTarget);
-    }
+    setOpen(event.currentTarget);
   };
 
   const handleClose = () => {
@@ -45,7 +40,10 @@ export default function AccountPopover({ param }) {
           }),
         }}
       >
-        <Avatar src={param?.photoURL} alt="photoURL" />
+        {
+          // eslint-disable-next-line
+          <Avatar src={Manager?.photoURL} alt="photoURL" />
+        }
       </IconButton>
 
       <Popover
@@ -67,7 +65,7 @@ export default function AccountPopover({ param }) {
           },
         }}
       >
-        <RoleOver param={param} />
+        <RoleOver />
       </Popover>
     </>
   );

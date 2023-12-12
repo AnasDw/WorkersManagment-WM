@@ -1,13 +1,8 @@
-import axios from 'axios';
+import { getRequest } from '../../api/axiosVerbs';
 
-const onAuthStateChanged = async (token) => {
+const onAuthStateChanged = async () => {
   try {
-    const res = await axios.get('http://localhost:3000/auth/current-user', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      withCredentials: true,
-    });
+    const res = await getRequest('auth/current-user');
     return res;
   } catch (error) {
     console.error(error.message);

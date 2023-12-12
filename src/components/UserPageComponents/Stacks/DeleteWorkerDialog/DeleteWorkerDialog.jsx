@@ -27,7 +27,7 @@ const DeleteWorkerDialog = ({ boolean, data }) => {
     <div>
       <Dialog fullScreen={fullScreen} open={boolean} aria-labelledby="responsive-dialog-title">
         <DialogTitle id="responsive-dialog-title">
-          {boolean ? ` Are you sure you want to delete ${data.name} from your database? ` : null}
+          {boolean ? ` Are you sure you want to delete  ${data.name} from your database? ` : null}
         </DialogTitle>
 
         <DialogActions>
@@ -40,12 +40,13 @@ const DeleteWorkerDialog = ({ boolean, data }) => {
             Cancel
           </Button>
           <Button
+            color="error"
             onClick={() => {
               DeleteWorker();
             }}
             autoFocus
           >
-            Save
+            Delete
           </Button>
         </DialogActions>
       </Dialog>

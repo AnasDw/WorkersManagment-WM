@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import { getRequest, patchRequest } from '../../../api/axiosVerbs';
-import { getCurrentDate, getCurrentTime } from '../../../constants/functions';
+import { getRequest, postRequest } from '../../../api/axiosVerbs';
+import { getCurrentTime, getCurrentDate } from '../../../constants/functions';
 
 const SelectList = [{ id: 'Minutes' }, { id: 'Hours' }, { id: 'Days' }];
 const CryptoJS = require('crypto-js');
@@ -15,37 +15,49 @@ const GenerateInvitationHook = (boolean, WorkPlace) => {
 
   const CopyLink = async () => {
     try {
-      if (boolean) SetWorkersStatus();
-      const Date = getCurrentDate();
       const ShowTime = getCurrentTime();
+      const currentDate = getCurrentDate();
+
+      if (boolean) SetWorkersStatus();
 
       const encrypted = CryptoJS.AES.encrypt(`${WorkPlace.provider}`, process.env.REACT_APP_SecretKey);
 
       const encodedURL = encodeURIComponent(encrypted.toString());
-      let URL = `https://wm-sys.netlify.app/InvitationPage/${encodedURL}`;
-      let i = 0;
-      const array = [...WorkPlace.invitations];
-      if (boolean) {
-        URL = `https://wm-sys.netlify.app/TaskEnforcerPage/${encodedURL}`;
-        i = 1;
-      }
 
-      array[i] = {
-        ValidateType: InputValidateType.charAt(0),
-        ValidateValue: InputValidateValue,
-        date: Date,
-        showTime: ShowTime,
+      const BaseUrl =
+        process.env.REACT_APP_ENV === 'development' ? 'http://localhost:3001' : 'https://wm-sys.netlify.app';
+
+      let URL = `${BaseUrl}/InvitationPage/${encodedURL}`;
+
+      let dataToEdit = '';
+
+      if (boolean) {
+        URL = `${BaseUrl}/TaskEnforcerPage/${encodedURL}`;
+        dataToEdit = 'taskEnforcerInvite';
+      } else {
+        dataToEdit = 'addWorkerInvite';
+      }
+      await postRequest(`${dataToEdit}`, {
+        provider: WorkPlace.provider,
         link: URL,
-      };
-      await patchRequest(`workPlace/${WorkPlace.provider}`, { invitations: [...array] }).then(() => {
-        navigator.clipboard.writeText(URL).then(() => {
-          setCopied(true);
-          setTimeout(() => {
-            setCopied(false);
-            window.location.reload();
-          }, 1000);
+        validateType: InputValidateType,
+        validateValue: InputValidateValue,
+        msg: ShortMsg,
+        time: ShowTime,
+        date: currentDate,
+      })
+        .then(() => {
+          navigator.clipboard.writeText(URL).then(() => {
+            setCopied(true);
+            setTimeout(() => {
+              setCopied(false);
+              window.location.reload();
+            }, 1000);
+          });
+        })
+        .catch((e) => {
+          console.error(e);
         });
-      });
     } catch (e) {
       console.error(e);
     }
@@ -61,7 +73,7 @@ const GenerateInvitationHook = (boolean, WorkPlace) => {
 
   const handleChange = (event) => {
     setInputValidateType(event.target.value);
-    const a = SelectList.find((obj) => obj.id === InputValidateType);
+    SelectList.find((obj) => obj.id === InputValidateType);
   };
 
   const handleSubmitForm = (event) => {

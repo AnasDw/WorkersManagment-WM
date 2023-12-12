@@ -43,7 +43,6 @@ export default function UserPage() {
     open,
     ShowDialog,
     Users,
-    Email,
     WorkPlace,
     User2Edit,
     page,
@@ -139,7 +138,7 @@ export default function UserPage() {
         />
       )}
 
-      <UsersReportsTable users={Users} email={Email} />
+      <UsersReportsTable users={Users} WorkPlace={WorkPlace} />
     </>
   );
 }

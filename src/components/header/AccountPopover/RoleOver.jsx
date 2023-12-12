@@ -1,30 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Divider, Typography, Stack, MenuItem } from '@mui/material';
-import axios from 'axios';
+import { useGlobalAuthContext } from '../../../hooks/useGlobalAuthContext';
 
 import { MENU_OPTIONS } from './constants';
 
-const RoleOver = ({ param }) => {
+const RoleOver = () => {
   const navigate = useNavigate();
-  // eslint-disable-next-line
-  const [open, setOpen] = useState(null);
+  const { Manager, logout } = useGlobalAuthContext();
 
-  const handleClose = () => {
-    setOpen(null);
-  };
+  // eslint-disable-next-line
 
   const SignOut = async () => {
     try {
-      await axios
-        .get('http://localhost:3000/auth/logout', {
-          headers: {
-            Authorization: `Bearer ${document.cookie.split('=')[1]}`,
-          },
-          withCredentials: true,
-        })
-        .then(navigate('/login', { replace: true }));
+      await logout();
+      navigate('/login', { replace: true });
     } catch (e) {
       console.log(e);
     }
@@ -34,10 +25,10 @@ const RoleOver = ({ param }) => {
     <>
       <Box sx={{ my: 1.5, px: 2.5 }}>
         <Typography variant="subtitle2" noWrap>
-          {param?.name}
+          {Manager?.name}
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-          {param?.email}
+          {Manager?.email}
         </Typography>
       </Box>
 
@@ -45,9 +36,7 @@ const RoleOver = ({ param }) => {
 
       <Stack sx={{ p: 1 }}>
         {MENU_OPTIONS.map((option) => (
-          <MenuItem key={option.label} onClick={handleClose}>
-            {option.label}
-          </MenuItem>
+          <MenuItem key={option.label}>{option.label}</MenuItem>
         ))}
       </Stack>
 

@@ -20,12 +20,15 @@ import {
 } from '../components/DashboardComponent/Apps/@dashboard/app';
 
 import onAuthStateChanged from '../components/utils/onAuthStateChanged';
+import { getRequest } from '../api/axiosVerbs';
 
 // ----------------------------------------------------------------------
 
 export default function DashboardAppPage() {
   const [Loading, setLoading] = useState(false);
   const [Manager, setManager] = useState(null);
+  // eslint-disable-next-line
+  const [WorkPlace, setWorkPlace] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,9 +42,16 @@ export default function DashboardAppPage() {
         navigate('/login', { replace: true });
       }
     });
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (Manager?.email) {
+      getRequest(`workPlace/${Manager.email}`).then((response) => {
+        setWorkPlace(response);
+      });
+    }
+  }, [Manager]);
 
   return (
     <>
@@ -75,7 +85,7 @@ export default function DashboardAppPage() {
             ))}
 
             <Grid item xs={12} md={12} lg={12}>
-              {/* <AppLinkGeneratorTaskEnforcer email={Manager?.email} /> */}
+              <AppLinkGeneratorTaskEnforcer WorkPlace={WorkPlace} />
             </Grid>
 
             <Grid item xs={12} md={6} lg={8}>

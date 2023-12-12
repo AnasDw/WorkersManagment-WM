@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
@@ -11,7 +10,7 @@ import { bgBlur } from '../../utils/cssStyles';
 import Searchbar from './Searchbar';
 import NotificationsPopover from './NotificationsPopover';
 import AccountPopover from './AccountPopover/AccountPopover';
-import onAuthStateChanged from '../utils/onAuthStateChanged';
+import { useGlobalAuthContext } from '../../hooks/useGlobalAuthContext';
 
 const NAV_WIDTH = 280;
 const HEADER_MOBILE = 64;
@@ -39,17 +38,7 @@ Header.propTypes = {
 
 export default function Header({ onOpenNav }) {
   const navigate = useNavigate();
-  const [isSignedIn, setIsSignedIn] = useState(false);
-  const [Response, setResponse] = useState();
-
-  useEffect(() => {
-    onAuthStateChanged(document.cookie.split('=')[1]).then((res) => {
-      if (res) {
-        setResponse(res.data.data);
-        setIsSignedIn(true);
-      }
-    });
-  }, []);
+  const { Loading } = useGlobalAuthContext();
 
   return (
     <StyledRoot>
@@ -68,7 +57,7 @@ export default function Header({ onOpenNav }) {
         <Searchbar />
         <Box sx={{ flexGrow: 1 }} />
 
-        {isSignedIn ? (
+        {!Loading ? (
           <Stack
             direction="row"
             alignItems="center"
@@ -78,7 +67,7 @@ export default function Header({ onOpenNav }) {
             }}
           >
             <NotificationsPopover />
-            <AccountPopover param={Response} />
+            <AccountPopover />
           </Stack>
         ) : (
           <Stack

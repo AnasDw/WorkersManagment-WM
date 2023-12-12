@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import axios from 'axios';
+import { useGlobalAuthContext } from '../../../../hooks/useGlobalAuthContext';
 
 import { validateForm } from './utils';
 
 const useSignUpHook = () => {
   const [Errors, setErrors] = useState([]);
   const [Error, setError] = useState(false);
+  const { register } = useGlobalAuthContext();
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -24,7 +25,7 @@ const useSignUpHook = () => {
     }
 
     try {
-      await axios.post('http://localhost:3000/auth/register', {
+      await register({
         name: `${data.get('firstName')} ${data.get('lastName')}`,
         email: data.get('email'),
         password: data.get('password'),

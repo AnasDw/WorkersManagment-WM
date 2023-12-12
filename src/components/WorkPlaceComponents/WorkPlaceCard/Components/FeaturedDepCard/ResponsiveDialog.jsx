@@ -17,10 +17,10 @@ import { pushData } from '../../../../../config/FireBase/CRUD';
 import { auth } from '../../../../../config/FireBase';
 
 ResponsiveDialog.propTypes = {
-  data: PropTypes.object.isRequired,
-  boolean: PropTypes.bool.isRequired,
-  func: PropTypes.func.isRequired,
-  data2push: PropTypes.array.isRequired,
+  data: PropTypes.object,
+  boolean: PropTypes.bool,
+  func: PropTypes.func,
+  data2push: PropTypes.object,
 };
 
 export default function ResponsiveDialog({ data, boolean, func, data2push }) {
@@ -54,7 +54,7 @@ export default function ResponsiveDialog({ data, boolean, func, data2push }) {
   useEffect(() => {
     setDep(data);
     setOpen(boolean);
-    // eslint-disable-next-line 
+    // eslint-disable-next-line
   }, [boolean]);
 
   return (

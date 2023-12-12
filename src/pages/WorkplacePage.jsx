@@ -24,7 +24,6 @@ const WorkplacePage = () => {
     if (Provider && SignedIn) {
       try {
         axios.get(`http://localhost:3000/workplace/${Provider}`).then((response) => {
-          console.log(response);
           setWorkplaceData(response.data.data);
           setLoading(false);
         });
@@ -41,7 +40,7 @@ const WorkplacePage = () => {
       </Helmet>
       {SignedIn && WorkplaceData ? (
         <WorkPlaceCard data={WorkplaceData} />
-      ) : Loading ? (
+      ) : !Loading && !WorkplaceData ? (
         <WelcomeContainer />
       ) : (
         <Box sx={{ m: 4, mt: 8 }}>

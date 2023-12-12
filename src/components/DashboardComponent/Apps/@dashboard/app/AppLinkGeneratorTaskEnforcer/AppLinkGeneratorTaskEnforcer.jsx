@@ -1,5 +1,4 @@
 import * as React from 'react';
-import copy from 'clipboard-copy';
 import PropTypes from 'prop-types';
 
 import Card from '@mui/material/Card';
@@ -18,8 +17,8 @@ import { ACTIONS } from './Constants';
 
 const TRUE = true;
 
-const AppLinkGeneratorTaskEnforcer = ({ email }) => {
-  const [state, dispatch] = AppLinkGeneratorHook(email);
+const AppLinkGeneratorTaskEnforcer = ({ WorkPlace }) => {
+  const [state, dispatch] = AppLinkGeneratorHook(WorkPlace);
 
   return (
     <Card>
@@ -38,11 +37,11 @@ const AppLinkGeneratorTaskEnforcer = ({ email }) => {
       </CardActionArea>
       <CardActions>
         {state.displayGenerateInvitation ? (
-          <GenerateInvitation boolean={TRUE} />
+          <GenerateInvitation boolean={TRUE} WorkPlace={WorkPlace.data.data} />
         ) : (
           <>
             <Grid container minWidth={'xl'} alignItems={'center'}>
-              {state.OnlineReq ? (
+              {state.OnlineReq && state.RemainingTime !== 'less than a minute' ? (
                 <>
                   <Grid item>
                     <Typography variant="body2" ml={2} color="text.secondary">
@@ -56,7 +55,7 @@ const AppLinkGeneratorTaskEnforcer = ({ email }) => {
                       sx={{ m: 1 }}
                       onClick={(e) => {
                         e.preventDefault();
-                        copy(state.OnlineReq.link).then(() => {
+                        navigator.clipboard.writeText(state.OnlineReq.link).then(() => {
                           dispatch({ type: ACTIONS.TOGGLE_COPY_BTN });
                           setTimeout(() => {
                             dispatch({ type: ACTIONS.TOGGLE_COPY_BTN });
@@ -94,7 +93,7 @@ const AppLinkGeneratorTaskEnforcer = ({ email }) => {
 };
 
 AppLinkGeneratorTaskEnforcer.propTypes = {
-  email: PropTypes.string.isRequired,
+  WorkPlace: PropTypes.object,
 };
 
 export default AppLinkGeneratorTaskEnforcer;

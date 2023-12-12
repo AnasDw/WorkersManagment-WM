@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 // @mui
@@ -8,6 +8,8 @@ import { Box, Link, Drawer, Typography, Avatar } from '@mui/material';
 // mock
 // hooks
 import useResponsive from '../../../../../hooks/useResponsive';
+import { useGlobalAuthContext } from '../../../../../hooks/useGlobalAuthContext';
+
 // components
 import Logo from '../../../../logo';
 import Scrollbar from '../../../../scrollbar';
@@ -15,7 +17,6 @@ import NavSection from '../../../../nav-section';
 
 //
 import navConfig from './config';
-import onAuthStateChanged from '../../../../utils/onAuthStateChanged';
 
 // ----------------------------------------------------------------------
 
@@ -39,19 +40,7 @@ export default function Nav({ openNav, onCloseNav }) {
   const { pathname } = useLocation();
   const isDesktop = useResponsive('up', 'lg');
 
-  const [SignedIn, setSignedIn] = useState(false);
-  const [Manager, setManager] = useState({});
-
-  useEffect(() => {
-    onAuthStateChanged(document.cookie.split('=')[1])
-      .then((response) => {
-        setManager(response.data.data);
-        setSignedIn(true);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, []);
+  const { Manager, loading } = useGlobalAuthContext();
 
   useEffect(() => {
     if (openNav) {
@@ -73,7 +62,7 @@ export default function Nav({ openNav, onCloseNav }) {
 
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none">
-          {SignedIn ? (
+          {!loading ? (
             <StyledAccount>
               <Avatar src={Manager?.photoURL} alt="photoURL" />
 
@@ -99,7 +88,7 @@ export default function Nav({ openNav, onCloseNav }) {
         width: { lg: NAV_WIDTH },
       }}
     >
-      {isDesktop && SignedIn ? (
+      {isDesktop && !loading ? (
         <Drawer
           open
           variant="permanent"

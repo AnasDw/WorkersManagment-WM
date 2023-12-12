@@ -97,5 +97,4 @@ EditWorkerDialog.propTypes = {
   boolean: PropTypes.bool,
   func: PropTypes.func,
   WorkPlace: PropTypes.object,
-  email: PropTypes.string,
 };

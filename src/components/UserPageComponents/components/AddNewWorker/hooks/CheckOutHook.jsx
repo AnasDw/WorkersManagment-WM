@@ -6,7 +6,7 @@ import Review from '../components/Review';
 import { reducer, ACTIONS } from '../constants/constants';
 import { postRequest } from '../../../../../api/axiosVerbs';
 
-const CheckOutHook = (WorkPlace) => {
+const CheckOutHook = (PropCancelIcon, WorkPlace) => {
   const [state, dispatch] = useReducer(reducer, {
     FirstName: '',
     LastName: '',
@@ -43,14 +43,19 @@ const CheckOutHook = (WorkPlace) => {
   };
 
   const SubmitForm = async () => {
+    const URL = PropCancelIcon ? 'workers' : 'addWorkerLimitedInvite';
     try {
-      await postRequest(`workers`, {
+      await postRequest(URL, {
         provider: WorkPlace.provider,
         name: `${state.FirstName} ${state.LastName}`,
         department: state.Department,
         position: state.Position,
         phoneNumber: state.PhoneNumber,
-      }).then(window.location.reload());
+      }).then((res) => {
+        if (res) {
+          window.location.reload();
+        }
+      });
     } catch (error) {
       console.error(error);
     }

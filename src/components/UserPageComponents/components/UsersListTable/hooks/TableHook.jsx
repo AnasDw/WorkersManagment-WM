@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useGlobalAuthContext } from '../../../../../hooks/useGlobalAuthContext';
 
 import { applySortFilter, getComparator } from '../../../Constants/Functions';
-import onAuthStateChanged from '../../../../utils/onAuthStateChanged';
+import { getRequest } from '../../../../../api/axiosVerbs';
 
 const TableHook = () => {
   const [open, setOpen] = useState(null);
   const [ShowDialog, setShowDialog] = useState(false);
   const [DeleteDialog, setDeleteDialog] = useState(false);
   const [Users, setUsers] = useState([]);
-  const [Email, setEmail] = useState();
   const [WorkPlace, setWorkPlace] = useState();
   const [User2Edit, setUser2Edit] = useState({});
   const [page, setPage] = useState(0);
@@ -18,6 +17,7 @@ const TableHook = () => {
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const { Manager } = useGlobalAuthContext();
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -55,27 +55,28 @@ const TableHook = () => {
     setPage(0);
     setFilterName(event.target.value);
   };
-
-  useEffect(() => {
-    onAuthStateChanged(document.cookie.split('=')[1]).then((response) => {
-      setEmail(response?.data?.data?.email);
+  const fetchUsers = async () => {
+    await getRequest(`workers/${Manager.email}`).then((response) => {
+      setUsers(response.data.data);
     });
-  }, []);
+  };
+  const fetchWorkPlace = async () => {
+    await getRequest(`workPlace/${Manager.email}`).then((response) => {
+      setWorkPlace(response.data.data);
+    });
+  };
 
   useEffect(() => {
-    if (Email) {
+    if (Manager) {
       try {
-        axios.get(`http://localhost:3000/workers/${Email}`).then((response) => {
-          setUsers(response.data.data);
-        });
-        axios.get(`http://localhost:3000/workPlace/${Email}`).then((response) => {
-          setWorkPlace(response.data.data);
-        });
+        fetchUsers();
+        fetchWorkPlace();
       } catch (error) {
         console.error(error);
       }
     }
-  }, [Email]);
+    // eslint-disable-next-line
+  }, [Manager]);
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -113,7 +114,6 @@ const TableHook = () => {
     open,
     ShowDialog,
     Users,
-    Email,
     WorkPlace,
     User2Edit,
     page,

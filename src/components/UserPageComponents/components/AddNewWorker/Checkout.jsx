@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -19,7 +20,8 @@ const steps = ['Formal Details', 'Skills', 'Review your Worker'];
 Checkout.propTypes = { PropCancelIcon: PropTypes.bool, WorkPlace: PropTypes.object };
 
 export default function Checkout({ PropCancelIcon, WorkPlace }) {
-  const [state, handleBack, SubmitForm, getStepContent, handleNext] = CheckOutHook(WorkPlace);
+  const [state, handleBack, SubmitForm, getStepContent, handleNext] = CheckOutHook(PropCancelIcon, WorkPlace);
+  const navigate = useNavigate();
 
   return (
     <>
@@ -52,6 +54,7 @@ export default function Checkout({ PropCancelIcon, WorkPlace }) {
           {state.activeStep === steps.length ? (
             <>
               {SubmitForm()}
+              {PropCancelIcon ? window.location.reload() : navigate('/200', { replace: true })}
               <Typography variant="h5" gutterBottom>
                 Nice, You successfully completed the application 👍
               </Typography>

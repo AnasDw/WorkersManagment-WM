@@ -15,7 +15,7 @@ const FeaturedCharts = ({ data }) => {
       <Grid item xs={12} md={6} lg={4}>
         <AppCurrentVisits
           title="Positions Distribution By Departments"
-          chartData={data.Positions.map((pos) => ({ label: pos.Dep, value: pos.Pos.length }))}
+          chartData={data.positions.map((pos) => ({ label: pos.Dep, value: pos.Pos.length }))}
           chartColors={[
             theme.palette.primary.main,
             theme.palette.success.main,
