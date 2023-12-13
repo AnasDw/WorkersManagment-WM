@@ -20,9 +20,7 @@ import Paper from '@mui/material/Paper';
 import { useState, useEffect } from 'react';
 import Skeleton from '@mui/material/Skeleton';
 import { useNavigate } from 'react-router-dom';
-
-import { getDataFromDocByEmail, pushData } from '../../../config/FireBase/CRUD';
-import { auth } from '../../../config/FireBase';
+import { patchRequest } from '../../../api/axiosVerbs';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -43,58 +41,30 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function FormTable({ Email, PulledUser }) {
+export default function FormTable({ WorkPlace, PulledUser }) {
   const navigate = useNavigate();
 
-  const [Data, setData] = useState(null);
   const [Request, setRequest] = useState([]);
   const [Loading, SetLoading] = useState(false);
 
   useEffect(() => {
-    try {
-      SetLoading(true);
-      getDataFromDocByEmail(Email, 'Managers').then((res) => {
-        if (res !== false) {
-          setData(res);
-        }
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  }, [Email]);
-
-  useEffect(() => {
-    if (Data != null) {
+    if (WorkPlace && Request.length <= 0) {
       setRequest(() => {
-        const temp = Data.OperatingDaysAndTimes.map((item) => ({ Day: item.day, req: 'Free' }));
+        const temp = WorkPlace.operatingDaysAndTimes.map((item) => ({ Day: item.day, req: 'Free' }));
         return temp;
       });
       SetLoading(false);
     }
-  }, [Data]);
+  }, [WorkPlace, Request]);
 
   const handleSubmitForm = (event) => {
-    event.preventDefault();
     try {
-      getDataFromDocByEmail(Email, 'workers').then((res) => {
-        if (res !== false) {
-          const Users2Push = res.data.map((worker) => {
-            if (worker.name === PulledUser.name) {
-              worker.status = 'filled';
-              worker.Requests = Request;
-            }
-            return worker;
-          });
-          SetLoading(true);
-          pushData('workers', { data: Users2Push }, auth.currentUser.email).then((res) => {
-            if (res !== false) {
-              navigate('/200', { replace: true });
-            }
-          });
-        }
+      event.preventDefault();
+      patchRequest(`workers/updateWorkerRequestByPhoneNumber/${PulledUser.phoneNumber}`, Request).then((res) => {
+        if (res) navigate('/200', { replace: true });
       });
     } catch (error) {
-      console.log(error);
+      console.error(error.response?.data.error);
     }
   };
 
@@ -125,39 +95,41 @@ export default function FormTable({ Email, PulledUser }) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {Data?.OperatingDaysAndTimes.map((day, i) => (
-                    <StyledTableRow key={day.day}>
-                      <StyledTableCell sx={{ p: 1 }} component="th" scope="row">
-                        {day.day}
-                      </StyledTableCell>
-                      <StyledTableCell key={day.day} sx={{ p: 0 }} align="left">
-                        <FormControl key={day.day} variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                          <InputLabel key={day.day} id="demo-simple-select-standard-label">
-                            Choice
-                          </InputLabel>
-                          <Select
-                            value={Request[i].req}
-                            onChange={(e) => {
-                              setRequest((old) => {
-                                const newValue = [...old];
-                                newValue[i].req = e.target.value;
-                                return newValue;
-                              });
-                            }}
-                            labelId="demo-simple-select-standard-label"
-                            id="demo-simple-select-standard"
-                            label="Age"
-                          >
-                            {['Free', 'Morning', 'Evening', 'Afternoon', "Can't Work"].map((item, i) => (
-                              <MenuItem key={i} value={item}>
-                                {item}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  ))}
+                  {!Loading
+                    ? WorkPlace?.operatingDaysAndTimes?.map((day, i) => (
+                        <StyledTableRow key={day.day}>
+                          <StyledTableCell sx={{ p: 1 }} component="th" scope="row">
+                            {day.day}
+                          </StyledTableCell>
+                          <StyledTableCell key={day.day} sx={{ p: 0 }} align="left">
+                            <FormControl key={day.day} variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                              <InputLabel key={day.day} id="demo-simple-select-standard-label">
+                                Choice
+                              </InputLabel>
+                              <Select
+                                value={Request[i]?.req}
+                                onChange={(e) => {
+                                  setRequest((old) => {
+                                    const newValue = [...old];
+                                    newValue[i].req = e.target.value;
+                                    return newValue;
+                                  });
+                                }}
+                                labelId="demo-simple-select-standard-label"
+                                id="demo-simple-select-standard"
+                                label="Age"
+                              >
+                                {['Free', 'Morning', 'Evening', 'Afternoon', "Can't Work"].map((item, i) => (
+                                  <MenuItem key={i} value={item}>
+                                    {item}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ))
+                    : null}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -191,8 +163,7 @@ export default function FormTable({ Email, PulledUser }) {
   );
 }
 
-
 FormTable.propTypes = {
-  Email: PropTypes.string,
+  WorkPlace: PropTypes.object,
   PulledUser: PropTypes.object,
 };

@@ -20,8 +20,8 @@ const defaultTheme = createTheme();
 
 const TaskEnforcerPage = () => {
   const param = useParams();
-  const BoolHook = CryptoHook(param.param1, 'TaskEnforcer');
-  const [PulledUser, Boolean, handleChange] = TaskEnforcerHook(BoolHook.SecretParam);
+  const BoolHook = CryptoHook(param.param1, 'TaskEnforcerInvite');
+  const [PulledUser, handleChange, Error, ErrorVal, WorkPlace] = TaskEnforcerHook(BoolHook.SecretParam);
 
   return BoolHook.Bool ? (
     <>
@@ -61,6 +61,8 @@ const TaskEnforcerPage = () => {
                   <Grid container sx={{ width: 300 }} spacing={2}>
                     <Grid item>
                       <TextField
+                        error={Error === true}
+                        helperText={Error === true ? ErrorVal : null}
                         sx={{ width: 300, textAlign: 'center' }}
                         autoComplete="Phone Number"
                         name={'PhoneNumber'}
@@ -68,8 +70,6 @@ const TaskEnforcerPage = () => {
                         id={'PhoneNumber'}
                         label={'Enter Your Phone Number'}
                         autoFocus
-                        error={Boolean}
-                        helperText={Boolean ? 'User Not Found' : null}
                       />
                     </Grid>
                   </Grid>
@@ -78,7 +78,7 @@ const TaskEnforcerPage = () => {
                   </Button>
                 </Box>
               ) : (
-                <FormTable Email={BoolHook.SecretParam} PulledUser={PulledUser} />
+                <FormTable WorkPlace={WorkPlace} PulledUser={PulledUser} />
               )}
             </Box>
           </Grid>

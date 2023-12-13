@@ -1,15 +1,12 @@
-import { useReducer, useEffect } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
+import { useReducer } from 'react';
 
 import FormalDetails from '../components/FormalDetails';
 import Skills from '../components/Skills';
 import Review from '../components/Review';
 import { reducer, ACTIONS } from '../constants/constants';
+import { postRequest } from '../../../../../api/axiosVerbs';
 
-import { auth } from '../../../../../config/FireBase';
-import { AddNewWorker, getDataFromDocByEmail } from '../../../../../config/FireBase/CRUD';
-
-const CheckOutHook = (email) => {
+const CheckOutHook = (PropCancelIcon, WorkPlace) => {
   const [state, dispatch] = useReducer(reducer, {
     FirstName: '',
     LastName: '',
@@ -20,33 +17,9 @@ const CheckOutHook = (email) => {
     Position: '',
     activeStep: 0,
     error: false,
-    Email: '',
-    WorkPlace: {},
+    WorkPlace: { ...WorkPlace },
     Possibilities: [],
   });
-
-  useEffect(() => {
-    if (email) {
-      dispatch({ type: ACTIONS.UPDATE_EMAIL, payload: email });
-    } else
-      onAuthStateChanged(auth, (newUser) => {
-        if (newUser) {
-          dispatch({ type: ACTIONS.UPDATE_EMAIL, payload: auth.currentUser.email });
-        }
-      });
-
-    // eslint-disable-next-line
-  }, []);
-
-  useEffect(() => {
-    if (state.Email) {
-      getDataFromDocByEmail(state.Email, 'Managers').then((res) => {
-        if (res !== false) {
-          dispatch({ type: ACTIONS.UPDATE_WORKPLACE, payload: res });
-        }
-      });
-    }
-  }, [state.Email]);
 
   function getStepContent(step) {
     switch (step) {
@@ -69,25 +42,22 @@ const CheckOutHook = (email) => {
     dispatch({ type: ACTIONS.DECREES });
   };
 
-  const SubmitForm = () => {
+  const SubmitForm = async () => {
+    const URL = PropCancelIcon ? 'workers' : 'addWorkerLimitedInvite';
     try {
-      AddNewWorker(state.Email, {
-        name: ` ${state.FirstName} ${state.LastName}`,
+      await postRequest(URL, {
+        provider: WorkPlace.provider,
+        name: `${state.FirstName} ${state.LastName}`,
         department: state.Department,
-        role: state.Position,
-        PhoneNumber: state.PhoneNumber,
-        status: 'not yet',
-        Requests: null,
-        skills: 'Not Found',
+        position: state.Position,
+        phoneNumber: state.PhoneNumber,
       }).then((res) => {
-        if (res !== false) {
-          setTimeout(() => {
-            window.location.reload();
-          }, 1500);
+        if (res) {
+          window.location.reload();
         }
       });
     } catch (error) {
-      console.error(error);
+      console.error(error.response?.data.error);
     }
   };
 

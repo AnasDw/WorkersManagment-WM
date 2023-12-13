@@ -7,6 +7,7 @@ import { Card, Table, Container, TableContainer, TablePagination } from '@mui/ma
 import Scrollbar from '../components/scrollbar';
 import {
   AddWorkerStack,
+  DeleteWorkerDialog,
   EditDeletePopover,
   EditWorkerDialog,
   NoResultsMessage,
@@ -23,8 +24,9 @@ import TableHook from '../components/UserPageComponents/components/UsersListTabl
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
-  { id: 'PhoneNumber', label: 'Phone Number', alignRight: false },
+  { id: 'phoneNumber', label: 'Phone Number', alignRight: false },
   { id: 'department', label: 'Department', alignRight: false },
+  { id: 'position', label: 'Position', alignRight: false },
   { id: 'role', label: 'Main Role', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
   { id: ' ', label: ' ', alignRight: false },
@@ -41,7 +43,6 @@ export default function UserPage() {
     open,
     ShowDialog,
     Users,
-    Email,
     WorkPlace,
     User2Edit,
     page,
@@ -60,6 +61,7 @@ export default function UserPage() {
     handleChangeRowsPerPage,
     setShowDialogState,
     setUser2EditState,
+    DeleteDialog,
   ] = TableHook();
 
   return (
@@ -69,7 +71,7 @@ export default function UserPage() {
       </Helmet>
 
       <Container>
-        <AddWorkerStack />
+        <AddWorkerStack WorkPlace={WorkPlace} Users={Users} />
 
         <Card>
           <UserListToolbar
@@ -124,19 +126,19 @@ export default function UserPage() {
 
       <EditDeletePopover handleCloseMenu={handleCloseMenu} open={open} setShowDialogState={setShowDialogState} />
 
+      {!DeleteDialog ? null : <DeleteWorkerDialog data={User2Edit} boolean={TRUE} />}
       {!ShowDialog ? null : (
         <EditWorkerDialog
           data={User2Edit}
           boolean={TRUE}
           func={() => {
-            setShowDialogState(false);
+            setShowDialogState(false, 1);
           }}
           WorkPlace={WorkPlace}
-          email={Email}
         />
       )}
 
-      <UsersReportsTable users={Users} email={Email} />
+      <UsersReportsTable users={Users} WorkPlace={WorkPlace} />
     </>
   );
 }

@@ -1,31 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Divider, Typography, Stack, MenuItem } from '@mui/material';
-
-import { signOut } from 'firebase/auth';
-import { auth } from '../../../config/FireBase';
+import { useGlobalAuthContext } from '../../../hooks/useGlobalAuthContext';
 
 import { MENU_OPTIONS } from './constants';
 
 const RoleOver = () => {
   const navigate = useNavigate();
-  // eslint-disable-next-line
-  const [open, setOpen] = useState(null);
+  const { Manager, logout } = useGlobalAuthContext();
 
-  const handleClose = () => {
-    setOpen(null);
-  };
+  // eslint-disable-next-line
 
   const SignOut = async () => {
     try {
-      signOut(auth, auth?.currentUser?.providerData[0].providerId)
-        .then(() => {
-          navigate('/login', { replace: true });
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      await logout();
+      navigate('/login', { replace: true });
     } catch (e) {
       console.log(e);
     }
@@ -35,10 +25,10 @@ const RoleOver = () => {
     <>
       <Box sx={{ my: 1.5, px: 2.5 }}>
         <Typography variant="subtitle2" noWrap>
-          {auth?.currentUser?.displayName}
+          {Manager?.name}
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-          {auth?.currentUser?.email}
+          {Manager?.email}
         </Typography>
       </Box>
 
@@ -46,9 +36,7 @@ const RoleOver = () => {
 
       <Stack sx={{ p: 1 }}>
         {MENU_OPTIONS.map((option) => (
-          <MenuItem key={option.label} onClick={handleClose}>
-            {option.label}
-          </MenuItem>
+          <MenuItem key={option.label}>{option.label}</MenuItem>
         ))}
       </Stack>
 

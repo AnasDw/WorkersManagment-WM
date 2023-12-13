@@ -1,10 +1,8 @@
 import { Stack, Button } from '@mui/material';
 import React from 'react';
 
-import { signInWithPopup } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { auth, googleProvider, facebookProvider } from '../../config/FireBase';
-import { getUserDataByEmail, pushData } from '../../config/FireBase/CRUD';
+
 import Iconify from '../iconify/Iconify';
 
 const icons = [
@@ -21,34 +19,17 @@ const IconsForm = () => {
     } else {
       await SignInWithFaceBook();
     }
-    pushData(
-      'Users',
-      { email: auth.currentUser.email, UserName: auth.currentUser.displayName },
-      auth.currentUser.email
-    ).then(() => {
-      navigate('/', { replace: true });
-    });
   };
   const SignInWithGoogle = async () => {
     try {
-      await signInWithPopup(auth, googleProvider).then(() => {
-        if (!getUserDataByEmail(auth.currentUser.email)) {
-          return;
-        }
-        navigate('/', { replace: true });
-      });
+      navigate('/', { replace: true });
     } catch (e) {
       console.log(e);
     }
   };
   const SignInWithFaceBook = async () => {
     try {
-      await signInWithPopup(auth, facebookProvider).then(() => {
-        if (!getUserDataByEmail(auth.currentUser.email)) {
-          return;
-        }
-        navigate('/', { replace: true });
-      });
+      navigate('/', { replace: true });
     } catch (e) {
       console.log(e);
     }

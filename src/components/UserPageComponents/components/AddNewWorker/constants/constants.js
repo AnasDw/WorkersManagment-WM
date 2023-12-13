@@ -37,7 +37,7 @@ function reducer(state, action) {
       return {
         ...state,
         Department: action.payload,
-        Possibilities: state.WorkPlace.Positions.find((pos) => pos.Dep === action.payload).Pos,
+        Possibilities: state.WorkPlace.positions.find((pos) => pos.Dep === action.payload).Pos,
       };
 
     case ACTIONS.UPDATE_POSITION:

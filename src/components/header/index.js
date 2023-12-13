@@ -1,18 +1,16 @@
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import { Box, Stack, AppBar, Toolbar, IconButton, Typography } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../../config/FireBase';
 import Iconify from '../iconify';
 import { bgBlur } from '../../utils/cssStyles';
 
 import Searchbar from './Searchbar';
 import NotificationsPopover from './NotificationsPopover';
 import AccountPopover from './AccountPopover/AccountPopover';
+import { useGlobalAuthContext } from '../../hooks/useGlobalAuthContext';
 
 const NAV_WIDTH = 280;
 const HEADER_MOBILE = 64;
@@ -40,15 +38,7 @@ Header.propTypes = {
 
 export default function Header({ onOpenNav }) {
   const navigate = useNavigate();
-  const [isSignedIn, setIsSignedIn] = useState(false);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setIsSignedIn(!!user);
-    });
-
-    return () => unsubscribe();
-  }, []);
+  const { Loading } = useGlobalAuthContext();
 
   return (
     <StyledRoot>
@@ -67,7 +57,7 @@ export default function Header({ onOpenNav }) {
         <Searchbar />
         <Box sx={{ flexGrow: 1 }} />
 
-        {isSignedIn ? (
+        {!Loading ? (
           <Stack
             direction="row"
             alignItems="center"

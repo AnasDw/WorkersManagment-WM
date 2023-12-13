@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
+import { patchRequest } from '../../../../../api/axiosVerbs';
 
-import { getDataFromDocByEmail, pushData } from '../../../../../config/FireBase/CRUD';
-
-const EditHook = (data, boolean, func, WorkPlace, email) => {
+const EditHook = (data, boolean, func, WorkPlace) => {
   const [open, setOpen] = useState(false);
   const [Employee, setEmployee] = useState({});
 
@@ -10,29 +9,17 @@ const EditHook = (data, boolean, func, WorkPlace, email) => {
     setOpen(false);
     func();
   };
-  const handleSave = () => {
+  const handleSave = async () => {
     try {
-      getDataFromDocByEmail(email, 'workers').then((res) => {
-        if (res !== false) {
-          const data2push = res.data.map((employee) => {
-            if (employee.name === data.name) {
-              employee.name = Employee.name;
-              employee.PhoneNumber = Employee.PhoneNumber;
-              employee.department = Employee.department;
-              employee.role = Employee.role;
-            }
-            return employee;
-          });
-
-          pushData('workers', { data: data2push }, email).then((res) => {
-            if (res !== false) {
-              window.location.reload();
-            }
-          });
-        }
-      });
+      await patchRequest(`workers/${data.phoneNumber}`, {
+        name: Employee.name,
+        phoneNumber: Employee.phoneNumber,
+        role: Employee.role,
+        position: Employee.position,
+        department: Employee.department,
+      }).then(window.location.reload());
     } catch (error) {
-      console.error(error);
+      console.error(error.message);
     }
   };
 
@@ -46,10 +33,12 @@ const EditHook = (data, boolean, func, WorkPlace, email) => {
     let temp = null;
     switch (value) {
       case 'Department':
-        return WorkPlace.DepartmentsNames;
-
+        return WorkPlace.departmentsNames;
       case 'Main Role':
-        temp = WorkPlace.Positions.find((category) => category.Dep === Employee.department);
+        return ['user', 'publisher'];
+
+      case 'Position':
+        temp = WorkPlace.positions.find((category) => category.Dep === Employee.department);
         return temp ? temp.Pos : null;
 
       default:
@@ -63,13 +52,16 @@ const EditHook = (data, boolean, func, WorkPlace, email) => {
           return Employee.name || null;
 
         case 'Employee Phone Number':
-          return Employee.PhoneNumber || null;
+          return Employee.phoneNumber || null;
 
         case 'Department':
           return Employee.department || null;
 
         case 'Main Role':
           return Employee.role || null;
+
+        case 'Position':
+          return Employee.position || null;
 
         default:
           return null;
@@ -88,11 +80,15 @@ const EditHook = (data, boolean, func, WorkPlace, email) => {
           break;
 
         case 'Employee Phone Number':
-          employee.PhoneNumber = value;
+          employee.phoneNumber = value;
           break;
 
         case 'Department':
           employee.department = value;
+          break;
+
+        case 'Position':
+          employee.position = value;
           break;
 
         case 'Main Role':

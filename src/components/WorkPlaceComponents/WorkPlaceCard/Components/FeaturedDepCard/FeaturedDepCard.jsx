@@ -42,7 +42,7 @@ export default function FeaturedDepCard({ props }) {
       <Grid container spacing={3} mt={8} alignItems={'center'} justifyContent={'center'}>
         {
           // eslint-disable-next-line
-          props.data.Positions.map(
+          props.data.positions.map(
             (
               item,
               index // eslint-disable-line

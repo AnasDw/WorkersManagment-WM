@@ -1,15 +1,15 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { onAuthStateChanged } from 'firebase/auth';
 
 // @mui
 import { styled, alpha } from '@mui/material/styles';
 import { Box, Link, Drawer, Typography, Avatar } from '@mui/material';
 // mock
 // hooks
-import { auth } from '../../../../../config/FireBase';
 import useResponsive from '../../../../../hooks/useResponsive';
+import { useGlobalAuthContext } from '../../../../../hooks/useGlobalAuthContext';
+
 // components
 import Logo from '../../../../logo';
 import Scrollbar from '../../../../scrollbar';
@@ -40,17 +40,7 @@ export default function Nav({ openNav, onCloseNav }) {
   const { pathname } = useLocation();
   const isDesktop = useResponsive('up', 'lg');
 
-  const [SignedIn, setSignedIn] = useState(false);
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (newUser) => {
-      if (newUser) {
-        setSignedIn(true);
-      } else {
-        setSignedIn(false);
-      }
-    });
-  }, []);
+  const { Manager, loading } = useGlobalAuthContext();
 
   useEffect(() => {
     if (openNav) {
@@ -72,13 +62,13 @@ export default function Nav({ openNav, onCloseNav }) {
 
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none">
-          {SignedIn ? (
+          {!loading ? (
             <StyledAccount>
-              <Avatar src={auth.currentUser?.photoURL} alt="photoURL" />
+              <Avatar src={Manager?.photoURL} alt="photoURL" />
 
               <Box sx={{ ml: 2 }}>
                 <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                  {auth.currentUser?.displayName}
+                  {Manager?.name}
                 </Typography>
               </Box>
             </StyledAccount>
@@ -98,7 +88,7 @@ export default function Nav({ openNav, onCloseNav }) {
         width: { lg: NAV_WIDTH },
       }}
     >
-      {isDesktop ? (
+      {isDesktop && !loading ? (
         <Drawer
           open
           variant="permanent"

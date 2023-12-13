@@ -13,14 +13,12 @@ import TextField from '@mui/material/TextField';
 import { useTheme } from '@mui/material/styles';
 
 // -- FireBase --
-import { pushData } from '../../../../../config/FireBase/CRUD';
-import { auth } from '../../../../../config/FireBase';
 
 ResponsiveDialog.propTypes = {
-  data: PropTypes.object.isRequired,
-  boolean: PropTypes.bool.isRequired,
-  func: PropTypes.func.isRequired,
-  data2push: PropTypes.array.isRequired,
+  data: PropTypes.object,
+  boolean: PropTypes.bool,
+  func: PropTypes.func,
+  data2push: PropTypes.object,
 };
 
 export default function ResponsiveDialog({ data, boolean, func, data2push }) {
@@ -43,18 +41,18 @@ export default function ResponsiveDialog({ data, boolean, func, data2push }) {
         }
         return item;
       });
-      pushData('Managers', data2push, auth.currentUser.email).then(() => {
-        window.location.reload();
-      });
+      // pushData('Managers', data2push, auth.currentUser.email).then(() => {
+      //   window.location.reload();
+      // });
     } catch (error) {
-      console.error(error);
+      console.error(error.response?.data.error);
     }
   };
 
   useEffect(() => {
     setDep(data);
     setOpen(boolean);
-    // eslint-disable-next-line 
+    // eslint-disable-next-line
   }, [boolean]);
 
   return (

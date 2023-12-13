@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -16,10 +17,11 @@ import CheckOutHook from './hooks/CheckOutHook';
 
 const steps = ['Formal Details', 'Skills', 'Review your Worker'];
 
-Checkout.propTypes = { PropCancelIcon: PropTypes.bool, email: PropTypes.string };
+Checkout.propTypes = { PropCancelIcon: PropTypes.bool, WorkPlace: PropTypes.object };
 
-export default function Checkout({ PropCancelIcon, email }) {
-  const [state, handleBack, SubmitForm, getStepContent, handleNext] = CheckOutHook(email);
+export default function Checkout({ PropCancelIcon, WorkPlace }) {
+  const [state, handleBack, SubmitForm, getStepContent, handleNext] = CheckOutHook(PropCancelIcon, WorkPlace);
+  const navigate = useNavigate();
 
   return (
     <>
@@ -28,7 +30,7 @@ export default function Checkout({ PropCancelIcon, email }) {
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 8 } }}>
           <Stack direction="row" sx={{ gap: 1 }} alignItems="center" justifyContent="space-between">
             <Typography component="h1" variant="h4" align="center">
-              {state.WorkPlace?.WorkPlaceName} - New Worker SetUp
+              {WorkPlace?.name} - New Worker SetUp
             </Typography>
             {PropCancelIcon ? (
               <IconButton>
@@ -52,6 +54,7 @@ export default function Checkout({ PropCancelIcon, email }) {
           {state.activeStep === steps.length ? (
             <>
               {SubmitForm()}
+              {PropCancelIcon ? window.location.reload() : navigate('/200', { replace: true })}
               <Typography variant="h5" gutterBottom>
                 Nice, You successfully completed the application 👍
               </Typography>
