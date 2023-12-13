@@ -34,7 +34,7 @@ const CryptoHook = (data2decrypt, place) => {
           navigate('/404', { replace: true });
         }
       } catch (error) {
-        console.error(error);
+        console.error(error.response?.data.error);
         navigate('/404', { replace: true });
       }
     };

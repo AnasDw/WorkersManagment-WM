@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
 import Skeleton from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
+import { getRequest } from '../api/axiosVerbs';
 
 import { WelcomeContainer, WorkPlaceCard } from '../components/WorkPlaceComponents';
-import onAuthStateChanged from '../components/utils/onAuthStateChanged';
+import { useGlobalAuthContext } from '../hooks/useGlobalAuthContext';
 
 const WorkplacePage = () => {
   const [SignedIn, setSignedIn] = useState(false);
@@ -13,22 +13,24 @@ const WorkplacePage = () => {
   const [Loading, setLoading] = useState(true);
   const [WorkplaceData, setWorkplaceData] = useState(null);
 
+  const { Manager } = useGlobalAuthContext();
+
   useEffect(() => {
-    onAuthStateChanged(document.cookie.split('=')[1]).then((response) => {
-      setProvider(response.data.data.email);
+    if (Manager) {
+      setProvider(Manager.email);
       setSignedIn(true);
-    });
-  }, []);
+    }
+  }, [Manager]);
 
   useEffect(() => {
     if (Provider && SignedIn) {
       try {
-        axios.get(`http://localhost:3000/workplace/${Provider}`).then((response) => {
+        getRequest(`workplace/${Provider}`).then((response) => {
           setWorkplaceData(response.data.data);
           setLoading(false);
         });
       } catch (error) {
-        console.error(error);
+        console.error(error.response?.data.error);
       }
     }
   }, [Provider, SignedIn]);

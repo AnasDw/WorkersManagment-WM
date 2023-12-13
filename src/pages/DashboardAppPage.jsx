@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { faker } from '@faker-js/faker';
-import { useNavigate } from 'react-router-dom';
 
 // @mui
 import { Grid, Container, Typography } from '@mui/material';
@@ -19,36 +18,23 @@ import {
   AppLinkGeneratorTaskEnforcer,
 } from '../components/DashboardComponent/Apps/@dashboard/app';
 
-import onAuthStateChanged from '../components/utils/onAuthStateChanged';
 import { getRequest } from '../api/axiosVerbs';
+import { useGlobalAuthContext } from '../hooks/useGlobalAuthContext';
 
 // ----------------------------------------------------------------------
 
 export default function DashboardAppPage() {
   const [Loading, setLoading] = useState(false);
-  const [Manager, setManager] = useState(null);
+  const { Manager } = useGlobalAuthContext();
   // eslint-disable-next-line
   const [WorkPlace, setWorkPlace] = useState({});
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    setLoading(true);
-    const token = document.cookie.split('=')[1];
-    onAuthStateChanged(token).then((res) => {
-      if (res) {
-        setManager(res.data.data);
-        setLoading(false);
-      } else {
-        navigate('/login', { replace: true });
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     if (Manager?.email) {
+      setLoading(true);
       getRequest(`workPlace/${Manager.email}`).then((response) => {
         setWorkPlace(response);
+        setLoading(false);
       });
     }
   }, [Manager]);

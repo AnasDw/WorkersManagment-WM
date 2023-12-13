@@ -11,7 +11,7 @@ import Paper from '@mui/material/Paper';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: '#cecfd0',
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
@@ -47,12 +47,24 @@ const UsersReportsTable = ({ users, WorkPlace }) => {
   }, [users, WorkPlace]);
 
   return (
-    <TableContainer sx={{ marginTop: 6, p: 3, backgroundColor: 'transparent' }} component={Paper}>
+    <TableContainer
+      sx={{
+        m: 3,
+        mt: 6,
+        backgroundColor: 'transparent',
+        borderRadius: '7px',
+        boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px;',
+        width: 'auto',
+      }}
+      component={Paper}
+    >
       <Table aria-label="customized table">
         <TableHead>
           <TableRow>
             {Cols.map((col, i) => (
-              <StyledTableCell key={i}>{col}</StyledTableCell>
+              <StyledTableCell sx={{ fontWeight: 900, fontSize: 16 }} key={i}>
+                {col}
+              </StyledTableCell>
             ))}
           </TableRow>
         </TableHead>

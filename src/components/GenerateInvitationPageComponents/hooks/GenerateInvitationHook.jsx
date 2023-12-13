@@ -56,10 +56,10 @@ const GenerateInvitationHook = (boolean, WorkPlace) => {
           });
         })
         .catch((e) => {
-          console.error(e);
+          console.error(e.response?.data.error);
         });
     } catch (e) {
-      console.error(e);
+      console.error(e.response?.data.error);
     }
   };
 

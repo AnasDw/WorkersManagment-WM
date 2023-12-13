@@ -53,7 +53,6 @@
     "crypto-js": "^4.2.0",
     "date-fns": "^2.29.3",
     "dayjs": "^1.11.10",
-    "firebase": "^10.4.0",
     "history": "^5.3.0",
     "lodash": "^4.17.21",
     "mui-image": "^1.0.7",

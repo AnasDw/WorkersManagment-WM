@@ -20,7 +20,7 @@ const DeleteWorkerDialog = ({ boolean, data }) => {
         if (res.data.success) window.location.reload();
       });
     } catch (error) {
-      console.error(error);
+      console.error(error.response?.data.error);
     }
   };
   return (

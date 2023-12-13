@@ -71,7 +71,7 @@ export default function UserPage() {
       </Helmet>
 
       <Container>
-        <AddWorkerStack WorkPlace={WorkPlace} />
+        <AddWorkerStack WorkPlace={WorkPlace} Users={Users} />
 
         <Card>
           <UserListToolbar

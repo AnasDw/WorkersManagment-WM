@@ -72,7 +72,7 @@ const TableHook = () => {
         fetchUsers();
         fetchWorkPlace();
       } catch (error) {
-        console.error(error);
+        console.error(error.response?.data.error);
       }
     }
     // eslint-disable-next-line

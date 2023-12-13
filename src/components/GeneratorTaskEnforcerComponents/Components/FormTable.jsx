@@ -48,23 +48,23 @@ export default function FormTable({ WorkPlace, PulledUser }) {
   const [Loading, SetLoading] = useState(false);
 
   useEffect(() => {
-    if (WorkPlace) {
+    if (WorkPlace && Request.length <= 0) {
       setRequest(() => {
         const temp = WorkPlace.operatingDaysAndTimes.map((item) => ({ Day: item.day, req: 'Free' }));
         return temp;
       });
       SetLoading(false);
     }
-  }, [WorkPlace]);
+  }, [WorkPlace, Request]);
 
   const handleSubmitForm = (event) => {
     try {
       event.preventDefault();
-      patchRequest(`updateWorkerRequestByPhoneNumber/${PulledUser.phoneNumber}`).then(
-        navigate('/200', { replace: true })
-      );
+      patchRequest(`workers/updateWorkerRequestByPhoneNumber/${PulledUser.phoneNumber}`, Request).then((res) => {
+        if (res) navigate('/200', { replace: true });
+      });
     } catch (error) {
-      console.error(error);
+      console.error(error.response?.data.error);
     }
   };
 

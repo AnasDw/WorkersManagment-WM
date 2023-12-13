@@ -13,7 +13,7 @@ const AppLinkGeneratorHook = (WorkPlace) => {
     RemainingTime: null,
   });
   useEffect(() => {
-    if (WorkPlace) {
+    if (WorkPlace?.data?.data?.provider) {
       try {
         dispatch({ type: ACTIONS.TOGGLE_LOADING_BTN });
         getRequest(`taskEnforcerInvite/${WorkPlace?.data?.data?.provider}`)
@@ -21,9 +21,14 @@ const AppLinkGeneratorHook = (WorkPlace) => {
             dispatch({ type: ACTIONS.UPDATE_DATA, payload: response.data.invitation });
             dispatch({ type: ACTIONS.FORMAT_TIME });
           })
-          .finally(dispatch({ type: ACTIONS.TOGGLE_LOADING_BTN }));
-      } catch (e) {
-        console.error(e);
+          .catch((error) => {
+            console.error(error.response?.data.error);
+          })
+          .finally(() => {
+            dispatch({ type: ACTIONS.TOGGLE_LOADING_BTN });
+          });
+      } catch (error) {
+        console.error(error.response?.data.error);
       }
     }
   }, [WorkPlace]);

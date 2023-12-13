@@ -17,7 +17,6 @@ export const AuthProvider = ({ children }) => {
       } catch (err) {
         handleError(err);
         setManager(null);
-        document.cookie = 'token=null';
       } finally {
         setLoading(false);
       }
@@ -52,6 +51,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (formData) => {
     try {
+      
       await authAPI.register(formData);
       loadUser();
     } catch (err) {
@@ -62,7 +62,6 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await authAPI.logout();
-      document.cookie = 'token=null';
       setManager(null);
     } catch (err) {
       handleError(err);

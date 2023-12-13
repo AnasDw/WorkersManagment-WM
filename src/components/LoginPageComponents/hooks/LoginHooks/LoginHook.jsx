@@ -34,7 +34,7 @@ export const LoginHook = () => {
       await login(Email, Password);
       navigate('/dashboard/app', { replace: true });
     } catch (error) {
-      console.log(error.message);
+      console.error(error.response?.data.error);
     }
   };
 

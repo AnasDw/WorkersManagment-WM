@@ -57,7 +57,7 @@ const CheckOutHook = (PropCancelIcon, WorkPlace) => {
         }
       });
     } catch (error) {
-      console.error(error);
+      console.error(error.response?.data.error);
     }
   };
 

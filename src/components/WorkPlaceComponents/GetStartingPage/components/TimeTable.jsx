@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
@@ -16,7 +15,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import onAuthStateChanged from '../../../utils/onAuthStateChanged';
+import { postRequest } from '../../../../api/axiosVerbs';
+import { useGlobalAuthContext } from '../../../../hooks/useGlobalAuthContext';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -42,6 +42,7 @@ export default function TimeTable({ days, data }) {
   const [DaysList, setDaysList] = useState([]);
   const [OTList, setOTList] = useState(Array(DaysList.length).fill(null));
   const [CTList, setCTList] = useState(Array(DaysList.length).fill(null));
+  const { Manager } = useGlobalAuthContext();
 
   useEffect(() => {
     const sortedWeekdays = days.sort((a, b) => {
@@ -83,28 +84,15 @@ export default function TimeTable({ days, data }) {
 
   const SendRequest = async (req) => {
     try {
-      onAuthStateChanged(document.cookie.split('=')[1])
-        .then((res) => {
-          axios.post(
-            'http://localhost:3000/workplace',
-            {
-              name: req.WorkPlaceName,
-              departmentsNames: req.DepartmentsNames,
-              positions: req.Positions,
-              operatingDaysAndTimes: req.OperatingDaysAndTimes,
-              provider: res.data.data.email,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${document.cookie.split('=')[1]}`,
-              },
-              withCredentials: true,
-            }
-          );
-        })
-        .then(window.location.reload());
+      postRequest('workplace', {
+        name: req.WorkPlaceName,
+        departmentsNames: req.DepartmentsNames,
+        positions: req.Positions,
+        operatingDaysAndTimes: req.OperatingDaysAndTimes,
+        provider: Manager.email,
+      }).then(window.location.reload());
     } catch (error) {
-      console.error(error);
+      console.error(error.response?.data.error);
     }
   };
 

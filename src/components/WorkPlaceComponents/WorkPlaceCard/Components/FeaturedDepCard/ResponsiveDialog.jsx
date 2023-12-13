@@ -13,8 +13,6 @@ import TextField from '@mui/material/TextField';
 import { useTheme } from '@mui/material/styles';
 
 // -- FireBase --
-import { pushData } from '../../../../../config/FireBase/CRUD';
-import { auth } from '../../../../../config/FireBase';
 
 ResponsiveDialog.propTypes = {
   data: PropTypes.object,
@@ -43,11 +41,11 @@ export default function ResponsiveDialog({ data, boolean, func, data2push }) {
         }
         return item;
       });
-      pushData('Managers', data2push, auth.currentUser.email).then(() => {
-        window.location.reload();
-      });
+      // pushData('Managers', data2push, auth.currentUser.email).then(() => {
+      //   window.location.reload();
+      // });
     } catch (error) {
-      console.error(error);
+      console.error(error.response?.data.error);
     }
   };
 
