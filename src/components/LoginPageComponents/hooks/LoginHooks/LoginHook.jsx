@@ -31,8 +31,10 @@ export const LoginHook = () => {
 
   const SignIn = async () => {
     try {
-      await login(Email, Password);
-      navigate('/dashboard/app', { replace: true });
+      await login(Email, Password).then((res) => {
+        console.log(res);
+      });
+      // navigate('/dashboard/app', { replace: true });
     } catch (error) {
       console.error(error.response?.data.error);
     }
