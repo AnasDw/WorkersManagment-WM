@@ -19,3 +19,12 @@ export function filterUsersByAvailability(users, specificDay) {
 
   return cantWorkCount;
 }
+
+
+export function downloadCSV(csvData, fileName) {
+  const blob = new Blob([csvData], { type: 'text/csv' });
+  const link = document.createElement('a');
+  link.href = window.URL.createObjectURL(blob);
+  link.download = fileName;
+  link.click();
+}

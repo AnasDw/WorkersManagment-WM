@@ -12,7 +12,7 @@ import NotificationsPopover from './NotificationsPopover';
 import AccountPopover from './AccountPopover/AccountPopover';
 import { useGlobalAuthContext } from '../../hooks/useGlobalAuthContext';
 
-const NAV_WIDTH = 280;
+const NAV_WIDTH = 180;
 const HEADER_MOBILE = 64;
 const HEADER_DESKTOP = 92;
 

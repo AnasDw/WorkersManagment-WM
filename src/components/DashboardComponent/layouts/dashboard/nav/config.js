@@ -1,5 +1,9 @@
 // component
 import ApartmentIcon from '@mui/icons-material/Apartment';
+import SettingsIcon from '@mui/icons-material/Settings';
+import FolderOpenIcon from '@mui/icons-material/FolderOpen';
+import ArticleIcon from '@mui/icons-material/Article';
+import GridViewIcon from '@mui/icons-material/GridView';
 import SvgColor from '../../../../svg-color';
 // ----------------------------------------------------------------------
 
@@ -9,7 +13,7 @@ const navConfig = [
   {
     title: 'dashboard',
     path: '/dashboard/app',
-    icon: icon('ic_analytics'),
+    icon: <GridViewIcon />,
   },
   {
     title: 'Workplace',
@@ -22,10 +26,32 @@ const navConfig = [
     icon: icon('ic_user'),
   },
   {
+    title: 'files',
+    path: '/',
+    icon: <FolderOpenIcon />,
+  },
+  {
+    title: 'usage',
+    path: '/',
+    icon: icon('ic_analytics'),
+  },
+  {
+    title: 'settings',
+    path: '/',
+    icon: <SettingsIcon />,
+  },
+];
+const secondNavConfig = [
+  {
+    title: 'documentations',
+    path: '/',
+    icon: <ArticleIcon />,
+  },
+  {
     title: 'login',
     path: '/login',
     icon: icon('ic_lock'),
   },
 ];
 
-export default navConfig;
+export { navConfig, secondNavConfig };

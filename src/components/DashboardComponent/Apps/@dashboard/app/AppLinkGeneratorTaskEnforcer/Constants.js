@@ -40,7 +40,7 @@ function getTimeRemainingComplex(validateType, validateValue, date, time) {
     }
 
     if (minutes > 0) {
-      formattedTimeRemaining += `${minutes} minutes `;
+      formattedTimeRemaining += `${Math.round(minutes)} minutes `;
     }
   }
   if (validateType.toLowerCase() === 'minutes') {

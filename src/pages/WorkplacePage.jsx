@@ -11,7 +11,7 @@ const WorkplacePage = () => {
   const [SignedIn, setSignedIn] = useState(false);
   const [Provider, setProvider] = useState();
   const [Loading, setLoading] = useState(true);
-  const [WorkplaceData, setWorkplaceData] = useState(null);
+  const [WorkplaceData, setWorkplaceData] = useState(false);
 
   const { Manager } = useGlobalAuthContext();
 
@@ -25,12 +25,14 @@ const WorkplacePage = () => {
   useEffect(() => {
     if (Provider && SignedIn) {
       try {
-        getRequest(`workplace/${Provider}`).then((response) => {
-          setWorkplaceData(response.data.data);
-          setLoading(false);
-        });
+        getRequest(`workplace/${Provider}`)
+          .then((response) => {
+            setWorkplaceData(response.data.data);
+          })
+          .finally(setLoading(false));
       } catch (error) {
         console.error(error.response?.data.error);
+        setLoading(false);
       }
     }
   }, [Provider, SignedIn]);

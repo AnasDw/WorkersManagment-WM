@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
+
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
@@ -73,9 +74,8 @@ const PrepareDepartment = ({ state, dispatch, WorkPlace }) => {
               ))}
             </Select>
           ) : item.MenuType === 'time' ? (
-            <LocalizationProvider required dateAdapter={AdapterDayjs}>
-              <TimePicker
-                sx={{ maxWidth: 140 }}
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <MobileTimePicker
                 value={item.FormValue}
                 onChange={(newValue) => {
                   dispatch({ type: item.Action, payload: newValue });

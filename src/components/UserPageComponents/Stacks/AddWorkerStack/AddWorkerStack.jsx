@@ -20,28 +20,28 @@ const AddWorkerStack = ({ WorkPlace, Users }) => {
         </Typography>
         {!AddWorker && !GenerateInvitationBool ? (
           <>
-            {Users.length > 0 && WorkPlace ? (
-              <Stack direction="row" sx={{ gap: 1 }} alignItems="center" justifyContent="space-between">
-                <Button
-                  onClick={() => {
-                    setAddWorker(true);
-                  }}
-                  variant="contained"
-                  startIcon={<Iconify icon="eva:plus-fill" />}
-                >
-                  New Worker
-                </Button>
-                <Button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setGenerateInvitation(true);
-                  }}
-                  variant="outlined"
-                  startIcon={<Iconify icon="vscode-icons:file-type-dartlang-generated" />}
-                >
-                  Generate Invitation
-                </Button>
+            <Stack direction="row" sx={{ gap: 1 }} alignItems="center" justifyContent="space-between">
+              <Button
+                onClick={() => {
+                  setAddWorker(true);
+                }}
+                variant="contained"
+                startIcon={<Iconify icon="eva:plus-fill" />}
+              >
+                New Worker
+              </Button>
+              <Button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setGenerateInvitation(true);
+                }}
+                variant="outlined"
+                startIcon={<Iconify icon="vscode-icons:file-type-dartlang-generated" />}
+              >
+                Generate Invitation
+              </Button>
 
+              {Users.length > 0 && WorkPlace ? (
                 <Button
                   onClick={(e) => {
                     e.preventDefault();
@@ -52,8 +52,8 @@ const AddWorkerStack = ({ WorkPlace, Users }) => {
                 >
                   Generate Work Schedule
                 </Button>
-              </Stack>
-            ) : null}
+              ) : null}
+            </Stack>
           </>
         ) : null}
       </Stack>

@@ -15,7 +15,6 @@ const defaultTheme = createTheme();
 const InvitationPage = () => {
   const param = useParams();
   const [WorkPlace, setWorkPlace] = useState();
-  const [Loading, setLoading] = useState(true);
   const hook = CryptoHook(param.param1, 'addWorkerInvite');
 
   useEffect(() => {
@@ -23,16 +22,19 @@ const InvitationPage = () => {
       fetchRequest();
     }
     // eslint-disable-next-line
-  }, [hook.SecretParam]);
+  }, [hook.SecretParam, hook.Loading]);
 
   const fetchRequest = async () => {
-    await getRequest(`workPlace/${hook.SecretParam}`).then((response) => {
-      setWorkPlace(response.data.data);
-      setLoading(false);
-    });
+    try {
+      await getRequest(`workPlace/${hook.SecretParam}`).then((response) => {
+        setWorkPlace(response.data.data);
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  return hook.Bool && !Loading ? (
+  return WorkPlace ? (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />

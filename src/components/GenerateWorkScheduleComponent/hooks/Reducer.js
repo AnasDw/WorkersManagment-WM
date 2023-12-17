@@ -7,6 +7,8 @@ const ACTIONS = {
   UPDATE_EXPECTATIONS: 'update-expecation',
   UPDATE_MIN_DURATION: 'min-duration',
   UPDATE_MAX_DURATION: 'max-duration',
+  UPDATE_LIMITER: 'update-limiter',
+  UPDATE_POSITIONS_DEMAND: 'update-positionsDemand',
 };
 function Reducer(state, action) {
   switch (action.type) {
@@ -26,6 +28,10 @@ function Reducer(state, action) {
       return { ...state, minDuration: action.payload };
     case ACTIONS.UPDATE_MAX_DURATION:
       return { ...state, maxDuration: action.payload };
+    case ACTIONS.UPDATE_LIMITER:
+      return { ...state, limiter: action.payload };
+    case ACTIONS.UPDATE_POSITIONS_DEMAND:
+      return { ...state, positionsDemand: action.payload };
 
     default:
       return { ...state };
