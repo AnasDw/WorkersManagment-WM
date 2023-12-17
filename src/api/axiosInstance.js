@@ -3,7 +3,7 @@ import axios from 'axios';
 const baseURL =
   process.env.REACT_APP_ENV === 'development'
     ? process.env.REACT_APP_AxiosClientBaseURL
-    : process.env.VITE_BASE_URL_PRODUCTION;
+    : process.env.REACT_APP_URL_PRODUCTION;
 
 const axiosClient = axios.create({ baseURL });
 
