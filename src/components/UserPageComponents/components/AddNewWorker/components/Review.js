@@ -33,7 +33,7 @@ export default function Review({ state }) {
               Skills
             </Typography>
             <Grid container direction="column">
-              <fragment>
+              <>
                 <Grid item>
                   <Typography gutterBottom>
                     <strong>Main Department: </strong> {state.Department}
@@ -44,7 +44,7 @@ export default function Review({ state }) {
                     <strong> Main Position: </strong> {state.Position}
                   </Typography>
                 </Grid>
-              </fragment>
+              </>
             </Grid>
           </Grid>
         </Grid>

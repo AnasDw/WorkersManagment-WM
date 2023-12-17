@@ -24,7 +24,7 @@ const GenerateWorkSchedule = ({ WorkPlace, Users }) => {
     >
       <Stepper sx={{ backgroundColor: '#F4F6F8' }} nonLinear activeStep={activeStep}>
         {steps.map((label, index) => (
-          <Step sx={{ m: 3 }} key={label} completed={completed[index]}>
+          <Step sx={{ m: 3 }} key={label} completed={activeStep > index}>
             <StepButton color="inherit" onClick={handleStep(index)}>
               {label}
             </StepButton>
@@ -44,13 +44,18 @@ const GenerateWorkSchedule = ({ WorkPlace, Users }) => {
           <>
             <Box sx={{ pt: 2, m: 3 }}> {getStepContent(activeStep)}</Box>
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1, m: 1 }}>
-                Back
-              </Button>
-              <Box sx={{ flex: '1 1 auto' }} />
-              <Button onClick={handleNext} sx={{ mr: 1, m: 1 }}>
-                Next
-              </Button>
+              {activeStep !== steps.length ? (
+                <>
+                  <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1, m: 1 }}>
+                    Back
+                  </Button>
+                  <Box sx={{ flex: '1 1 auto' }} />
+                  <Button onClick={handleNext} sx={{ mr: 1, m: 1 }}>
+                    Next
+                  </Button>
+                </>
+              ) : null}
+
               {activeStep !== steps.length &&
                 (completed[activeStep] ? (
                   <Typography variant="caption" sx={{ display: 'inline-block' }}>

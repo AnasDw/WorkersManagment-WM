@@ -41,7 +41,7 @@ const AppLinkGeneratorTaskEnforcer = ({ WorkPlace }) => {
         ) : (
           <>
             <Grid container minWidth={'xl'} alignItems={'center'}>
-              {state.OnlineReq && state.RemainingTime !== 'less than a minute' ? (
+              {state.OnlineReq && state.RemainingTime ? (
                 <>
                   <Grid item>
                     <Typography variant="body2" ml={2} color="text.secondary">

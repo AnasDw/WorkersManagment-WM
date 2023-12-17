@@ -7,6 +7,7 @@ const baseURL =
 
 const axiosClient = axios.create({ baseURL });
 
+axiosClient.defaults.maxRedirects = 0;
 // Add a response interceptor that handles errors
 axiosClient.interceptors.response.use(
   // Return the response data
@@ -29,6 +30,9 @@ axiosClient.interceptors.response.use(
       case 400:
         console.error('Bad Request: The request was unacceptable.');
         break;
+      case 411:
+        console.error('Bad Request: The request was not found.');
+        break;
       case 401:
         console.error('Unauthorized: Access is denied due to invalid credentials.');
         break;
@@ -42,7 +46,7 @@ axiosClient.interceptors.response.use(
         console.error('Internal Server Error: Something went wrong on the server.');
         break;
       default:
-        console.error(`An error occurred: ${statusCode} - ${error.response.statusText}`);
+        console.error(`An error occurred: ${statusCode} `);
     }
 
     // Return the error
@@ -71,8 +75,8 @@ export const authAPI = {
   getCurrentUser: () => axiosClient.get('/auth/current-user'),
 };
 
-// All requests will wait 2 seconds before timeout
-axiosClient.defaults.timeout = 2000;
+// All requests will wait 60 seconds before timeout
+axiosClient.defaults.timeout = 60000;
 
 axiosClient.defaults.withCredentials = true;
 
