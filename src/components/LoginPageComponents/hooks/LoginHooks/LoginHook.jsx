@@ -33,6 +33,7 @@ export const LoginHook = () => {
     try {
       await login(Email, Password).then((res) => {
         console.log(res);
+      
       });
       // navigate('/dashboard/app', { replace: true });
     } catch (error) {
