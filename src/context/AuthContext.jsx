@@ -43,6 +43,7 @@ export const AuthProvider = ({ children }) => {
   const handleAuthSuccess = (res) => {
     document.cookie = res.data.token;
     localStorage.setItem('token', res.data.token);
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     loadUser();
   };
 
