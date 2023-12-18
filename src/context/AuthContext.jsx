@@ -51,9 +51,10 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const res = await authAPI.login(email, password);
-      console.log(res.data.token);
-      document.cookie = `authToken=${res.data.token}; path=/;`;
-      localStorage.setItem('token', res.data.token);
+      const result = await res;
+      console.log(result.data.token);
+      document.cookie = `authToken=${result.data.token}; path=/;`;
+      localStorage.setItem('token', result.data.token);
       loadUser();
     } catch (err) {
       handleError(err);
