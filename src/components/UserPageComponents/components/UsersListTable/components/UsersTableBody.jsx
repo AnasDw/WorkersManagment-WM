@@ -16,63 +16,67 @@ const UsersTableBody = ({
   selected,
   Users,
   handleOpenMenu,
-}) => (
-  <TableBody>
-    {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, j) => {
-      const { name, role, status, department, PhoneNumber } = row;
-      const selectedUser = selected.indexOf(name) !== -1;
-      return (
-        <TableRow hover key={j} tabIndex={-1} role="checkbox" selected={selectedUser}>
-          <TableCell padding="checkbox">
-            <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} />
-          </TableCell>
+}) => {
+  const getAvatarByCounter = (name, j) => {
+    const Counter = j < Users.length ? j : Users.length % j;
+    return <Avatar alt={name} src={`/assets/images/avatars/avatar_${Counter}.jpg`} />;
+  };
 
-          <TableCell component="th" scope="row" padding="none">
-            <Stack direction="row" alignItems="center" spacing={2}>
-              <Avatar
-                alt={name}
-                src={`/assets/images/avatars/avatar_${
-                  Users.length % (Math.floor(Math.random() * Users.length) + 1)
-                }.jpg`}
-              />
-              <Typography variant="subtitle2" noWrap>
-                {name}
-              </Typography>
-            </Stack>
-          </TableCell>
+  return (
+    <TableBody>
+      {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, j) => {
+        const { name, phoneNumber, department, position, role, status } = row;
+        const selectedUser = selected.indexOf(name) !== -1;
+        return (
+          <TableRow hover key={j} tabIndex={-1} role="checkbox" selected={selectedUser}>
+            <TableCell padding="checkbox">
+              <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} />
+            </TableCell>
 
-          <TableCell align="left">{PhoneNumber}</TableCell>
+            <TableCell component="th" scope="row" padding="none">
+              <Stack direction="row" alignItems="center" spacing={2}>
+                {getAvatarByCounter(name, page * 5 + j)}
+                <Typography variant="subtitle2" noWrap>
+                  {name}
+                </Typography>
+              </Stack>
+            </TableCell>
 
-          <TableCell align="left">{department}</TableCell>
+            <TableCell align="left">{`0${phoneNumber}`}</TableCell>
 
-          <TableCell align="left">{role}</TableCell>
+            <TableCell align="left">{department}</TableCell>
 
-          <TableCell align="left">
-            <Label color={(status === 'not yet' && 'error') || 'success'}>{sentenceCase(status)}</Label>
-          </TableCell>
+            <TableCell align="left">{position}</TableCell>
 
-          <TableCell align="right">
-            <IconButton
-              size="large"
-              color="inherit"
-              onClick={(e) => {
-                setUser2EditState(row);
-                handleOpenMenu(e);
-              }}
-            >
-              <Iconify icon={'eva:more-vertical-fill'} />
-            </IconButton>
-          </TableCell>
+            <TableCell align="left">{role}</TableCell>
+
+            <TableCell align="left">
+              <Label color={(status === 'Incomplete' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+            </TableCell>
+
+            <TableCell align="right">
+              <IconButton
+                size="large"
+                color="inherit"
+                onClick={(e) => {
+                  setUser2EditState(row);
+                  handleOpenMenu(e);
+                }}
+              >
+                <Iconify icon={'eva:more-vertical-fill'} />
+              </IconButton>
+            </TableCell>
+          </TableRow>
+        );
+      })}
+      {emptyRows > 0 && (
+        <TableRow style={{ height: 53 * emptyRows }}>
+          <TableCell colSpan={6} />
         </TableRow>
-      );
-    })}
-    {emptyRows > 0 && (
-      <TableRow style={{ height: 53 * emptyRows }}>
-        <TableCell colSpan={6} />
-      </TableRow>
-    )}
-  </TableBody>
-);
+      )}
+    </TableBody>
+  );
+};
 
 UsersTableBody.propTypes = {
   filteredUsers: PropTypes.array.isRequired,

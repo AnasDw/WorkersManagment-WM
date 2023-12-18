@@ -25,7 +25,7 @@ const EditDeletePopover = ({ handleCloseMenu, open, setShowDialogState }) => (
   >
     <MenuItem
       onClick={() => {
-        setShowDialogState(true);
+        setShowDialogState(true, 1);
         handleCloseMenu();
       }}
     >
@@ -33,7 +33,13 @@ const EditDeletePopover = ({ handleCloseMenu, open, setShowDialogState }) => (
       Edit
     </MenuItem>
 
-    <MenuItem sx={{ color: 'error.main' }}>
+    <MenuItem
+      onClick={() => {
+        setShowDialogState(true, 2);
+        handleCloseMenu();
+      }}
+      sx={{ color: 'error.main' }}
+    >
       <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
       Delete
     </MenuItem>

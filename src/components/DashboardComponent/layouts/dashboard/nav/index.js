@@ -1,32 +1,31 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { onAuthStateChanged } from 'firebase/auth';
 
 // @mui
-import { styled, alpha } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { Box, Link, Drawer, Typography, Avatar } from '@mui/material';
 // mock
 // hooks
-import { auth } from '../../../../../config/FireBase';
 import useResponsive from '../../../../../hooks/useResponsive';
+import { useGlobalAuthContext } from '../../../../../hooks/useGlobalAuthContext';
+
 // components
 import Logo from '../../../../logo';
 import Scrollbar from '../../../../scrollbar';
 import NavSection from '../../../../nav-section';
 
 //
-import navConfig from './config';
+import { navConfig, secondNavConfig } from './config';
 
 // ----------------------------------------------------------------------
 
-const NAV_WIDTH = 280;
+const NAV_WIDTH = 210;
 const StyledAccount = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
-  padding: theme.spacing(2, 2.5),
+  justifyContent: 'baseline',
   borderRadius: Number(theme.shape.borderRadius) * 1.5,
-  backgroundColor: alpha(theme.palette.grey[500], 0.12),
 }));
 
 // ----------------------------------------------------------------------
@@ -40,17 +39,7 @@ export default function Nav({ openNav, onCloseNav }) {
   const { pathname } = useLocation();
   const isDesktop = useResponsive('up', 'lg');
 
-  const [SignedIn, setSignedIn] = useState(false);
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (newUser) => {
-      if (newUser) {
-        setSignedIn(true);
-      } else {
-        setSignedIn(false);
-      }
-    });
-  }, []);
+  const { Manager, loading } = useGlobalAuthContext();
 
   useEffect(() => {
     if (openNav) {
@@ -63,30 +52,39 @@ export default function Nav({ openNav, onCloseNav }) {
     <Scrollbar
       sx={{
         height: 1,
-        '& .simplebar-content': { height: 1, display: 'flex', flexDirection: 'column' },
+        '& .simplebar-content': { height: 'auto', display: 'flex', flexDirection: 'column' },
       }}
     >
-      <Box sx={{ px: 7.5, py: 3, display: 'inline-flex' }}>
+      <Box sx={{ py: 5, display: 'inline-flex', px: 7.5 }}>
         <Logo />
       </Box>
 
-      <Box sx={{ mb: 5, mx: 2.5 }}>
-        <Link underline="none">
-          {SignedIn ? (
-            <StyledAccount>
-              <Avatar src={auth.currentUser?.photoURL} alt="photoURL" />
+      <NavSection data={navConfig} />
 
+      <NavSection sx={{ mt: 16 }} data={secondNavConfig} />
+
+      <Box sx={{ mx: 2.5 }}>
+        <Box sx={{ textAlign: 'center' }}>
+          <Typography variant="subtitle2" sx={{ color: '#dddee0', fontSize: 13, fontWeight: 500, userSelect: 'none' }}>
+            - - - - - - - - - - - - - - - - - - - - - - - - -- - - - - - - -{' '}
+          </Typography>
+        </Box>
+        <Link underline="none">
+          {!loading ? (
+            <StyledAccount sx={{ m: 0.8 }}>
+              <Avatar sx={{ width: 25, height: 25 }} src={Manager?.photoURL} alt="photoURL" />
               <Box sx={{ ml: 2 }}>
-                <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                  {auth.currentUser?.displayName}
+                <Typography
+                  variant="subtitle2"
+                  sx={{ color: 'text.primary', userSelect: 'none', fontSize: 13, fontWeight: 500 }}
+                >
+                  {Manager?.name}
                 </Typography>
               </Box>
             </StyledAccount>
           ) : null}
         </Link>
       </Box>
-
-      <NavSection data={navConfig} />
     </Scrollbar>
   );
 
@@ -98,7 +96,7 @@ export default function Nav({ openNav, onCloseNav }) {
         width: { lg: NAV_WIDTH },
       }}
     >
-      {isDesktop ? (
+      {isDesktop && !loading ? (
         <Drawer
           open
           variant="permanent"

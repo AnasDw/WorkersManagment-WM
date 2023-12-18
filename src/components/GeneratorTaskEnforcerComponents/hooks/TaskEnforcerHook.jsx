@@ -1,48 +1,38 @@
-import { useState, useEffect } from 'react';
-import { getDataFromDocByEmail } from '../../../config/FireBase/CRUD';
+import { useState } from 'react';
+import { getRequest } from '../../../api/axiosVerbs';
 
 const TaskEnforcerHook = (SecretParam) => {
-  const [Users, setUsers] = useState(null);
   const [PulledUser, setPulledUser] = useState(null);
-  const [Boolean, setBoolean] = useState(false);
-  const [UserPhoneNumber, setUserPhoneNumber] = useState();
-
-  useEffect(() => {
-    if (Users != null) {
-      const userToPull = Users.find((worker) => worker.PhoneNumber === UserPhoneNumber);
-      if (userToPull) setPulledUser(userToPull);
-      else setBoolean(true);
-    }
-    // eslint-disable-next-line
-  }, [UserPhoneNumber]);
-
-  useEffect(() => {
-    if (SecretParam) {
-      try {
-        getDataFromDocByEmail(SecretParam, 'workers').then((data) => {
-          if (data !== false) {
-            setUsers(data.data);
-          }
-        });
-      } catch (e) {
-        console.log(e);
-      }
-    }
-  }, [SecretParam]);
+  const [Error, setError] = useState(false);
+  const [WorkPlace, setWorkPlace] = useState(false);
+  const [ErrorVal, setErrorVal] = useState('some thing went wrong...');
 
   const handleChange = (event) => {
     try {
-      setBoolean(false);
       event.preventDefault();
       const data = new FormData(event.currentTarget);
-      setUserPhoneNumber(data.get('PhoneNumber'));
       setPulledUser(null);
+      setError(false);
+
+      getRequest(`workPlace/${SecretParam}`).then((res) => {
+        setWorkPlace(res.data.data);
+      });
+
+      getRequest(`workers/getWorkerByPhoneNumber/${SecretParam}/${data.get('PhoneNumber')}`)
+        .then((response) => {
+          setPulledUser(response.data.data);
+        })
+        .catch((error) => {
+          setError(true);
+          setErrorVal(error.response.data.error);
+        });
     } catch (error) {
-      console.error(error);
+      setError(true);
+      setErrorVal(error.response.data.error);
     }
   };
 
-  return [PulledUser, Boolean, handleChange];
+  return [PulledUser, handleChange, Error, ErrorVal, WorkPlace];
 };
 
 export default TaskEnforcerHook;

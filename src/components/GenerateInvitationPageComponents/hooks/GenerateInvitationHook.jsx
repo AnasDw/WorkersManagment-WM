@@ -1,75 +1,71 @@
 import { useState } from 'react';
-import copy from 'clipboard-copy';
 
-import { getCurrentDate, getCurrentTime } from '../../../constants/functions';
-import { auth } from '../../../config/FireBase';
-import { getDataFromDocByEmail, pushData } from '../../../config/FireBase/CRUD';
+import { getRequest, postRequest } from '../../../api/axiosVerbs';
+import { getCurrentTime, getCurrentDate } from '../../../constants/functions';
 
 const SelectList = [{ id: 'Minutes' }, { id: 'Hours' }, { id: 'Days' }];
 const CryptoJS = require('crypto-js');
 
-const GenerateInvitationHook = (boolean) => {
+const GenerateInvitationHook = (boolean, WorkPlace) => {
   const [Copied, setCopied] = useState(false);
   const [Error, setError] = useState(false);
   const [InputValidateType, setInputValidateType] = useState('None');
   const [InputValidateValue, setInputValidateValue] = useState(0);
   const [ShortMsg, setShortMsg] = useState();
-  // eslint-disable-next-line
-  const [temp, setTemp] = useState({});
 
   const CopyLink = async () => {
     try {
-      if (boolean) SetWorkersStatus();
-      const Date = getCurrentDate();
       const ShowTime = getCurrentTime();
+      const currentDate = getCurrentDate();
 
-      const encrypted = CryptoJS.AES.encrypt(`${auth.currentUser.email}`, process.env.REACT_APP_SecretKey);
+      if (boolean) SetWorkersStatus();
+
+      const encrypted = CryptoJS.AES.encrypt(`${WorkPlace.provider}`, process.env.REACT_APP_SecretKey);
 
       const encodedURL = encodeURIComponent(encrypted.toString());
-      let URL = `https://wm-sys.netlify.app/InvitationPage/${encodedURL}`;
-      let place = 'AddUserInvitation';
-      if (boolean) {
-        URL = `https://wm-sys.netlify.app/TaskEnforcerPage/${encodedURL}`;
-        place = 'TaskEnforcer';
-      }
 
-      await pushData(
-        place,
-        {
-          ValidateType: InputValidateType.charAt(0),
-          ValidateValue: InputValidateValue,
-          date: Date,
-          showTime: ShowTime,
-          link: URL,
-        },
-        auth.currentUser.email
-      ).then(() => {
-        copy(URL).then(() => {
-          setCopied(true);
-          setTimeout(() => {
-            setCopied(false);
-            window.location.reload();
-          }, 1000);
+      const BaseUrl =
+        process.env.REACT_APP_ENV === 'development' ? 'http://localhost:3001' : 'https://wm-sys.netlify.app';
+
+      let URL = `${BaseUrl}/InvitationPage/${encodedURL}`;
+
+      let dataToEdit = '';
+
+      if (boolean) {
+        URL = `${BaseUrl}/TaskEnforcerPage/${encodedURL}`;
+        dataToEdit = 'taskEnforcerInvite';
+      } else {
+        dataToEdit = 'addWorkerInvite';
+      }
+      await postRequest(`${dataToEdit}`, {
+        provider: WorkPlace.provider,
+        link: URL,
+        validateType: InputValidateType,
+        validateValue: InputValidateValue,
+        msg: ShortMsg,
+        time: ShowTime,
+        date: currentDate,
+      })
+        .then(() => {
+          navigator.clipboard.writeText(URL).then(() => {
+            setCopied(true);
+            setTimeout(() => {
+              setCopied(false);
+              window.location.reload();
+            }, 1000);
+          });
+        })
+        .catch((e) => {
+          console.error(e.response?.data.error);
         });
-      });
     } catch (e) {
-      console.error(e);
+      console.error(e.response?.data.error);
     }
   };
 
   const SetWorkersStatus = async () => {
     try {
-      await getDataFromDocByEmail(auth.currentUser.email, 'workers').then((res) => {
-        if (res !== false) {
-          const Data2Push = res.data.map((data) => {
-            const temp = { ...data };
-            temp.status = 'not yet';
-            temp.Requests = null;
-            return temp;
-          });
-          pushData('workers', { data: Data2Push }, auth.currentUser.email);
-        }
-      });
+      await getRequest(`workers/updateWorkersStatus/${WorkPlace.provider}`);
     } catch (error) {
       console.error(error);
     }
@@ -77,8 +73,7 @@ const GenerateInvitationHook = (boolean) => {
 
   const handleChange = (event) => {
     setInputValidateType(event.target.value);
-    const a = SelectList.find((obj) => obj.id === InputValidateType);
-    setTemp(a);
+    SelectList.find((obj) => obj.id === InputValidateType);
   };
 
   const handleSubmitForm = (event) => {

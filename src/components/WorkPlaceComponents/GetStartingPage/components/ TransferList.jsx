@@ -99,7 +99,7 @@ export default function TransferList({ data }) {
       <Divider />
       <List
         sx={{
-          width: 200,
+          width: '100%',
           height: 230,
           bgcolor: 'background.paper',
           overflow: 'auto',
@@ -148,7 +148,7 @@ export default function TransferList({ data }) {
                 Please specify the days on which your business operates{' '}
               </Typography>
             </Grid>
-            <Grid md={5} sm={5} xs={8} item>
+            <Grid md={5} sm={5} xs={12} item mt={2}>
               {customList('Choices', left)}
             </Grid>
             <Grid md={2} sm={2} xs={4} item>

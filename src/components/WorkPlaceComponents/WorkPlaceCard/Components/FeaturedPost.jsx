@@ -27,7 +27,7 @@ const FeaturedPost = (props) => (
         variant="h2"
         sx={{ fontFamily: 'Garamond', color: '#324E87' }}
       >
-        {props.props.data.WorkPlaceName}
+        {props.props.data.name}
       </Typography>
     </CardActionArea>
   </Grid>

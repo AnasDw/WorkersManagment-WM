@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect } from 'react';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import Paper from '@mui/material/Paper';
@@ -8,14 +8,33 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useParams } from 'react-router-dom';
 import Checkout from '../UserPageComponents/components/AddNewWorker/Checkout';
 import { CryptoHook } from './hooks/CryptoHook';
+import { getRequest } from '../../api/axiosVerbs';
 
 const defaultTheme = createTheme();
 
 const InvitationPage = () => {
   const param = useParams();
-  const hook = CryptoHook(param.param1, 'AddUserInvitation');
+  const [WorkPlace, setWorkPlace] = useState();
+  const hook = CryptoHook(param.param1, 'addWorkerInvite');
 
-  return hook.Bool ? (
+  useEffect(() => {
+    if (hook.SecretParam && !hook.Loading) {
+      fetchRequest();
+    }
+    // eslint-disable-next-line
+  }, [hook.SecretParam, hook.Loading]);
+
+  const fetchRequest = async () => {
+    try {
+      await getRequest(`workPlace/${hook.SecretParam}`).then((response) => {
+        setWorkPlace(response.data.data);
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return WorkPlace ? (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
@@ -42,7 +61,7 @@ const InvitationPage = () => {
               alignItems: 'center',
             }}
           >
-            <Checkout PropCancelIcon={false} email={hook.SecretParam} />
+            <Checkout PropCancelIcon={false} WorkPlace={WorkPlace} />
           </Box>
         </Grid>
       </Grid>

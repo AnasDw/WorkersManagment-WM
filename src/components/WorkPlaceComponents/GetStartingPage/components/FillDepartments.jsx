@@ -47,11 +47,19 @@ const FillDepartments = ({ Bool, handleData }) => {
           ))}
         </Select>
 
-        <Box spacing={2} component="form" onChange={addChange}>
+        <Box
+          display={'flex'}
+          justifyContent={'center'}
+          alignItems={'center'}
+          flexWrap={'wrap'}
+          gap={2}
+          m={3}
+          component="form"
+          onChange={addChange}
+        >
           {Array.from({ length: DepartmentsVal }, (_, index) => (
             <TextField
               key={index}
-              margin="normal"
               required
               xs={12}
               md={6}

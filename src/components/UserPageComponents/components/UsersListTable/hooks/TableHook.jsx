@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
+import { useGlobalAuthContext } from '../../../../../hooks/useGlobalAuthContext';
 
 import { applySortFilter, getComparator } from '../../../Constants/Functions';
-
-import { getDataFromDocByEmail } from '../../../../../config/FireBase/CRUD';
-import { auth } from '../../../../../config/FireBase';
+import { getRequest } from '../../../../../api/axiosVerbs';
 
 const TableHook = () => {
   const [open, setOpen] = useState(null);
   const [ShowDialog, setShowDialog] = useState(false);
+  const [DeleteDialog, setDeleteDialog] = useState(false);
   const [Users, setUsers] = useState([]);
-  const [Email, setEmail] = useState();
   const [WorkPlace, setWorkPlace] = useState();
   const [User2Edit, setUser2Edit] = useState({});
   const [page, setPage] = useState(0);
@@ -19,6 +17,7 @@ const TableHook = () => {
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const { Manager } = useGlobalAuthContext();
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -56,26 +55,28 @@ const TableHook = () => {
     setPage(0);
     setFilterName(event.target.value);
   };
+  const fetchUsers = async () => {
+    await getRequest(`workers/${Manager.email}`).then((response) => {
+      setUsers(response.data.data);
+    });
+  };
+  const fetchWorkPlace = async () => {
+    await getRequest(`workPlace/${Manager.email}`).then((response) => {
+      setWorkPlace(response.data.data);
+    });
+  };
 
   useEffect(() => {
-    onAuthStateChanged(auth, (newUser) => {
-      if (newUser) {
-        setEmail(auth.currentUser.email);
-        getDataFromDocByEmail(auth.currentUser.email, 'workers').then((res) => {
-          if (res !== false) {
-            try {
-              setUsers(res.data);
-              getDataFromDocByEmail(auth.currentUser.email, 'Managers').then((response) => {
-                setWorkPlace(response);
-              });
-            } catch (error) {
-              console.error(error);
-            }
-          }
-        });
+    if (Manager) {
+      try {
+        fetchUsers();
+        fetchWorkPlace();
+      } catch (error) {
+        console.error(error.response?.data.error);
       }
-    });
-  }, []);
+    }
+    // eslint-disable-next-line
+  }, [Manager]);
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -98,8 +99,9 @@ const TableHook = () => {
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
-  const setShowDialogState = (val) => {
-    setShowDialog(val);
+  const setShowDialogState = (val, category) => {
+    if (category === 1) setShowDialog(val);
+    else setDeleteDialog(val);
   };
   const setUser2EditState = (val) => {
     setUser2Edit(val);
@@ -112,7 +114,6 @@ const TableHook = () => {
     open,
     ShowDialog,
     Users,
-    Email,
     WorkPlace,
     User2Edit,
     page,
@@ -131,6 +132,8 @@ const TableHook = () => {
     handleChangeRowsPerPage,
     setShowDialogState,
     setUser2EditState,
+    DeleteDialog,
+    setDeleteDialog,
   ];
 };
 

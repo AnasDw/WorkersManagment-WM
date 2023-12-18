@@ -37,6 +37,7 @@ function NavItem({ item }) {
       component={RouterLink}
       to={path}
       sx={{
+        fontSize: 13,
         '&.active': {
           color: 'text.primary',
           bgcolor: 'action.selected',

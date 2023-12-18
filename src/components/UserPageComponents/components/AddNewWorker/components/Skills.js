@@ -21,7 +21,7 @@ export default function Skills({ state, dispatch }) {
       <Typography variant="h6" gutterBottom>
         Skills
       </Typography>
-      <Grid item xs={12}>
+      <Grid item display={'flex'} flexDirection={'column'}>
         <FormControl
           color={state.error ? 'success' : null}
           focused={state.error}
@@ -37,7 +37,7 @@ export default function Skills({ state, dispatch }) {
               dispatch({ type: ACTIONS.UPDATE_DEPARTMENT, payload: event.target.value });
             }}
           >
-            {state.WorkPlace.DepartmentsNames.map((data, j) => (
+            {state.WorkPlace.departmentsNames.map((data, j) => (
               <FormControlLabel key={j} value={`${data}`} control={<Radio />} label={`${data}`} />
             ))}
           </RadioGroup>
@@ -50,7 +50,7 @@ export default function Skills({ state, dispatch }) {
             focused={state.error}
             error={state.error && state.Position === ''}
           >
-            <FormLabel id="demo-radio-buttons-group-label">What would be the main role of the worker?</FormLabel>
+            <FormLabel id="demo-radio-buttons-group-label">What would be the main position of the worker?</FormLabel>
             <RadioGroup
               row
               aria-labelledby="demo-radio-buttons-group-label"

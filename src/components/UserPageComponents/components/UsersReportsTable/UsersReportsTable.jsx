@@ -8,11 +8,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { getDataFromDocByEmail } from '../../../../config/FireBase/CRUD';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: '#cecfd0',
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
@@ -29,37 +28,43 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const UsersReportsTable = ({ users, email }) => {
+const UsersReportsTable = ({ users, WorkPlace }) => {
   const [Rows, setRows] = useState([]);
   const [Cols, setCols] = useState([]);
 
   useEffect(() => {
+    const temp = users?.filter((user) => user.status === 'Completed');
     setRows(() => {
-      const temp = users.filter((user) => user.status === 'filled');
       let rowsToReturn = [];
-      if (temp) rowsToReturn = temp.map((user) => ({ name: user.name, Requests: user.Requests }));
+      if (temp) rowsToReturn = temp.map((user) => ({ name: user.name, Requests: user.requests }));
       return rowsToReturn;
     });
-  }, [users]);
 
-  useEffect(() => {
-    try {
-      getDataFromDocByEmail(email, 'Managers').then((response) => {
-        const columns = response.OperatingDaysAndTimes.map((item) => item.day);
-        setCols(['Name', ...columns]);
-      });
-    } catch (error) {
-      console.error(error);
+    if (WorkPlace && temp.length > 0) {
+      const columns = WorkPlace?.operatingDaysAndTimes.map((item) => item.day);
+      setCols(['Name', ...columns]);
     }
-  }, [email]);
+  }, [users, WorkPlace]);
 
   return (
-    <TableContainer sx={{ marginTop: 6, p: 3, backgroundColor: 'transparent' }} component={Paper}>
+    <TableContainer
+      sx={{
+        m: 3,
+        mt: 6,
+        backgroundColor: 'transparent',
+        borderRadius: '7px',
+        boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px;',
+        width: 'auto',
+      }}
+      component={Paper}
+    >
       <Table aria-label="customized table">
         <TableHead>
           <TableRow>
             {Cols.map((col, i) => (
-              <StyledTableCell key={i}>{col}</StyledTableCell>
+              <StyledTableCell sx={{ fontWeight: 900, fontSize: 16 }} key={i}>
+                {col}
+              </StyledTableCell>
             ))}
           </TableRow>
         </TableHead>
@@ -81,8 +86,8 @@ const UsersReportsTable = ({ users, email }) => {
 };
 
 UsersReportsTable.propTypes = {
-  users: PropTypes.array.isRequired,
-  email: PropTypes.string.isRequired,
+  users: PropTypes.array,
+  WorkPlace: PropTypes.object,
 };
 
 export { UsersReportsTable };

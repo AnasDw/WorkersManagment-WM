@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 import { Stack, Button, Typography } from '@mui/material';
 import Checkout from '../../components/AddNewWorker/Checkout';
 import Iconify from '../../../iconify/Iconify';
 import GenerateInvitation from '../../../GenerateInvitationPageComponents/GenerateInvitation';
+import { GenerateWorkSchedule } from '../../../GenerateWorkScheduleComponent';
 
-const AddWorkerStack = () => {
+const AddWorkerStack = ({ WorkPlace, Users }) => {
   const [AddWorker, setAddWorker] = useState();
   const [GenerateInvitationBool, setGenerateInvitation] = useState(false);
+  const [GenerateWorkScheduleBool, setGenerateWorkSchedule] = useState(false);
 
   return (
     <>
@@ -37,15 +40,31 @@ const AddWorkerStack = () => {
               >
                 Generate Invitation
               </Button>
+
+              {Users.length > 0 && WorkPlace ? (
+                <Button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setGenerateWorkSchedule(true);
+                  }}
+                  variant="outlined"
+                  startIcon={<Iconify icon="twemoji:man-office-worker" />}
+                >
+                  Generate Work Schedule
+                </Button>
+              ) : null}
             </Stack>
           </>
         ) : null}
       </Stack>
 
-      {AddWorker ? <Checkout PropCancelIcon /> : null}
-      {GenerateInvitationBool ? <GenerateInvitation boolean={false} /> : null}
+      {AddWorker ? <Checkout PropCancelIcon WorkPlace={WorkPlace} /> : null}
+      {GenerateInvitationBool ? <GenerateInvitation boolean={false} WorkPlace={WorkPlace} /> : null}
+      {GenerateWorkScheduleBool ? <GenerateWorkSchedule WorkPlace={WorkPlace} Users={Users} /> : null}
     </>
   );
 };
+
+AddWorkerStack.propTypes = { WorkPlace: PropTypes.object, Users: PropTypes.array };
 
 export default AddWorkerStack;

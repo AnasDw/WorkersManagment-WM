@@ -125,7 +125,18 @@ const FillPositions = ({ data }) => {
                   ))}
               </Select>
 
-              <Box key={'ab'} rowGap={1} columnGap={1} component="form">
+              <Box
+                key={'ab'}
+                rowGap={1}
+                columnGap={1}
+                component="form"
+                display={'flex'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                flexWrap={'wrap'}
+                gap={2}
+                m={3}
+              >
                 {Array.from({ length: CounterValues[index] }, (_, index) => (
                   <TextField
                     key={index}

@@ -15,8 +15,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { pushData } from '../../../../config/FireBase/CRUD';
-import { auth } from '../../../../config/FireBase';
+import { postRequest } from '../../../../api/axiosVerbs';
+import { useGlobalAuthContext } from '../../../../hooks/useGlobalAuthContext';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -42,6 +42,7 @@ export default function TimeTable({ days, data }) {
   const [DaysList, setDaysList] = useState([]);
   const [OTList, setOTList] = useState(Array(DaysList.length).fill(null));
   const [CTList, setCTList] = useState(Array(DaysList.length).fill(null));
+  const { Manager } = useGlobalAuthContext();
 
   useEffect(() => {
     const sortedWeekdays = days.sort((a, b) => {
@@ -83,15 +84,15 @@ export default function TimeTable({ days, data }) {
 
   const SendRequest = async (req) => {
     try {
-      await pushData('Managers', req, auth.currentUser.email)
-        .then(() => {
-          window.location.reload();
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+      postRequest('workplace', {
+        name: req.WorkPlaceName,
+        departmentsNames: req.DepartmentsNames,
+        positions: req.Positions,
+        operatingDaysAndTimes: req.OperatingDaysAndTimes,
+        provider: Manager.email,
+      }).then(window.location.reload());
     } catch (error) {
-      console.error(error);
+      console.error(error.response?.data.error);
     }
   };
 
