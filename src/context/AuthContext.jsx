@@ -40,9 +40,9 @@ export const AuthProvider = ({ children }) => {
     showToast(errorMessage, 'error');
   };
 
-  const handleAuthSuccess = (res) => {
-    document.cookie = res.data.token;
-    localStorage.setItem('token', res.data.token);
+  const handleAuthSuccess = (token) => {
+    document.cookie = token;
+    localStorage.setItem('token', token);
     console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
 
     loadUser();
@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await authAPI.login(email, password);
       console.log(res);
-      handleAuthSuccess(res);
+      handleAuthSuccess(res.token);
     } catch (err) {
       handleError(err);
     }
