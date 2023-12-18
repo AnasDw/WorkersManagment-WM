@@ -40,10 +40,17 @@ export const AuthProvider = ({ children }) => {
     showToast(errorMessage, 'error');
   };
 
+  const handleAuthSuccess = (res) => {
+    console.log(res.data);
+    document.cookie = res.data;
+    localStorage.setItem('token', res.data);
+    loadUser();
+  };
+
   const login = async (email, password) => {
     try {
-      await authAPI.login(email, password);
-      loadUser();
+      const res = await authAPI.login(email, password);
+      handleAuthSuccess(res);
     } catch (err) {
       handleError(err);
     }
@@ -51,7 +58,6 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (formData) => {
     try {
-      
       await authAPI.register(formData);
       loadUser();
     } catch (err) {
