@@ -31,11 +31,9 @@ export const LoginHook = () => {
 
   const SignIn = async () => {
     try {
-      await login(Email, Password).then((res) => {
-        console.log(res);
-      
+      await login(Email, Password).then(() => {
+        navigate('/dashboard/app', { replace: true });
       });
-      // navigate('/dashboard/app', { replace: true });
     } catch (error) {
       console.error(error.response?.data.error);
     }
