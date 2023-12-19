@@ -23,7 +23,7 @@ const GeneratingLoader = () => {
 
   React.useEffect(() => {
     const timer = setInterval(() => {
-      setProgress((prevProgress) => (prevProgress >= 100 ? 10 : prevProgress + 5));
+      setProgress((prevProgress) => (prevProgress >= 100 ? 10 : prevProgress + 2));
     }, 800);
     return () => {
       clearInterval(timer);

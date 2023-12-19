@@ -43,7 +43,7 @@ const WorkScheduleHook = (WorkPlace, Users) => {
         const newActiveStep = activeStep + 1;
         setActiveStep(newActiveStep);
       } else {
-        // setActiveStep(activeStep + 1);
+        setActiveStep(activeStep + 1);
         handleComplete();
       }
     }
@@ -89,7 +89,7 @@ const WorkScheduleHook = (WorkPlace, Users) => {
       { timeout: 60000 }
     ).then((res) => {
       if (res.data.response.message.content) downloadCSV(res.data.response.message.content, 'work_schedule.csv');
-      // window.location.reload();
+      window.location.reload();
     });
   };
   // eslint-disable-next-line
