@@ -45,6 +45,10 @@ export const AuthProvider = ({ children }) => {
     loadUser();
   };
 
+  const handleLogout = () => {
+    document.cookie = 'Token=; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+  };
+
   const login = async (email, password) => {
     try {
       const res = await authAPI.login(email, password);
@@ -68,6 +72,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await authAPI.logout();
       setManager(null);
+      handleLogout();
     } catch (err) {
       handleError(err);
     }
