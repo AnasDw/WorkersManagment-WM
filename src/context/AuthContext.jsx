@@ -52,9 +52,14 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await authAPI.login(email, password);
       const result = await res;
-      console.log(result.data.token);
-      document.cookie = `authToken=${result.data.token}; path=/;`;
-      localStorage.setItem('token', result.data.token);
+
+      console.log('result: ', result);
+      console.log('result.data: ', result.data);
+      console.log('result.data.token: ', result.data.token);
+
+      document.cookie = `Token=${result.data.token}`;
+      localStorage.setItem('token', result);
+      
       loadUser();
     } catch (err) {
       handleError(err);
