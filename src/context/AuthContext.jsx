@@ -41,10 +41,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const handleAuthSuccess = (token) => {
-    document.cookie = `authToken=${token}; path=/;`;
-    localStorage.setItem('token', token);
-    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-
+    document.cookie = `Token=${token}`;
     loadUser();
   };
 
@@ -52,15 +49,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await authAPI.login(email, password);
       const result = await res;
-
-      console.log('result: ', result);
-      console.log('result.data: ', result.data);
-      console.log('result.data.token: ', result.data.token);
-
-      document.cookie = `Token=${result.data.token}`;
-      localStorage.setItem('token', result);
-      
-      loadUser();
+      handleAuthSuccess(result.data.token);
     } catch (err) {
       handleError(err);
     }
