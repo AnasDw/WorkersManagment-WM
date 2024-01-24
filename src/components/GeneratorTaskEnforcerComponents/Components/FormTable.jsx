@@ -83,7 +83,9 @@ export default function FormTable({ WorkPlace, PulledUser }) {
       >
         <Grid container my={2} mb={5} spacing={2} justifyContent="center" alignItems="center">
           <Grid md={12} sm={12} xs={12} item>
-            <Typography variant={'h6'}>Requesting Your Detailed Task Directives</Typography>
+            <Typography textAlign={'center'} variant={'h6'}>
+              Requesting Your Detailed Task Directives
+            </Typography>
           </Grid>
           <Grid md={12} sm={12} xs={12} item>
             <TableContainer component={Paper}>

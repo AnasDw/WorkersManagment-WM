@@ -19,7 +19,7 @@ export default function App() {
           <ScrollToTop />
           <AuthProvider>
             <StyledChart />
-            <Router />/
+            <Router />
           </AuthProvider>
         </ThemeProvider>
       </BrowserRouter>

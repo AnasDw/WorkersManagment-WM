@@ -26,7 +26,7 @@ const TaskEnforcerPage = () => {
   return BoolHook.Bool ? (
     <>
       <ThemeProvider theme={defaultTheme}>
-        <Grid container component="main" sx={{ height: '100vh' }}>
+        <Grid container component="main" sx={{ height: 'auto', minHeight: '100vh' }}>
           <CssBaseline />
           <Grid
             item
@@ -53,7 +53,7 @@ const TaskEnforcerPage = () => {
               <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                 {!PulledUser ? <Diversity3Icon /> : <VerifiedUserIcon />}
               </Avatar>
-              <Typography component="h1" variant="h5">
+              <Typography component="h1" variant="h5" textAlign={'center'}>
                 {!PulledUser ? 'Welcome to the WM Employee System' : `Welcome back ${PulledUser?.name}`}
               </Typography>
               {!PulledUser ? (

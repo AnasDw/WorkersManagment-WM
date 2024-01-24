@@ -25,7 +25,7 @@ const GenerateInvitationHook = (boolean, WorkPlace) => {
       const encodedURL = encodeURIComponent(encrypted.toString());
 
       const BaseUrl =
-        process.env.REACT_APP_ENV === 'development' ? 'http://localhost:3001' : 'https://wm-sys.netlify.app';
+        process.env.REACT_APP_ENV === 'development' ? 'http://localhost:3000' : 'https://wm-sys.netlify.app';
 
       let URL = `${BaseUrl}/InvitationPage/${encodedURL}`;
 
